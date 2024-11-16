@@ -1,9 +1,20 @@
 import { Container, Stack, TextField, Button } from "@mui/material";
+import getDatabasePath from "../lib/database";
 
 export default function DatabaseConnection() {
   return (
     <>
-      <Container maxWidth="md">
+      <Container
+        maxWidth="md"
+        sx={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "20px",
+        }}
+      >
         <Stack
           direction="row"
           sx={{ width: "100%", display: "flex", gap: "30px" }}
@@ -18,7 +29,11 @@ export default function DatabaseConnection() {
           direction="row"
           sx={{ width: "100%", display: "flex", justifyContent: "end" }}
         >
-          <Button variant="contained" size="large">
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => getDatabasePath()}
+          >
             Connect
           </Button>
         </Stack>

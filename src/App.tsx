@@ -1,10 +1,10 @@
-import DatabaseConnection from "./pages/DatabaseConnection.tsx";
+import FirstLogin from "./pages/FirstLogin.tsx";
 import "./App.css";
 
 export default function App() {
   return (
     <>
-      <DatabaseConnection />
+      <FirstLogin />
     </>
   );
 }

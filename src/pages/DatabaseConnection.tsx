@@ -29,7 +29,7 @@ export default function DatabaseConnection() {
           sx={{ width: "100%", display: "flex", justifyContent: "end" }}
         >
           <Button variant="contained" size="large">
-            Connect
+            Save
           </Button>
         </Stack>
       </Container>

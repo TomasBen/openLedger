@@ -12,9 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "tauri-lab",
-        "width": 800,
-        "height": 600
+        "title": "ACC-SOFWARE",
+        "center": true,
+        "width": 1500,
+        "height": 900
       }
     ],
     "security": {

@@ -1,13 +1,23 @@
 import {
+  FormControl,
   Container,
   Stack,
   Select,
   MenuItem,
+  InputLabel,
   TextField,
   Button,
 } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { useState } from "react";
 
 export default function FirstLogin() {
+  const [modalidad, setModalidad] = useState("");
+
+  const handleChange = (e: SelectChangeEvent) => {
+    setModalidad(e.target.value as string);
+  };
+
   return (
     <>
       <Container
@@ -30,17 +40,25 @@ export default function FirstLogin() {
           variant="outlined"
           fullWidth
         />
-        <Select fullWidth>
-          <MenuItem value={"Emprendedor (Persona Humana)"}>
-            Emprededor (Persona Humana)
-          </MenuItem>
-          <MenuItem value={"Empresa (Persona Jurídica)"}>
-            Emresa (Persona Jurídica)
-          </MenuItem>
-          <MenuItem value={"Contador/Estudio Contable"}>
-            Contador/Estudio Contable
-          </MenuItem>
-        </Select>
+        <FormControl fullWidth>
+          <InputLabel id="select-modalidad">Modalidad de Trabajo</InputLabel>
+          <Select
+            labelId="select-modalidad"
+            label="Modalidad de Trabajo"
+            value={modalidad}
+            onChange={handleChange}
+          >
+            <MenuItem value={"Emprendedor (Persona Humana)"}>
+              Emprededor (Persona Humana)
+            </MenuItem>
+            <MenuItem value={"Empresa (Persona Jurídica)"}>
+              Emresa (Persona Jurídica)
+            </MenuItem>
+            <MenuItem value={"Contador/Estudio Contable"}>
+              Contador/Estudio Contable
+            </MenuItem>
+          </Select>
+        </FormControl>
         <Stack
           direction="row"
           sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}

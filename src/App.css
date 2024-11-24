@@ -63,6 +63,7 @@
     --color-surface-tint: rgb(141 205 255);
     --color-on-primary: rgb(0 52 79);
     --color-primary-container: rgb(0 161 232);
+    /* --color-primary-container-hover: rgb(); <- todo */
     --color-on-primary-container: rgb(0 5 11);
     --color-secondary: rgb(255 181 157);
     --color-on-secondary: rgb(93 24 0);
@@ -110,12 +111,47 @@
     --color-surface-container-highest: rgb(48 53 58);
 }
 
+/* Layout.tsx related styles for the app container */
+
 #root,
 body {
     height: 100vh;
     width: 100vw;
     display: flex;
     cursor: default;
+}
+
+#root {
+    flex-direction: column;
+}
+
+main {
+    /* main takes 90 of the vieport height since the header
+    and footer take the remaining 5 and 5 respectively */
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+}
+
+header.upper_panel {
+    height: 5vh;
+    width: 100%;
+    display: flex;
+    background-color: var(--color-surface-variant);
+}
+
+header.upper_panel > a.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background-color: white;
+}
+
+footer.lower_panel {
+    height: 5vh;
+    width: 100%;
+    display: flex;
+    background-color: var(--color-surface-variant);
 }
 
 .navbar_container {
@@ -130,16 +166,18 @@ body {
     gap: 1px;
     border-right: 1px solid;
     border-color: var(--color-secondary);
+    overflow: hidden;
 }
 
 /* Styles for react router navlinks */
 a.navlink {
     width: 100%;
     padding: 20px;
+    border-radius: 0.3rem;
     color: var(--color-on-surface);
     font-size: 1.3rem;
+    text-overflow: clip;
     text-decoration: none;
-    border-radius: 0.3rem;
 }
 
 a.navlink.active {

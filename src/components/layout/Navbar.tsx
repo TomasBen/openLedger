@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <div className={"navbar_container"}>
+    <nav className={"navbar_container"} aria-label="main navigation">
       <NavLink to="/" className={"navlink"}>
         Dashboard
       </NavLink>
@@ -27,6 +27,6 @@ export default function Navbar() {
       <NavLink to="/contabilidad" className={"navlink variant"}>
         Contabilidad
       </NavLink>
-    </div>
+    </nav>
   );
 }

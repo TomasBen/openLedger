@@ -10,6 +10,7 @@
     --color-surface-tint: rgb(0 100 147);
     --color-on-primary: rgb(255 255 255);
     --color-primary-container: rgb(50 181 255);
+    --color-primary-container-hover: rgb(46 164 237);
     --color-on-primary-container: rgb(0 35 55);
     --color-secondary: rgb(147 44 0);
     --color-on-secondary: rgb(255 255 255);
@@ -120,7 +121,7 @@ body {
 .navbar_container {
     height: 100%;
     width: 15vw;
-    background-color: light-dark(red, blue);
+    background-color: var(--color-surface);
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -138,10 +139,16 @@ a.navlink {
     color: var(--color-on-surface);
     font-size: 1.3rem;
     text-decoration: none;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
 }
 
 a.navlink.active {
-    color: var(--color-on-primary);
-    background-color: var(--color-primary);
+    color: var(--color-on-primary-container);
+    background-color: var(--color-primary-container);
+    font-weight: bold;
+}
+
+a.navlink:hover {
+    background-color: var(--color-primary-container-hover);
+    transition: background-color 300ms;
 }

@@ -1,13 +1,11 @@
 import AccessibilityButton from "../accessibilityButton";
-import ZoomButtonGroup from "../zoomButtonGroup";
+import NavbarButton from "../navbarButton";
 
 export default function LowerPanel() {
   return (
     <footer className="lower_panel" role="contentinfo">
-      {/* redo both button components with buttonBase API to disable
-      ripple effect */}
       <section className="left_dock">
-        <ZoomButtonGroup />
+        <NavbarButton />
       </section>
       <section className="right_dock">
         <AccessibilityButton />

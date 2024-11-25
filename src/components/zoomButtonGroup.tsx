@@ -1,37 +1,68 @@
 import { useState } from "react";
-import { ButtonGroup, Button } from "@mui/material";
+import { Webview } from "../lib/webview";
+import { z } from "zod";
+import { ButtonGroup, ButtonBase, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Webview } from "../lib/webview";
 
 export default function ZoomButtonGroup() {
   let [scaleFactor, setScaleFactor] = useState(1);
 
-  {
-    /* TODO: add textinput in the scalefactor to manually set the scalefactor
-  and add a debounce to the button or try a faster way through Rust bindings
-  (delay most probably has to do with tauri IPC)  */
-  }
+  const scaleFactorSchema = z
+    .number({
+      invalid_type_error: "scale factor must be between 0.5 and 2",
+    })
+    .min(0.5)
+    .max(2);
+
+  const validateNumber = (input: number) => {
+    return scaleFactorSchema.safeParse(input);
+  };
+
+  const handleSetScale = (num: number) => {
+    const scaleFactor = validateNumber(num);
+
+    if (scaleFactor.success == true) {
+      Webview.setZoom(num);
+      setScaleFactor(num);
+    } else {
+      {
+        /* Implement error handling with a module that accepts an error type
+      (fatalError or warning) and adds it to the diagnostics bar in the LP */
+      }
+    }
+  };
 
   return (
-    <ButtonGroup orientation="horizontal" variant="outlined" size="medium">
-      <Button>
+    <ButtonGroup
+      className={"accessibility_button_group"}
+      orientation="horizontal"
+      variant="outlined"
+      size="medium"
+    >
+      <ButtonBase disableTouchRipple>
         <RemoveIcon
           onClick={() => {
             Webview.zoomOut();
             setScaleFactor((scaleFactor -= 0.1));
           }}
         />
-      </Button>
-      <Button style={{ fontSize: "0.8rem" }}>{scaleFactor}</Button>
-      <Button>
+      </ButtonBase>
+      <TextField
+        size="small"
+        value={scaleFactor}
+        onChange={(e) => console.log(e.currentTarget.value)}
+      >
+        {scaleFactor}
+      </TextField>
+      <ButtonBase disableTouchRipple>
         <AddIcon
           onClick={() => {
             Webview.zoomIn();
             setScaleFactor((scaleFactor += 0.1));
           }}
         />
-      </Button>
+      </ButtonBase>
     </ButtonGroup>
   );
 }

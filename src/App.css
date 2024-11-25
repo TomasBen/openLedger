@@ -3,6 +3,7 @@
 ::after {
     box-sizing: border-box;
     margin: 0;
+    cursor: default;
 }
 
 :root {
@@ -118,7 +119,6 @@ body {
     height: 100vh;
     width: 100vw;
     display: flex;
-    cursor: default;
 }
 
 #root {
@@ -131,6 +131,13 @@ main {
     height: 90vh;
     width: 100vw;
     display: flex;
+}
+
+header.upper_panel,
+footer.lower_panel {
+    padding: 0.5em 2em;
+    border: 1px solid;
+    border-color: var(--color-outline-variant);
 }
 
 header.upper_panel {
@@ -156,11 +163,16 @@ footer.lower_panel {
     background-color: var(--color-surface);
 }
 
-header,
-footer {
-    padding: 0.1em 2em;
-    border: 1px solid;
-    border-color: var(--color-outline-variant);
+footer.lower_panel > .left_dock > div.accessibility_button_group > button {
+    padding: 10px;
+}
+
+/* styling for the middle button inside zoom controls in LP */
+footer.lower_panel
+    > .left_dock
+    > div.accessibility_button_group
+    > button:nth-child(2) {
+    font-size: 1em;
 }
 
 .navbar_container {
@@ -176,6 +188,10 @@ footer {
     border-right: 1px solid;
     border-color: var(--color-outline-variant);
     overflow: hidden;
+}
+
+.navbar_container.close {
+    display: none;
 }
 
 /* Styles for react router navlinks */

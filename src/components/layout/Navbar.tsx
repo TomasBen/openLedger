@@ -2,7 +2,11 @@ import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className={"navbar_container"} aria-label="main navigation">
+    <nav
+      className={"navbar_container"}
+      aria-label="main navigation"
+      id="navbar"
+    >
       <NavLink to="/" className={"navlink"}>
         Dashboard
       </NavLink>

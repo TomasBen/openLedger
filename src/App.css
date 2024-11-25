@@ -137,7 +137,7 @@ header.upper_panel {
     height: 5vh;
     width: 100%;
     display: flex;
-    background-color: var(--color-surface-variant);
+    background-color: var(--color-surface);
 }
 
 header.upper_panel > a.skip-link {
@@ -151,13 +151,22 @@ footer.lower_panel {
     height: 5vh;
     width: 100%;
     display: flex;
-    background-color: var(--color-surface-variant);
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-surface);
+}
+
+header,
+footer {
+    padding: 0.1em 2em;
+    border: 1px solid;
+    border-color: var(--color-outline-variant);
 }
 
 .navbar_container {
     height: 100%;
     width: 15vw;
-    background-color: var(--color-surface);
+    background-color: var(--color-surface-variant);
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -165,7 +174,7 @@ footer.lower_panel {
     justify-content: start;
     gap: 1px;
     border-right: 1px solid;
-    border-color: var(--color-secondary);
+    border-color: var(--color-outline-variant);
     overflow: hidden;
 }
 

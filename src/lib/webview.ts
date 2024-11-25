@@ -1,11 +1,13 @@
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 
+export let scaleFactor = 1;
+
 export class Webview {
   static async zoomIn() {
     if (scaleFactor >= 0.5 && scaleFactor <= 2) {
       try {
         await getCurrentWebview().setZoom(scaleFactor + 0.1);
-        setScaleFactor((prev) => prev + 0.1);
+        scaleFactor += 0.1;
         return;
       } catch (error) {
         console.error(error);
@@ -14,10 +16,11 @@ export class Webview {
     }
   }
 
-  static async zoomOut(scaleFactor: number) {
+  static async zoomOut() {
     if (scaleFactor >= 0.5 && scaleFactor <= 2) {
       try {
         await getCurrentWebview().setZoom(scaleFactor - 0.1);
+        scaleFactor -= 0.1;
         return;
       } catch (error) {
         console.error(error);

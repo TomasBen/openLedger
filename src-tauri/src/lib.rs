@@ -1,4 +1,9 @@
+use std::sync::Mutex;
+use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
+use user_preferences::UserPreferences;
+
+mod user_preferences;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -25,12 +30,17 @@ pub fn run() {
     }];
 
     tauri::Builder::default()
+        .setup(|app| {
+            app.manage(Mutex::new(UserPreferences::default()));
+            Ok(())
+        })
         .plugin(
             tauri_plugin_sql::Builder::new()
                 .add_migrations("sqlite:accsw.db", migrations)
                 .build(),
         )
         .plugin(tauri_plugin_shell::init())
+        .invoke_handler(tauri::generate_handler![user_preferences::set_theme])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

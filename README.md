@@ -1,7 +1,8 @@
-# Tauri + React + Typescript
+## TODO
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [ ] Expand user preferences in rust side and make them load on app launch so that settings get saved.
+  - [ ] Add a import/export settings feature that writes settings to a JSON or TOML file on the root folder of folder specified by the user.
+- [ ] Rewrite navbar using a less bloated library like "Crossroads" instead of react-router or tanstack's. Should have active links logic and maybe caching (have to look into caching).
+- [ ] Create an error handling crate/module that catches errors on components and shows them to the "Diagnostics" component on the lower panel, kinda like Zed does. Has to have at least 2 or 3 types of erros ("Error", "Warning", "Info"), with acording icons.
+- [ ] Create a crash/fatal errors reporter that sends erros to an api, along with a track to the component where it happened and some privacy respecting context like OS info and such (have to look into this).
+  - [ ] Create a dashboard with all the crashes and data sent to it. Hosted on my machine.

@@ -59,6 +59,7 @@
     --color-surface-container-highest: rgb(222 227 233);
 }
 
+/* check for compatibility in other distros and Windows  */
 @media (prefers-color-scheme: dark) {
     --color-primary: rgb(141 205 255);
     --color-surface-tint: rgb(141 205 255);
@@ -112,8 +113,6 @@
     --color-surface-container-highest: rgb(48 53 58);
 }
 
-/* Layout.tsx related styles for the app container */
-
 #root,
 body {
     height: 100vh;
@@ -161,18 +160,6 @@ footer.lower_panel {
     justify-content: space-between;
     align-items: center;
     background-color: var(--color-surface);
-}
-
-footer.lower_panel > .left_dock > div.accessibility_button_group > button {
-    padding: 10px;
-}
-
-/* styling for the middle button inside zoom controls in LP */
-footer.lower_panel
-    > .left_dock
-    > div.accessibility_button_group
-    > button:nth-child(2) {
-    font-size: 1em;
 }
 
 .navbar_container {

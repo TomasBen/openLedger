@@ -3,6 +3,10 @@ import Layout from "./Layout.tsx";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
+{
+  /* Lazy load pages other than Dashboard */
+}
+
 export default function App() {
   return (
     <>

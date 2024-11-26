@@ -2,9 +2,13 @@ import { useState } from "react";
 import { Tooltip, IconButton } from "@mui/material";
 import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
 
-type panelState = "open" | "closed";
+export type panelState = "open" | "closed";
 
 export default function NavbarButton() {
+  {
+    /* Update logic to be more like the one used in accessibilityButton */
+  }
+
   const [panelState, setPanelState] = useState<panelState>("open");
 
   const navbar = document.getElementById("navbar");
@@ -21,12 +25,8 @@ export default function NavbarButton() {
 
   return (
     <Tooltip title="Left Panel">
-      <IconButton>
-        {panelState === "open" ? (
-          <PanelLeftClose onClick={() => handleClick()} />
-        ) : (
-          <PanelLeftOpen onClick={() => handleClick()} />
-        )}
+      <IconButton onClick={() => handleClick()}>
+        {panelState === "open" ? <PanelLeftClose /> : <PanelLeftOpen />}
       </IconButton>
     </Tooltip>
   );

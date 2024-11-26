@@ -1,10 +1,9 @@
 import { useState, useRef } from "react";
-import { PersonStanding } from "lucide-react";
-import { PanelState } from "./navbarButton";
 import { Popper, ClickAwayListener, Tooltip, IconButton } from "@mui/material";
-import AccessibilityButtonMenu from "./accessibilityButtonMenu";
+import { ShieldAlert } from "lucide-react";
+import { PanelState } from "./navbarButton";
 
-export default function AccessibilityButton() {
+export default function Diagnostics() {
   const [panelState, setPanelState] = useState<PanelState>("closed");
   const anchorElement = useRef<HTMLDivElement>(null);
 
@@ -13,20 +12,21 @@ export default function AccessibilityButton() {
   };
 
   return (
-    <div className={"accessibilityButtonContainer"} ref={anchorElement}>
+    <div className="diagnosticsButtonContainer" ref={anchorElement}>
       <Popper
         placement="top"
         open={panelState === "open"}
         anchorEl={anchorElement.current}
       >
-        <ClickAwayListener onClickAway={() => setPanelState("closed")}>
-          <AccessibilityButtonMenu />
+        <ClickAwayListener onClickAway={() => handleClick()}>
+          <span role={"placeholder for diagnostics"} />
+          {/* App wide diagnostics to be implemented */}
         </ClickAwayListener>
       </Popper>
 
-      <Tooltip title="Accessibility" className={"accessibilityButton"}>
+      <Tooltip title="Diagnostics">
         <IconButton onClick={() => handleClick()}>
-          <PersonStanding />
+          <ShieldAlert style={{ pointerEvents: "none" }} />
         </IconButton>
       </Tooltip>
     </div>

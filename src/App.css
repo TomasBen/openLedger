@@ -118,6 +118,7 @@ body {
     height: 100vh;
     width: 100vw;
     display: flex;
+    overflow: hidden;
 }
 
 #root {
@@ -125,41 +126,78 @@ body {
 }
 
 main {
-    /* main takes 90 of the vieport height since the header
-    and footer take the remaining 5 and 5 respectively */
-    height: 90vh;
+    /* main takes 95% of the vieport height since the
+    footer takes the remaining 5 */
+    height: 95vh;
     width: 100vw;
     display: flex;
 }
 
-header.upper_panel,
 footer.lower_panel {
-    padding: 0.5em 2em;
+    height: 5vh;
+    width: 100%;
+    padding: 0.5em 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-surface);
     border: 1px solid;
     border-color: var(--color-outline-variant);
 }
 
-header.upper_panel {
-    height: 5vh;
-    width: 100%;
-    display: flex;
-    background-color: var(--color-surface);
-}
-
-header.upper_panel > a.skip-link {
+footer.lower_panel > a.skip-link {
     position: absolute;
     left: -9999px;
     top: 0;
     background-color: white;
 }
 
-footer.lower_panel {
-    height: 5vh;
-    width: 100%;
+footer.lower_panel > section {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color: var(--color-surface);
+    gap: 10px;
+}
+
+.skeleton {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface-container);
+}
+
+.skeletonSection {
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.skeletonIcon {
+    height: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background-color: var(--color-surface-container-high);
+    animation: pulse 1s infinite alternate;
+}
+
+.skeletonText {
+    height: 25px;
+    width: 20rem;
+    background-color: var(--color-surface-container-high);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.accessibilityButtonMenu {
+    display: flex;
+    justify-content: center;
 }
 
 .navbar_container {

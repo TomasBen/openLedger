@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, forwardRef, ForwardedRef } from "react";
 import { Webview } from "../lib/webview.ts";
+import { Window } from "../lib/window.ts";
 import { Sun, Moon, Minus, Plus } from "lucide-react";
 import {
   Paper,
@@ -16,34 +17,41 @@ import {
 
 type Theme = "system" | "light" | "dark";
 
-export default function AccessibilityButtonMenu() {
-  const [theme, setTheme] = useState("system");
+const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>(
+  (_, ref: ForwardedRef<HTMLDivElement>) => {
+    const [theme, setTheme] = useState("system");
 
-  const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme);
-  };
+    const handleThemeChange = (newTheme: Theme) => {
+      if (newTheme === "dark") {
+        Window.setDarkMode();
+      } else if (newTheme === "light") {
+        Window.setLightMode();
+      } else {
+        Window.setLightMode();
+      }
+      setTheme(newTheme);
+    };
 
-  const [scaleFactor, setScaleFactor] = useState<number>(1);
+    const [scaleFactor, setScaleFactor] = useState<number>(1);
 
-  {
-    /* Implement user settings scale factor that syncronizes with the useState here */
-  }
-
-  const changeScaleFactor = (operation: string) => {
-    if (operation === "zoomIn" && scaleFactor < 2) {
-      Webview.zoomIn();
-      setScaleFactor((prevScaleFactor) => prevScaleFactor + 0.1);
-    } else if (operation === "zoomOut" && scaleFactor > 0.5) {
-      Webview.zoomOut();
-      setScaleFactor((prevScaleFactor) => prevScaleFactor - 0.1);
-    } else {
-      console.log("number must be between 0.5 and 2");
+    {
+      /* Implement user settings scale factor that syncronizes with the useState here */
     }
-  };
 
-  return (
-    <>
-      <Paper className={"accessibilityButtonMenu"} aria-hidden="true">
+    const changeScaleFactor = (operation: string) => {
+      if (operation === "zoomIn" && scaleFactor < 2) {
+        Webview.zoomIn();
+        setScaleFactor((prevScaleFactor) => prevScaleFactor + 0.1);
+      } else if (operation === "zoomOut" && scaleFactor > 0.5) {
+        Webview.zoomOut();
+        setScaleFactor((prevScaleFactor) => prevScaleFactor - 0.1);
+      } else {
+        console.log("number must be between 0.5 and 2");
+      }
+    };
+
+    return (
+      <Paper ref={ref} className={"accessibilityButtonMenu"} aria-hidden="true">
         <MenuList>
           <MenuItem disableRipple>
             <Checkbox />
@@ -52,7 +60,6 @@ export default function AccessibilityButtonMenu() {
           <Divider />
           <MenuItem disableRipple>Select theme</MenuItem>
           <MenuItem disableRipple>
-            {/* not implemented yet, see README */}
             <ToggleButtonGroup
               exclusive
               value={theme}
@@ -89,6 +96,10 @@ export default function AccessibilityButtonMenu() {
           </MenuItem>
         </MenuList>
       </Paper>
-    </>
-  );
-}
+    );
+  },
+);
+
+AccessibilityButtonMenu.displayName = "AccessibilityButtonMenu";
+
+export default AccessibilityButtonMenu;

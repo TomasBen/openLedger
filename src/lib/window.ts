@@ -2,14 +2,14 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 
 export const window = getCurrentWindow();
 
-export default class Window {
+export class Window {
   static async getCurrentTheme() {
     try {
       const theme = await window.theme();
 
       console.log(theme);
     } catch (error) {
-      return error as string;
+      return error;
     }
   }
 
@@ -17,7 +17,7 @@ export default class Window {
     try {
       await window.setTheme("dark");
     } catch (error) {
-      return error as string;
+      return error;
     }
   }
 
@@ -25,7 +25,7 @@ export default class Window {
     try {
       await window.setTheme("light");
     } catch (error) {
-      return error as string;
+      return error;
     }
   }
 }

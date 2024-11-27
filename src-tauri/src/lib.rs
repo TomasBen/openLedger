@@ -3,7 +3,7 @@ use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::UserPreferences;
 
-mod user_preferences;
+pub mod user_preferences;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

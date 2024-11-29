@@ -23,20 +23,14 @@ export default function Dashboard() {
     <>
       <h1>Dashboard</h1>
 
-      <button onClick={async () => await invoke("get_preferences")}>
-        get user preferences
-      </button>
-
       <button
-        onClick={async () =>
-          await invoke("update_preferences", {
-            newPreferences: {
-              Theme: { theme: "Dark" },
-            } as PreferenceUpdate,
-          })
-        }
+        onClick={async () => {
+          await invoke("get_preferences").then((preferences) =>
+            console.log(preferences),
+          );
+        }}
       >
-        update preferences to dark mode
+        get user preferences
       </button>
 
       <button
@@ -54,6 +48,10 @@ export default function Dashboard() {
         }
       >
         update entire preferences
+      </button>
+
+      <button onClick={async () => await invoke("save_preferences")}>
+        save preferences
       </button>
     </>
   );

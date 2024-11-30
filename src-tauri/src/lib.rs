@@ -1,4 +1,5 @@
 use std::sync::Mutex;
+use tauri::window::Window;
 use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::AppState;
@@ -33,10 +34,26 @@ pub fn run() {
 
             // set the app_config_path to the previously retrieved AppData dir. Platform agnostic.
             app_state.app_config_path = app_config_dir;
-            app_state.user_preferences = app_state
-                .user_preferences
-                .load_from_file(&app_state)
-                .unwrap();
+
+            let user_preferences = app_state.user_preferences;
+
+            app_state.user_preferences = user_preferences.load_from_file(&app_state).unwrap();
+            app.set_theme(app_state.user_preferences.theme);
+
+            let window = tauri::window::WindowBuilder::new(app, "main").build()?;
+
+            match user_preferences.fullscreen {
+                true => {
+                    if let Err(e) = Window::set_fullscreen(true) {
+                        println!("Failed to set window fullscreen to true: {}", e)
+                    }
+                }
+                false => {
+                    if let Err(e) = Window::set_fullscreen(false) {
+                        println!("Failed to set window fullscreen to false: {}", e)
+                    }
+                }
+            }
 
             Ok(())
         })

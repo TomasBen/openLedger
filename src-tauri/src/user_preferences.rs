@@ -3,7 +3,7 @@ use serde_json::to_string_pretty;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::{Mutex, MutexGuard};
-use tauri::{Error, State};
+use tauri::{Error, State, Theme};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Language {
@@ -12,18 +12,11 @@ pub enum Language {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Theme {
-    System,
-    Light,
-    Dark,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserPreferences {
-    language: Language,
-    theme: Theme,
-    scale_factor: f64,
-    fullscreen: bool,
+    pub language: Language,
+    pub theme: Option<Theme>,
+    pub scale_factor: f64,
+    pub fullscreen: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -39,14 +32,14 @@ impl Default for UserPreferences {
     fn default() -> Self {
         UserPreferences {
             language: Language::English,
-            theme: Theme::System,
+            theme: Some(Theme::Light),
             scale_factor: 1.0,
             fullscreen: true,
         }
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct AppState {
     pub user_preferences: UserPreferences,
     pub app_config_path: PathBuf,
@@ -66,7 +59,7 @@ impl UserPreferences {
         match update {
             PreferenceUpdate::Full(prefs) => *self = prefs,
             PreferenceUpdate::Language { language } => self.language = language,
-            PreferenceUpdate::Theme { theme } => self.theme = theme,
+            PreferenceUpdate::Theme { theme } => self.theme = Some(theme),
             PreferenceUpdate::ScaleFactor { scale_factor } => self.scale_factor = scale_factor,
             PreferenceUpdate::Fullscreen { fullscreen } => self.fullscreen = fullscreen,
         }
@@ -76,7 +69,7 @@ impl UserPreferences {
         Ok(())
     }
 
-    /* Consider using tokio for async I/O operations */
+    /* Consider using tokio for async I/O operations in the future */
 
     fn save_to_file(self: &Self, mut path: PathBuf) -> Result<(), Error> {
         // conver the UserPreferences struct to a pretty printed json
@@ -156,14 +149,16 @@ pub async fn get_preferences(state: State<'_, Mutex<AppState>>) -> Result<UserPr
 }
 
 #[tauri::command]
-pub async fn save_preferences(state: State<'_, Mutex<AppState>>) -> Result<(), Error> {
+pub async fn save_preferences(state: State<'_, Mutex<AppState>>) -> Result<String, Error> {
     let app_state = state.lock().unwrap();
 
-    // need to handle erros in all async functions here
+    // need to handle errors in all async functions here
 
-    app_state
+    match app_state
         .user_preferences
-        .save_to_file(app_state.app_config_path.clone());
-
-    Ok(())
+        .save_to_file(app_state.app_config_path.clone())
+    {
+        Ok(()) => Ok("preferences successfully saved".to_string()),
+        Err(e) => Ok(format!("failed to save preferences: {}", e)),
+    }
 }

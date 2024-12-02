@@ -9,9 +9,10 @@ pub use tauri::webview::Webview;
 pub use tauri::window::Window;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
 pub enum Language {
+    #[serde(rename = "english")]
     English,
+    #[serde(rename = "spanish")]
     Spanish,
 }
 
@@ -23,7 +24,7 @@ pub struct UserPreferences {
     pub theme: Option<Theme>,
     #[serde(rename = "ScaleFactor")]
     pub scale_factor: f64,
-    #[serde(rename = "Fullscreem")]
+    #[serde(rename = "Fullscreen")]
     pub fullscreen: bool,
 }
 
@@ -90,11 +91,6 @@ impl UserPreferences {
 
         path.push("preferences.json");
 
-        println!(
-            "Saving preferences to the following path: {:?} \n \n {}",
-            path, &json
-        );
-
         fs::write(path, json).map_err(|e| {
             std::io::Error::new(
                 std::io::ErrorKind::Other,
@@ -112,17 +108,25 @@ impl UserPreferences {
         let mut path = app_state.app_config_path.clone();
         path.push("preferences.json");
 
+        if !path.exists() {
+            println!("[RUST::load_from_file] Preferences file not found, initializing defaults");
+            return Ok(UserPreferences::default());
+        }
+
         match fs::read_to_string(&path) {
             Ok(content) => {
-                println!("reading preferences from path: {:?}", path);
+                println!("reading preferences from path: {:?} \n\n", path);
 
                 match serde_json::from_str::<UserPreferences>(&content) {
                     Ok(preferences) => {
-                        println!("successfully loaded preferences!");
+                        println!("successfully loaded preferences! \n\n");
                         Ok(preferences)
                     }
                     Err(e) => {
-                        println!("Failed to parse preferences JSON: {:?}, using defaults", e);
+                        println!(
+                            "Failed to parse preferences JSON: {:?}, using defaults \n\n",
+                            e
+                        );
                         Ok(UserPreferences::default())
                     }
                 }
@@ -140,21 +144,17 @@ pub async fn update_preferences(
     new_preferences: PreferenceUpdate,
     state: State<'_, Mutex<AppState>>,
 ) -> Result<(), Error> {
-    let mut app_state = state.lock().unwrap();
-
-    match app_state.user_preferences.update(new_preferences) {
-        Ok(()) => {
-            println!("[Rust::update_preferences] preferences updated successfully!");
-            Ok(())
-        }
-        Err(e) => {
-            println!(
-                "[Rust::update_preferences] there was an error while updating preferences!: {}",
-                e
-            );
-            Ok(())
-        }
+    {
+        let mut app_state = state.lock().unwrap();
+        app_state.user_preferences.update(new_preferences)?
     }
+    {
+        let app_state = state.lock().unwrap();
+        let path = app_state.app_config_path.clone();
+
+        app_state.user_preferences.save_to_file(path)?;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -166,11 +166,9 @@ pub async fn get_preferences(state: State<'_, Mutex<AppState>>) -> Result<UserPr
     Ok(preferences.clone())
 }
 
-#[tauri::command]
+/* #[tauri::command]
 pub async fn save_preferences(state: State<'_, Mutex<AppState>>) -> Result<String, Error> {
     let app_state = state.lock().unwrap();
-
-    // need to handle errors in all async functions here
 
     match app_state
         .user_preferences
@@ -182,7 +180,9 @@ pub async fn save_preferences(state: State<'_, Mutex<AppState>>) -> Result<Strin
             e
         )),
     }
-}
+} */
+
+// -------------------- WINDOW RELATED FUNCTIONS -------------------------
 
 #[tauri::command]
 pub async fn set_to_fullscreen(window: Window) -> Result<String, Error> {

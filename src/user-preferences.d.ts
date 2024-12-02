@@ -2,13 +2,13 @@
 and transforming the strings on every update call isn't ideal */
 
 export enum Language {
-  English = 'English',
-  Spanish = 'Spanish',
+  English = 'english',
+  Spanish = 'spanish',
 }
 
 export enum Theme {
-  Light = 'Light',
-  Dark = 'Dark',
+  Light = 'light',
+  Dark = 'dark',
 }
 
 export type UserPreferencesContextType = {

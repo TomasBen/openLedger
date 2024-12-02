@@ -5,16 +5,16 @@ import { Sun, Moon, Minus, Plus } from 'lucide-react';
 import { Paper, MenuList, MenuItem, Divider } from '@mui/material';
 import { ToggleButtonGroup, ToggleButton, ButtonGroup, Checkbox, ButtonBase, IconButton } from '@mui/material';
 
+import { Theme } from '../user-preferences.d';
+
 const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: ForwardedRef<HTMLDivElement>) => {
   const { preferences, updatePreferences } = useContext(UserPreferencesContext);
 
   const changeScaleFactor = (operation: string) => {
-    if (operation === 'zoomIn' && preferences.ScaleFactor < 2) {
+    if (operation === 'zoomIn') {
       Webview.zoomIn(preferences, updatePreferences);
-    } else if (operation === 'zoomOut' && preferences.ScaleFactor > 0.5) {
-      Webview.zoomOut(preferences, updatePreferences);
     } else {
-      console.log('number must be between 0.5 and 2');
+      Webview.zoomOut(preferences, updatePreferences);
     }
   };
 
@@ -29,10 +29,10 @@ const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: Forwarde
         <MenuItem disableRipple>Select theme</MenuItem>
         <MenuItem disableRipple>
           <ToggleButtonGroup exclusive value={preferences.Theme}>
-            <ToggleButton value="Light" onClick={() => updatePreferences({ Theme: 'Light' })}>
+            <ToggleButton value={Theme.Light} onClick={() => updatePreferences({ Theme: Theme.Light })}>
               <Sun style={{ pointerEvents: 'none' }} />
             </ToggleButton>
-            <ToggleButton value="Dark" onClick={() => updatePreferences({ Theme: 'Dark' })}>
+            <ToggleButton value={Theme.Dark} onClick={() => updatePreferences({ Theme: Theme.Dark })}>
               <Moon style={{ pointerEvents: 'none' }} />
             </ToggleButton>
           </ToggleButtonGroup>

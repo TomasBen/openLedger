@@ -3,6 +3,8 @@ use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::AppState;
 
+pub use tauri::window::Window;
+
 pub mod user_preferences;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -15,13 +17,7 @@ pub fn run() {
     }];
 
     tauri::Builder::default()
-        /*
-            First initialize a default AppState struct that looks like:
-            AppState {
-                user_preferences: Userpreferences::default() <- placeholder values before we load them from file,
-                app_config_path: PathBuf::from("undefined") <- placeholder value since we cant get the app_config_dir from the user_preferences module,
-            }
-        */
+        // First initialize a default AppState struct that looks like:
         .manage(Mutex::new(AppState::default()))
         .setup(|app| {
             // get the app's config dir
@@ -50,7 +46,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             user_preferences::update_preferences,
             user_preferences::get_preferences,
-            user_preferences::save_preferences,
             user_preferences::set_to_fullscreen
         ])
         .run(tauri::generate_context!())

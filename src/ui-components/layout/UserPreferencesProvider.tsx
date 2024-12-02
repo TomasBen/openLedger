@@ -16,30 +16,26 @@ export default function UserPreferencesProvider({ children }: { children: React.
     async function loadPreferences() {
       const userPrefs = await invoke<UserPreferences>('get_preferences');
       setPreferences(userPrefs);
-      console.log('[UserPreferencesProvider] Preferences loaded from Tauri: \n\n', userPrefs);
     }
     loadPreferences();
   }, []);
 
   // saves preferences
   const savePreferences = async (updates: Partial<UserPreferences>) => {
-    console.log('[UserPreferencesProvider::SavePreferences] Trying to save preferences to Tauri: \n\n', updates);
     try {
       await invoke('update_preferences', { newPreferences: updates });
       setPendingChanges({});
-      console.log('[UserPreferencesProvider::SavePreferences] Preferences updated to Tauri: \n\n', preferences);
     } catch (error) {
       console.error('[UserPreferecesProvider::SavePreferences] Error updating preferences to Tauri: \n\n', error);
     }
   };
 
   // Debounces given function to only be called once every 30s
-  const debouncedSave = useDebounce(savePreferences, 5000);
+  const debouncedSave = useDebounce(savePreferences, 3000);
 
   const updatePreferences = async (updates: Partial<UserPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...updates }));
     setPendingChanges((prev) => ({ ...prev, ...updates }));
-    console.log('[UserPreferencesProvider::SavePreferences] Updates queued: \n\n', updates);
     debouncedSave(updates);
   };
 

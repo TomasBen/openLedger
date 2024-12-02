@@ -17,7 +17,11 @@ export default function LanguageButton() {
       <Popper placement="top" open={panelState === 'open'} anchorEl={anchorElement.current}>
         <ClickAwayListener onClickAway={() => setPanelState(panelState === 'open' ? 'closed' : 'open')}>
           <Paper>
-            <ToggleButtonGroup orientation="vertical" exclusive value={preferences ? preferences.Language : 'English'}>
+            <ToggleButtonGroup
+              orientation="vertical"
+              exclusive
+              value={preferences ? preferences.Language : Language.English}
+            >
               <ToggleButton value={Language.English} onClick={() => updatePreferences({ Language: Language.English })}>
                 English
               </ToggleButton>

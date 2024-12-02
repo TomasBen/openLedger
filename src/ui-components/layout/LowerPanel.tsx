@@ -1,4 +1,5 @@
 import AccessibilityButton from "../accessibilityButton";
+import LanguageButton from "../languageButton";
 import NavbarButton from "../navbarButton";
 import DiagnosticsButton from "../diagnosticsButton";
 
@@ -13,6 +14,7 @@ export default function LowerPanel() {
         <DiagnosticsButton />
       </section>
       <section className="right_dock">
+        <LanguageButton />
         <AccessibilityButton />
       </section>
     </footer>

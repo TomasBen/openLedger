@@ -1,5 +1,5 @@
-import LowerPanel from "./components/layout/LowerPanel.tsx";
-import Navbar from "./components/layout/Navbar.tsx";
+import LowerPanel from "./ui-components/layout/LowerPanel.tsx";
+import Navbar from "./ui-components/layout/Navbar.tsx";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

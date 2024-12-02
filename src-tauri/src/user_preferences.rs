@@ -5,27 +5,41 @@ use std::path::PathBuf;
 use std::sync::{Mutex, MutexGuard};
 use tauri::{Error, State, Theme};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+pub use tauri::webview::Webview;
+pub use tauri::window::Window;
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
 pub enum Language {
     English,
     Spanish,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct UserPreferences {
+    #[serde(rename = "Language")]
     pub language: Language,
+    #[serde(rename = "Theme")]
     pub theme: Option<Theme>,
+    #[serde(rename = "ScaleFactor")]
     pub scale_factor: f64,
+    #[serde(rename = "Fullscreem")]
     pub fullscreen: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PreferenceUpdate {
     Full(UserPreferences),
-    Language { language: Language },
-    Theme { theme: Theme },
-    ScaleFactor { scale_factor: f64 },
-    Fullscreen { fullscreen: bool },
+    Language(Language),
+    Theme(Theme),
+    ScaleFactor(f64),
+    Fullscreen(bool),
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct AppState {
+    pub user_preferences: UserPreferences,
+    pub app_config_path: PathBuf,
 }
 
 impl Default for UserPreferences {
@@ -37,12 +51,6 @@ impl Default for UserPreferences {
             fullscreen: true,
         }
     }
-}
-
-#[derive(Debug, Clone, Serialize)]
-pub struct AppState {
-    pub user_preferences: UserPreferences,
-    pub app_config_path: PathBuf,
 }
 
 impl Default for AppState {
@@ -58,10 +66,10 @@ impl UserPreferences {
     fn update(&mut self, update: PreferenceUpdate) -> Result<(), Error> {
         match update {
             PreferenceUpdate::Full(prefs) => *self = prefs,
-            PreferenceUpdate::Language { language } => self.language = language,
-            PreferenceUpdate::Theme { theme } => self.theme = Some(theme),
-            PreferenceUpdate::ScaleFactor { scale_factor } => self.scale_factor = scale_factor,
-            PreferenceUpdate::Fullscreen { fullscreen } => self.fullscreen = fullscreen,
+            PreferenceUpdate::Language(language) => self.language = language,
+            PreferenceUpdate::Theme(theme) => self.theme = Some(theme),
+            PreferenceUpdate::ScaleFactor(scale_factor) => self.scale_factor = scale_factor,
+            PreferenceUpdate::Fullscreen(fullscreen) => self.fullscreen = fullscreen,
         }
 
         println!("{:?}", &self);
@@ -134,9 +142,19 @@ pub async fn update_preferences(
 ) -> Result<(), Error> {
     let mut app_state = state.lock().unwrap();
 
-    app_state.user_preferences.update(new_preferences)?;
-
-    Ok(())
+    match app_state.user_preferences.update(new_preferences) {
+        Ok(()) => {
+            println!("[Rust::update_preferences] preferences updated successfully!");
+            Ok(())
+        }
+        Err(e) => {
+            println!(
+                "[Rust::update_preferences] there was an error while updating preferences!: {}",
+                e
+            );
+            Ok(())
+        }
+    }
 }
 
 #[tauri::command]
@@ -158,7 +176,21 @@ pub async fn save_preferences(state: State<'_, Mutex<AppState>>) -> Result<Strin
         .user_preferences
         .save_to_file(app_state.app_config_path.clone())
     {
-        Ok(()) => Ok("preferences successfully saved".to_string()),
-        Err(e) => Ok(format!("failed to save preferences: {}", e)),
+        Ok(()) => Ok("[Rust::save_preferences]preferences successfully saved".to_string()),
+        Err(e) => Ok(format!(
+            "[Rust::save_preferences]failed to save preferences: {}",
+            e
+        )),
+    }
+}
+
+#[tauri::command]
+pub async fn set_to_fullscreen(window: Window) -> Result<String, Error> {
+    match window.set_fullscreen(true) {
+        Ok(()) => Ok("window set to fullscreen succesfully".to_string()),
+        Err(e) => Ok(format!(
+            "error when trying to set the window to fullscreen: {}",
+            e
+        )),
     }
 }

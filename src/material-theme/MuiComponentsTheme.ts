@@ -5,6 +5,14 @@ const theme = createTheme({
     dark: true,
   },
   components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          padding: "0.3em",
+          backdropFilter: "blur(10px)",
+        },
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
@@ -22,14 +30,15 @@ const theme = createTheme({
         },
       },
     },
-    MuiMenuItem: {
+    MuiToggleButton: {
       styleOverrides: {
         root: {
+          border: "none",
           cursor: "default",
         },
       },
     },
-    MuiToggleButton: {
+    MuiMenuItem: {
       styleOverrides: {
         root: {
           cursor: "default",

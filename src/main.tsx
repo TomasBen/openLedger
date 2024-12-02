@@ -1,16 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./material-theme/MuiComponentsTheme.ts";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import UserPreferencesProvider from './ui-components/layout/UserPreferencesProvider.tsx';
+import theme from './material-theme/MuiComponentsTheme.ts';
+import App from './App';
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <App />
+        <UserPreferencesProvider>
+          <App />
+        </UserPreferencesProvider>
       </BrowserRouter>
     </ThemeProvider>
-  </React.StrictMode>,
+  </StrictMode>,
 );

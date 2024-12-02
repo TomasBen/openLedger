@@ -1,5 +1,4 @@
 use std::sync::Mutex;
-use tauri::window::Window;
 use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::AppState;
@@ -40,21 +39,6 @@ pub fn run() {
             app_state.user_preferences = user_preferences.load_from_file(&app_state).unwrap();
             app.set_theme(app_state.user_preferences.theme);
 
-            let window = tauri::window::WindowBuilder::new(app, "main").build()?;
-
-            match user_preferences.fullscreen {
-                true => {
-                    if let Err(e) = Window::set_fullscreen(true) {
-                        println!("Failed to set window fullscreen to true: {}", e)
-                    }
-                }
-                false => {
-                    if let Err(e) = Window::set_fullscreen(false) {
-                        println!("Failed to set window fullscreen to false: {}", e)
-                    }
-                }
-            }
-
             Ok(())
         })
         .plugin(
@@ -66,7 +50,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             user_preferences::update_preferences,
             user_preferences::get_preferences,
-            user_preferences::save_preferences
+            user_preferences::save_preferences,
+            user_preferences::set_to_fullscreen
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

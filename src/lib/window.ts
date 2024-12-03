@@ -1,6 +1,6 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
-import { UserPreferences, Theme } from '../user-preferences.d';
+import { UserPreferences, Theme } from '../types/user-preferences';
 
 export const window = getCurrentWindow();
 

@@ -10,7 +10,7 @@ in order of importance:
 - [x] Expand user preferences in rust side and make them load on app launch so that settings get saved.
   - [ ] Add a import/export settings feature that writes settings to a JSON or TOML file on the root folder of folder specified by the user.
 - [x] Fully implement dark mode.
-  - [ ] Test on other devices to see if it works. Currently changing the webview theme doesnt make the css @media (prefers-color-scheme: dark) work, don't know if this is a my distro problem or Linux problem even.
+  - [ ] Test on other devices to see if it works.
 - [ ] Implement a ~~redis~~ cache for the expensive db queries. Have to look into other FOSS memory databases, possibly memcached for ease of use.
 - [ ] Create an error handling crate/module that catches errors on components and shows them to the "Diagnostics" component on the lower panel, kinda like Zed does. Has to have at least 2 or 3 types of erros ("Error", "Warning", "Info"), with acording icons.
 - [ ] Implement high contrast mode and add it to the accessibility button menu.

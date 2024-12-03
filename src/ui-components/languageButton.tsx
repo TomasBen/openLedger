@@ -4,7 +4,7 @@ import { PanelState } from './ui-components';
 import { Languages } from 'lucide-react';
 import { Popper, ClickAwayListener, Paper, Tooltip, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
 
-import { Language } from '../user-preferences.d';
+import { Language } from '../types/user-preferences';
 
 export default function LanguageButton() {
   const { preferences, updatePreferences } = useContext(UserPreferencesContext);

@@ -6,7 +6,7 @@ import { Sun, Moon, Minus, Plus } from 'lucide-react';
 import { Paper, MenuList, MenuItem, Divider } from '@mui/material';
 import { ToggleButtonGroup, ToggleButton, ButtonGroup, ButtonBase, IconButton } from '@mui/material';
 
-import { Theme } from '../user-preferences.d';
+import { Theme } from '../types/user-preferences';
 
 const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: ForwardedRef<HTMLDivElement>) => {
   const { preferences, updatePreferences } = useContext(UserPreferencesContext);

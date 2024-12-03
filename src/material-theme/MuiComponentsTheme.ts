@@ -33,7 +33,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            backgroundColor: 'var(--color-surface-container-low)',
+            backgroundColor: 'transparent',
           },
         },
       },

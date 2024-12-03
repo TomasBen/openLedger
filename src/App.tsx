@@ -1,21 +1,27 @@
-import Dashboard from "./pages/Dashboard.tsx";
-import Layout from "./Layout.tsx";
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import { lazy, Suspense } from 'react';
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './Layout.tsx';
+import Dashboard from './routes/Dashboard.tsx';
 
-{
-  /* Lazy load pages other than Dashboard */
-}
+const ComprobantesDeVentas = lazy(() => import('./routes/ventas/comprobantes.tsx'));
+const Presupuestos = lazy(() => import('./routes/ventas/presupuestos.tsx'));
+const Remitos = lazy(() => import('./routes/ventas/remitos.tsx'));
 
 export default function App() {
   return (
     <>
       <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/connection" element={<h1>Database</h1>} />
-          <Route path="/first-login" element={<h1>Login</h1>} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/ventas">
+              <Route index element={<ComprobantesDeVentas />} />
+              <Route path="presupuestos" element={<Presupuestos />} />
+              <Route path="remitos" element={<Remitos />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </Layout>
     </>
   );

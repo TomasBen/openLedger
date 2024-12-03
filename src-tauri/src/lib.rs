@@ -17,6 +17,7 @@ pub fn run() {
     }];
 
     tauri::Builder::default()
+        // .invoke_system(http.initialization_script(), http.responder())
         // First initialize a default AppState struct that looks like:
         .manage(Mutex::new(AppState::default()))
         .setup(|app| {
@@ -34,6 +35,8 @@ pub fn run() {
 
             app_state.user_preferences = user_preferences.load_from_file(&app_state).unwrap();
             app.set_theme(app_state.user_preferences.theme);
+
+            // http.start(app.handle());
 
             Ok(())
         })

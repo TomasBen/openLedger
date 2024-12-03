@@ -1,36 +1,32 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <nav
-      className={"navbar_container"}
-      aria-label="main navigation"
-      id="navbar"
-    >
-      <NavLink to="/" className={"navlink"}>
+    <nav className={'navbar_container'} aria-label="main navigation" id="navbar">
+      <NavLink to="/" className={'navlink'}>
         Dashboard
       </NavLink>
-      <NavLink to="/reportes" className={"navlink"}>
-        Reportes
-      </NavLink>
-      <NavLink to="/ventas" className={"navlink"}>
+      <NavLink to="/ventas" className={'navlink'}>
         Ventas
       </NavLink>
-      <NavLink to="/compras" className={"navlink"}>
+      {/* <NavLink to="/reportes" className={'navlink'}>
+        Reportes
+      </NavLink>
+      <NavLink to="/compras" className={'navlink'}>
         Compras
       </NavLink>
-      <NavLink to="/finanzas" className={"navlink"}>
+      <NavLink to="/finanzas" className={'navlink'}>
         Finanzas
       </NavLink>
-      <NavLink to="/inventario" className={"navlink"}>
+      <NavLink to="/inventario" className={'navlink'}>
         Inventario
       </NavLink>
-      <NavLink to="/impuestos" className={"navlink"}>
+      <NavLink to="/impuestos" className={'navlink'}>
         Impuestos
       </NavLink>
-      <NavLink to="/contabilidad" className={"navlink variant"}>
+      <NavLink to="/contabilidad" className={'navlink variant'}>
         Contabilidad
-      </NavLink>
+        </NavLink> */}
     </nav>
   );
 }

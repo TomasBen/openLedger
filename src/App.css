@@ -186,8 +186,7 @@ body {
 }
 
 main {
-    /* main takes 95% of the vieport height since the
-    footer takes the remaining 5 */
+    /* main takes 95% of the vieport height since the footer takes the remaining 5 */
     height: 95vh;
     width: 100vw;
     display: flex;
@@ -217,43 +216,6 @@ footer.lower_panel > section {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.skeleton {
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-surface-container);
-}
-
-.skeletonSection {
-    padding: 5px;
-    display: flex;
-    gap: 5px;
-}
-
-.skeletonIcon {
-    height: 30px;
-    aspect-ratio: 1/1;
-    border-radius: 100%;
-    background-color: var(--color-surface-container-high);
-    animation: pulse 1s infinite alternate;
-}
-
-.skeletonText {
-    height: 25px;
-    width: 20rem;
-    background-color: var(--color-surface-container-high);
-    animation: pulse 1s infinite alternate;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 0.3;
-    }
-    100% {
-        opacity: 1;
-    }
 }
 
 .accessibilityButtonMenu {
@@ -288,8 +250,8 @@ a.navlink {
     border-radius: 0.3rem;
     color: var(--color-on-surface);
     font-size: 1.3rem;
-    text-overflow: clip;
     text-decoration: none;
+    text-overflow: clip;
 }
 
 a.navlink.active {
@@ -301,4 +263,42 @@ a.navlink.active {
 a.navlink:hover {
     background-color: var(--color-primary-container-hover);
     transition: background-color 300ms;
+}
+
+.breadcrumb-container {
+    height: auto;
+    width: 100%;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    border-bottom: 1px solid;
+    border-color: var(--color-outline-variant);
+}
+
+.breadcrumb-container > a.breadcrumb-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
+
+.breadcrumb-container > a.breadcrumb-home:hover {
+    background-color: var(--color-surface-container);
+}
+
+.breadcrumb-container > a,
+.breadcrumb-container > span {
+    padding: 10px;
+    color: var(--color-on-surface);
+    text-transform: capitalize;
+    text-decoration: none;
+}
+
+.breadcrumb-container > a:last-child {
+    font-weight: bold;
+}
+
+.breadcrumb-container > a:hover {
+    text-decoration: underline;
 }

@@ -16,7 +16,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/ventas">
-              <Route index element={<ComprobantesDeVentas />} />
+              // TODO: root ventas page with statistics
+              <Route path="comprobantes" element={<ComprobantesDeVentas />} />
               <Route path="presupuestos" element={<Presupuestos />} />
               <Route path="remitos" element={<Remitos />} />
             </Route>

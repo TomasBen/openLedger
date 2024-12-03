@@ -6,7 +6,7 @@ export default function Navbar() {
       <NavLink to="/" className={'navlink'}>
         Dashboard
       </NavLink>
-      <NavLink to="/ventas" className={'navlink'}>
+      <NavLink to="/ventas/comprobantes" className={'navlink'}>
         Ventas
       </NavLink>
       {/* <NavLink to="/reportes" className={'navlink'}>

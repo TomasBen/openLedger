@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 import UserPreferencesContext from '../contexts/UserPreferencesContext';
-import { PanelState } from './ui-components';
+import { PanelState } from '../types/components';
 import { Languages } from 'lucide-react';
 import { Popper, ClickAwayListener, Paper, Tooltip, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
 

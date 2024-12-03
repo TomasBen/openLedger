@@ -1,7 +1,7 @@
 ## KNOWN BUGS FIXED
 
 - [ ] UpdatePreferences debounced hook doesnt update the settings properly. If settings changed stack up, the context on the frontside correctly updates all of them but the backend side only updates the most recent one.
-- [ ] Light mode and high contrast works but dark mode and high contrast defaults to light mode. Might be because system doesnt make the differencew between the two and uses a single high contrast profile for both. No idea how to fix other than force the colors with javascript which I might not want todo.
+- [ ] The different components of the navbar have different widths causing layout shift.
 
 ## TODO
 

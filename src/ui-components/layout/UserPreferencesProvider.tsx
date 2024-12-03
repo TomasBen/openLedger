@@ -30,7 +30,7 @@ export default function UserPreferencesProvider({ children }: { children: React.
     }
   };
 
-  // Debounces given function to only be called once every 30s
+  // Debounces given function to only be called once every 5s
   const debouncedSave = useDebounce(savePreferences, 3000);
 
   const updatePreferences = async (updates: Partial<UserPreferences>) => {

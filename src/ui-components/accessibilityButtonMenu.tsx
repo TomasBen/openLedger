@@ -1,9 +1,10 @@
 import { useContext, forwardRef, ForwardedRef } from 'react';
+import { Window } from '../lib/window.ts';
 import { Webview } from '../lib/webview.ts';
 import UserPreferencesContext from '../contexts/UserPreferencesContext';
 import { Sun, Moon, Minus, Plus } from 'lucide-react';
 import { Paper, MenuList, MenuItem, Divider } from '@mui/material';
-import { ToggleButtonGroup, ToggleButton, ButtonGroup, Checkbox, ButtonBase, IconButton } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, ButtonGroup, ButtonBase, IconButton } from '@mui/material';
 
 import { Theme } from '../user-preferences.d';
 
@@ -21,18 +22,20 @@ const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: Forwarde
   return (
     <Paper ref={ref} className={'accessibilityButtonMenu'} aria-hidden="true">
       <MenuList>
-        <MenuItem disableRipple>
-          <Checkbox />
+        {/* high contrast option disabled since its automatically propagated from
+          the system configuration, might add independent option in the future
+          <MenuItem disableRipple>
+          <Checkbox onChange={() => Window.setHighContastMode(preferences)} />
           High Contrast
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
         <MenuItem disableRipple>Select theme</MenuItem>
         <MenuItem disableRipple>
           <ToggleButtonGroup exclusive value={preferences.Theme}>
-            <ToggleButton value={Theme.Light} onClick={() => updatePreferences({ Theme: Theme.Light })}>
+            <ToggleButton value={Theme.Light} onClick={() => Window.setLightMode(updatePreferences)}>
               <Sun style={{ pointerEvents: 'none' }} />
             </ToggleButton>
-            <ToggleButton value={Theme.Dark} onClick={() => updatePreferences({ Theme: Theme.Dark })}>
+            <ToggleButton value={Theme.Dark} onClick={() => Window.setDarkMode(updatePreferences)}>
               <Moon style={{ pointerEvents: 'none' }} />
             </ToggleButton>
           </ToggleButtonGroup>

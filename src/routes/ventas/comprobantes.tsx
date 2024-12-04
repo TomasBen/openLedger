@@ -1,5 +1,5 @@
 import { Stack, Box } from '@mui/material';
-import Breadcrumb from '../../ui-components/breadcrumb';
+import Breadcrumb from '../../components/breadcrumb.tsx';
 
 import { BreadcrumbItem } from '../../types/components';
 

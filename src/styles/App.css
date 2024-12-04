@@ -193,6 +193,78 @@ main {
     background: var(--color-surface);
 }
 
+{/* --------- SIDEBAR STYLES --------- */}
+
+.sidebar {
+    height: 100%;
+    width: 15vw;
+    background-color: var(--color-surface-container-low);
+    padding: 0.3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 0.3em;
+    border-right: 1px solid;
+    border-color: var(--color-outline-variant);
+    overflow-x: visible;
+}
+
+.sidebar.close {
+    display: none;
+}
+
+.sidebarEntry {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.sidebarLink {
+    width: 100%;
+    padding: 1rem;
+    color: var(--color-on-surface);
+    font-size: 1.3rem;
+    text-decoration: none;
+    border-radius: 0.3rem;
+}
+
+.sidebarLink.active {
+    color: var(--color-on-primary-container);
+    background-color: var(--color-primary-container);
+}
+
+.sidebarLink:hover {
+    background-color: var(--color-primary-container-hover);
+}
+
+.sidebarEntry > .floatingMenu {
+    color: var(--color-on-surface);
+    background-color: var(--color-surface-container-low);
+    position: absolute;
+    top: 0;
+    left: 105%;
+    padding: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3em;
+    border: 1px solid;
+    border-color: var(--color-outline-variant);
+    z-index: 10;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 100ms ease-in-out;
+}
+
+.sidebarEntry:hover > .floatingMenu {
+    transform: scaleX(1);
+}
+
+{/* --------- SIDEBAR STYLES --------- */}
+
 footer.lower_panel {
     height: 5vh;
     width: 100%;
@@ -223,52 +295,11 @@ footer.lower_panel > section {
     justify-content: center;
 }
 
-.navbar_container {
-    height: 100%;
-    width: 15vw;
-    background-color: var(--color-surface-container-low);
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    gap: 1px;
-    border-right: 1px solid;
-    /* I use outline variant since its more sutile and not so noticeable */
-    border-color: var(--color-outline-variant);
-    overflow: hidden;
-}
-
-.navbar_container.close {
-    display: none;
-}
-
-/* Styles for react router navlinks */
-a.navlink {
-    width: 100%;
-    padding: 20px;
-    border-radius: 0.3rem;
-    color: var(--color-on-surface);
-    font-size: 1.3rem;
-    text-decoration: none;
-    text-overflow: clip;
-}
-
-a.navlink.active {
-    color: var(--color-on-primary-container);
-    background-color: var(--color-primary-container);
-    font-weight: bold;
-}
-
-a.navlink:hover {
-    background-color: var(--color-primary-container-hover);
-    transition: background-color 300ms;
-}
-
 .breadcrumb-container {
     height: auto;
     width: 100%;
-    padding: 0.5em;
+    padding: 0.3em;
+    padding-left: 1em;
     display: flex;
     align-items: center;
     gap: 0.8em;
@@ -289,8 +320,9 @@ a.navlink:hover {
 
 .breadcrumb-container > a,
 .breadcrumb-container > span {
-    padding: 10px;
+    padding: 0.3em;
     color: var(--color-on-surface);
+    font-size: 1em;
     text-transform: capitalize;
     text-decoration: none;
 }

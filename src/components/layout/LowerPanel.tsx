@@ -1,7 +1,7 @@
-import AccessibilityButton from "../accessibilityButton";
-import LanguageButton from "../languageButton";
-import NavbarButton from "../navbarButton";
-import DiagnosticsButton from "../diagnosticsButton";
+import AccessibilityButton from '../accessibilityButton';
+import LanguageButton from '../languageButton';
+import SidebarButton from '../sidebarButton';
+import DiagnosticsButton from '../diagnosticsButton';
 
 export default function LowerPanel() {
   return (
@@ -10,7 +10,7 @@ export default function LowerPanel() {
         skip to main contentcle
       </a>
       <section className="left_dock">
-        <NavbarButton />
+        <SidebarButton />
         <DiagnosticsButton />
       </section>
       <section className="right_dock">

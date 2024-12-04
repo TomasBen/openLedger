@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Stack, IconButton } from '@mui/material';
+import { Stack } from '@mui/material';
 import { House } from 'lucide-react';
 
 import { BreadcrumbItem } from '../types/components';

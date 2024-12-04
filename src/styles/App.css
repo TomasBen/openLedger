@@ -224,9 +224,9 @@ main {
 
 .sidebarLink {
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
     color: var(--color-on-surface);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-decoration: none;
     border-radius: 0.3rem;
 }
@@ -246,11 +246,11 @@ main {
     position: absolute;
     top: 0;
     left: 105%;
-    padding: 0.3rem;
+    padding: 0.4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0.3em;
+    gap: 0.4em;
     border: 1px solid;
     border-color: var(--color-outline-variant);
     z-index: 10;
@@ -394,4 +394,33 @@ footer.lower_panel > section {
     100% {
         opacity: 0.3;
     }
+}
+
+/* ---------- ACTION BAR STYLES ---------- */
+
+.action-bar {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+}
+
+.search-field {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar {
+    padding: 0;
+    flex: 1;
+}
+
+.divider {
+    height: 80%;
+    width: 1px;
+    background-color: var(--color-outline-variant);
+    content: ' ';
 }

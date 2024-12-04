@@ -5,16 +5,32 @@ const theme = createTheme({
     light: {
       palette: {
         primary: {
-          main: 'rgb(216 226 255)',
-          contrastText: 'rgb(0 26 65)',
+          main: '#445E91',
+          contrastText: '#FFFFFF',
+        },
+        secondary: {
+          main: '#336940',
+          contrastText: '#FFFFFF',
+        },
+        error: {
+          main: '#BA1A1A',
+          contrastText: '#FFFFFF',
         },
       },
     },
     dark: {
       palette: {
         primary: {
-          main: 'rgb(39 66 115)',
-          contrastText: 'rgb(255 255 255)',
+          main: '#ADC6FF',
+          contrastText: '#102F60',
+        },
+        secondary: {
+          main: '#9AD4A2',
+          contrastText: '#003517',
+        },
+        error: {
+          main: '#FFB779',
+          contrastText: '#690005',
         },
       },
     },
@@ -41,9 +57,8 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          color: 'var(--color-on-primary-container)',
           '&:hover': {
-            backgroundColor: 'var(--color-primary-container-hover)',
+            opacity: 1.1,
           },
         },
       },

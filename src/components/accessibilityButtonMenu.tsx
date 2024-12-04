@@ -28,7 +28,6 @@ const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: Forwarde
           <Checkbox onChange={() => Window.setHighContastMode(preferences)} />
           High Contrast
         </MenuItem> */}
-        <Divider />
         <MenuItem disableRipple>Select theme</MenuItem>
         <MenuItem disableRipple>
           <ToggleButtonGroup exclusive value={preferences.Theme}>

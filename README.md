@@ -1,12 +1,12 @@
-## KNOWN BUGS FIXED
+## BUGS TO FI
 
 - [ ] UpdatePreferences debounced hook doesnt update the settings properly. If settings changed stack up, the context on the frontside correctly updates all of them but the backend side only updates the most recent one.
-- [ ] The different components of the navbar have different widths causing layout shift.
 
 ## TODO
 
 in order of importance:
 
+- [ ] Migrate to radix UI instead of MUI.
 - [x] Expand user preferences in rust side and make them load on app launch so that settings get saved.
   - [ ] Add a import/export settings feature that writes settings to a JSON or TOML file on the root folder of folder specified by the user.
 - [x] Fully implement dark mode.

@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import LowerPanel from './components/layout/LowerPanel.tsx';
 import Sidebar from './components/layout/Sidebar.tsx';
+import MainSkeleton from './components/layout/MainSkeleton.tsx';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
@@ -38,8 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* react root opening tag */}
       <main id="main-content" role="main">
         <Sidebar navItems={navItems} />
-        {/* suspense should be added here */}
-        {children}
+        <Suspense fallback={<MainSkeleton />}>{children}</Suspense>
       </main>
       <LowerPanel />
       {/* react root closing tag */}

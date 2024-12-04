@@ -193,7 +193,7 @@ main {
     background: var(--color-surface);
 }
 
-{/* --------- SIDEBAR STYLES --------- */}
+/* ---------- SIDEBAR STYLES ---------- */
 
 .sidebar {
     height: 100%;
@@ -263,7 +263,7 @@ main {
     transform: scaleX(1);
 }
 
-{/* --------- SIDEBAR STYLES --------- */}
+/* ---------- LAYOUT STYLES ---------- */
 
 footer.lower_panel {
     height: 5vh;
@@ -333,4 +333,65 @@ footer.lower_panel > section {
 
 .breadcrumb-container > a:hover {
     text-decoration: underline;
+}
+
+/* ---------- MAIN SKELETON STYLES ---------- */
+
+.skeleton {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: space-between;
+}
+
+.skeleton-section {
+    padding: 1em 2em 1em 2em;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    animation: pulse 1.5s infinite alternate;
+}
+
+.skeleton-section.path {
+    width: full;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex: 0;
+    gap: 1em;
+    border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.skeleton-chip {
+    height: 2em;
+    width: 5em;
+    background-color: lightgray;
+    border-radius: 1em;
+}
+
+.skeleton-line {
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
+    border-radius: 1em;
+}
+
+.skeleton-square {
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
+    border-radius: 1em;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
 }

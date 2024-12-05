@@ -141,12 +141,15 @@ impl UserPreferences {
 
 #[tauri::command]
 pub async fn update_preferences(
-    new_preferences: PreferenceUpdate,
+    update: PreferenceUpdate,
     state: State<'_, Mutex<AppState>>,
 ) -> Result<(), Error> {
     {
         let mut app_state = state.lock().unwrap();
-        app_state.user_preferences.update(new_preferences)?
+        match app_state.user_preferences.update(update) {
+            Ok(()) => println!("preferences updated successfuly"),
+            Err(e) => println!("errro when updating preferences: {}", e),
+        }
     }
     {
         let app_state = state.lock().unwrap();

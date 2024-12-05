@@ -1,13 +1,13 @@
-import { useState, useRef, useContext } from 'react';
-import UserPreferencesContext from '../contexts/UserPreferencesContext';
-import { PanelState } from '../types/components';
+import { useState, useRef } from 'react';
+import { PanelState } from '@/types/components';
 import { Languages } from 'lucide-react';
 import { Popper, ClickAwayListener, Paper, Tooltip, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
 
 import { Language } from '../types/user-preferences';
+import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 
 export default function LanguageButton() {
-  const { preferences, updatePreferences } = useContext(UserPreferencesContext);
+  const { preferences, updatePreferences } = usePreferencesStore();
 
   const [panelState, setPanelState] = useState<PanelState>('closed');
   const anchorElement = useRef<HTMLDivElement>(null);
@@ -17,11 +17,7 @@ export default function LanguageButton() {
       <Popper placement="top" open={panelState === 'open'} anchorEl={anchorElement.current}>
         <ClickAwayListener onClickAway={() => setPanelState(panelState === 'open' ? 'closed' : 'open')}>
           <Paper>
-            <ToggleButtonGroup
-              orientation="vertical"
-              exclusive
-              value={preferences ? preferences.Language : Language.English}
-            >
+            <ToggleButtonGroup orientation="vertical" exclusive value={preferences.Language}>
               <ToggleButton value={Language.English} onClick={() => updatePreferences({ Language: Language.English })}>
                 English
               </ToggleButton>

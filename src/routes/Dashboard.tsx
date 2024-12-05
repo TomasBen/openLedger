@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import UserPreferencesContext from '../contexts/UserPreferencesContext';
 import { Box, Button } from '@mui/material';
+import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 
 export default function Dashboard() {
-  const { preferences } = useContext(UserPreferencesContext);
+  const { preferences } = usePreferencesStore();
 
   return (
     <Box sx={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>

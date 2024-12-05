@@ -11,10 +11,10 @@ export enum Theme {
   Dark = 'dark',
 }
 
-export type UserPreferencesContextType = {
+export interface PreferencesStore {
   preferences: UserPreferences;
   updatePreferences: (updates: Partial<UserPreferences>) => void;
-};
+}
 
 export interface UserPreferences {
   Language: Language;

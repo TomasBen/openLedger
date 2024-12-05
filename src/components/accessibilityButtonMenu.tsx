@@ -1,7 +1,7 @@
-import { useContext, forwardRef, ForwardedRef } from 'react';
+import { forwardRef, ForwardedRef } from 'react';
 import { Window } from '../lib/window.ts';
 import { Webview } from '../lib/webview.ts';
-import UserPreferencesContext from '../contexts/UserPreferencesContext';
+import { usePreferencesStore } from '@/stores/UserPreferencesStore.ts';
 import { Sun, Moon, Minus, Plus } from 'lucide-react';
 import { Paper, MenuList, MenuItem, Divider } from '@mui/material';
 import { ToggleButtonGroup, ToggleButton, ButtonGroup, ButtonBase, IconButton } from '@mui/material';
@@ -9,7 +9,7 @@ import { ToggleButtonGroup, ToggleButton, ButtonGroup, ButtonBase, IconButton } 
 import { Theme } from '../types/user-preferences';
 
 const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: ForwardedRef<HTMLDivElement>) => {
-  const { preferences, updatePreferences } = useContext(UserPreferencesContext);
+  const { preferences, updatePreferences } = usePreferencesStore();
 
   const changeScaleFactor = (operation: string) => {
     if (operation === 'zoomIn') {

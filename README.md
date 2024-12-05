@@ -6,7 +6,7 @@
 
 in order of importance:
 
-- [ ] Migrate to radix UI instead of MUI.
+- [ ] Migrate to tanstack router from react-router.
 - [x] Expand user preferences in rust side and make them load on app launch so that settings get saved.
   - [ ] Add a import/export settings feature that writes settings to a JSON or TOML file on the root folder of folder specified by the user.
 - [x] Fully implement dark mode.

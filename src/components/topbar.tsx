@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Stack } from '@mui/material';
-import { House } from 'lucide-react';
+import { Flex } from '@chakra-ui/react';
+import { House, ChevronRight } from 'lucide-react';
 
 import { BreadcrumbItem } from '../types/components';
 
@@ -10,18 +10,18 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <Stack direction="row" className={'breadcrumb-container'}>
-      <Link to="/" className={'breadcrumb-home'}>
-        <House />
+    <Flex direction="row" align="center" className={'breadcrumb-container'}>
+      <Link to="/">
+        <House color="var(--color-outline)" />
       </Link>
       {items.map((item, index) => (
         <>
-          <span>&gt;</span>
+          <ChevronRight size="1em" />
           <Link to={item.path} key={index}>
             {item.name}
           </Link>
         </>
       ))}
-    </Stack>
+    </Flex>
   );
 }

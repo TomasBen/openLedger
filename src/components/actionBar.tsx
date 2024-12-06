@@ -1,13 +1,8 @@
-import { Stack, TextField, Button, ButtonProps } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Search } from 'lucide-react';
-
-const SearchButton = styled(Button)<ButtonProps>(() => ({
-  height: '100%',
-  width: 'auto',
-  padding: '1em',
-  border: '1px solid var(--color-outline-variant)',
-}));
+import { Flex, Input } from '@chakra-ui/react';
+import { InputGroup } from '@/components/ui/input-group';
+import { Button } from '@/components/ui/button';
+import { MenuRoot, MenuContent, MenuItem, MenuTrigger } from '@/components/ui/menu';
+import { Search, ChevronDown } from 'lucide-react';
 
 interface ActionBarProps {
   placeholder: string;
@@ -15,23 +10,24 @@ interface ActionBarProps {
 
 export default function ActionBar({ placeholder }: ActionBarProps) {
   return (
-    <Stack direction="row" className={'action-bar'}>
-      <section className={'search-field'}>
-        <TextField className={'search-bar'} placeholder={placeholder} />
-        <SearchButton size="large">
-          <Search />
-        </SearchButton>
-      </section>
-      <span className={'divider'} />
-      <Button variant="contained" size="large">
-        Añadir
-      </Button>
-      <Button variant="outlined" size="large">
-        Acciones
-      </Button>
-      <Button variant="contained" size="large" color="secondary">
-        Acciones
-      </Button>
-    </Stack>
+    <Flex direction="row" align="center" p="1em" gap="0.5em">
+      <InputGroup flex="1" endElement={<Search />}>
+        <Input placeholder={placeholder} />
+      </InputGroup>
+      <Button variant="solid">Añadir</Button>
+      <MenuRoot>
+        <MenuTrigger>
+          <Button variant="outline">
+            Acciones <ChevronDown />
+          </Button>
+        </MenuTrigger>
+        <MenuContent>
+          <MenuItem value="import MC ARCA">Importar desde mis comprobantes (ARCA)</MenuItem>
+          <MenuItem value="import CEL ARCA">Importar desde comprobantes en línea (ARCA)</MenuItem>
+          <MenuItem value="import CSV">Importar .CSV</MenuItem>
+          <MenuItem value="import EXCEL">Importar EXCEL</MenuItem>
+        </MenuContent>
+      </MenuRoot>
+    </Flex>
   );
 }

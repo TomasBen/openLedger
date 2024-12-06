@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import { useReactTable, ColumnDef } from '@tanstack/react-table';
-import Breadcrumb from '../../components/breadcrumb.tsx';
-import ActionBar from '../../components/actionBar.tsx';
+import { Box } from '@chakra-ui/react';
+import ActionBar from '@/components/actionBar.tsx';
+import Topbar from '@/components/topbar.tsx';
 
 import { BreadcrumbItem } from '../../types/components';
 
-interface ComprobanteDeVenta {
+{
+  /* interface ComprobanteDeVenta {
   fecha: string;
   tipo: 'A' | 'B' | 'C';
   comprobante: 'factura' | 'remito';
@@ -17,12 +16,12 @@ interface ComprobanteDeVenta {
   impuestos: number;
   total: number;
   Observaciones?: string;
+  } */
 }
 
 export default function ComprobantesDeVentas() {
-  const [Data, setData] = useState<ComprobanteDeVenta[] | null>(null);
-
-  useEffect(() => {
+  {
+    /* useEffect(() => {
     setData([
       {
         fecha: '2022-01-01',
@@ -75,7 +74,8 @@ export default function ComprobantesDeVentas() {
       header: 'Total',
       accessorKey: 'total',
     },
-  ];
+    ]; */
+  }
 
   const items: BreadcrumbItem[] = [
     { name: 'ventas', path: '/ventas' },
@@ -83,8 +83,8 @@ export default function ComprobantesDeVentas() {
   ];
 
   return (
-    <Box style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Breadcrumb items={items} />
+    <Box w="100%">
+      <Topbar items={items} />
       <ActionBar placeholder="Buscar por fecha, comprobante, tipo, importe, moneda, CAE, cliente..." />
     </Box>
   );

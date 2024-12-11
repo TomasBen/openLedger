@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Stack } from '@chakra-ui/react';
 import { SidebarGroup } from '../../types/components';
 
 interface FloatingMenuProps {
@@ -7,7 +8,7 @@ interface FloatingMenuProps {
 
 export default function SidebarFloatingMenu({ subitems }: FloatingMenuProps) {
   return (
-    <div className={'floatingMenu'}>
+    <Stack className={'floatingMenu'}>
       {subitems
         ? subitems.map((item, index) => (
             <NavLink className={'sidebarLink'} to={item.path} key={index}>
@@ -15,6 +16,6 @@ export default function SidebarFloatingMenu({ subitems }: FloatingMenuProps) {
             </NavLink>
           ))
         : null}
-    </div>
+    </Stack>
   );
 }

@@ -204,6 +204,7 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  gap: 0px;
   border-right: 1px solid;
   border-color: var(--color-outline-variant);
   overflow-x: visible;
@@ -249,9 +250,9 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.4em;
   border: 1px solid;
   border-color: var(--color-outline-variant);
+  border-radius: 0.3em;
   z-index: 10;
   transform-origin: left;
   transform: scaleX(0);

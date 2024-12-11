@@ -26,6 +26,7 @@ export default function Sidebar({ navItems }: SidebarProps) {
 
   return (
     <Stack className={'sidebar'} aria-label="main navigation" id="sidebar">
+      {/* Uncomment after adding the user logic
       <AvatarGroup>
         <Avatar
           name="Matt Murdock"
@@ -62,6 +63,7 @@ export default function Sidebar({ navItems }: SidebarProps) {
         </SelectContent>
       </SelectRoot>
       <Separator />
+      */}
       {navItems.map((item, index) => (
         <div className="sidebarEntry" key={index}>
           {/* add option to pass down icons for each item */}

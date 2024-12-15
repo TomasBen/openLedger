@@ -1,25 +1,35 @@
-import tsql from "@tauri-apps/plugin-sql";
+import tsql from '@tauri-apps/plugin-sql';
 
-export type Representative = {
+export type AccountType = 'corporate' | 'accounting study' | 'independent accountant' | 'end user';
+
+export interface Account {
   name: string;
-  email?: string;
-};
+  email: string;
+  account_type: AccountType;
+  country?: string;
+  industry?: string;
+}
 
-export const DB = await tsql.load("sqlite:accsw.db");
+export const DB = await tsql.load('sqlite:accsw.db');
 
 export default class Database {
-  static async getAllRepresentatives() {
-    let response = await DB.select("SELECT * FROM representative");
-
-    return response;
-  }
-
-  static async createRepresentative({ name, email }: Representative) {
-    let response = await DB.execute(
-      "INSERT INTO representative (name, email) VALUES ($1, $2)",
-      [name, email],
+  static async createAccount({ name, email, account_type, country, industry }: Account) {
+    const operation = await DB.execute(
+      'INSERT INTO accounts (name, email, account_type, country, industry) VALUES (?, ?, ?, ?, ?)',
+      [name, email, account_type, country, industry],
     );
 
-    return response;
+    await this.createSelfEntity({ name, email });
+
+    console.log(operation);
+  }
+
+  private static async createSelfEntity({ name, email }: Partial<Account>) {
+    const operation = await DB.execute(
+      'INSERT INTO entities (name, email, tax_category, associated_account) VALUES (?, ?, ?, ?)',
+      [name, email, 'monotributo', name],
+    );
+
+    console.log(operation);
   }
 }

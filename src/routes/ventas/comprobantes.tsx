@@ -1,7 +1,8 @@
+import Database from '@/lib/database';
 import { Box } from '@chakra-ui/react';
 import ActionBar from '@/components/actionBar.tsx';
 import Topbar from '@/components/topbar.tsx';
-
+import { Button } from '@/components/ui/button.tsx';
 import { BreadcrumbItem } from '../../types/components';
 
 {
@@ -86,6 +87,19 @@ export default function ComprobantesDeVentas() {
     <Box w="100%">
       <Topbar items={items} />
       <ActionBar placeholder="Buscar por fecha, comprobante, tipo, importe, moneda, CAE, cliente..." />
+      <Button
+        color="primary"
+        onClick={() =>
+          Database.createAccount({
+            name: 'test',
+            email: 'test@test.com',
+            account_type: 'independent accountant',
+            country: 'Argentina',
+          })
+        }
+      >
+        Crear nueva cuenta
+      </Button>
     </Box>
   );
 }

@@ -12,13 +12,11 @@ pub fn run() {
     let migrations = vec![Migration {
         version: 1,
         description: "initial database creation",
-        sql: include_str!("../migrations/0001_client_representative_table.sql"),
+        sql: include_str!("../migrations/0001_initial_tables.sql"),
         kind: MigrationKind::Up,
     }];
 
     tauri::Builder::default()
-        // .invoke_system(http.initialization_script(), http.responder())
-        // First initialize a default AppState struct that looks like:
         .manage(Mutex::new(AppState::default()))
         .setup(|app| {
             // get the app's config dir

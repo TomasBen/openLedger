@@ -1,4 +1,5 @@
 import { Flex, Input } from '@chakra-ui/react';
+import NewDocumentDialog from './newDocumentDialog';
 import { InputGroup } from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
 import { MenuRoot, MenuContent, MenuItem, MenuTrigger } from '@/components/ui/menu';
@@ -14,7 +15,7 @@ export default function ActionBar({ placeholder }: ActionBarProps) {
       <InputGroup flex="1" endElement={<Search />}>
         <Input placeholder={placeholder} />
       </InputGroup>
-      <Button variant="solid">Añadir</Button>
+      <NewDocumentDialog trigger="Nuevo Comprobante" title="Nuevo Comprobante" />
       <MenuRoot>
         <MenuTrigger>
           <Button variant="outline">

@@ -2,6 +2,8 @@ import { invoke } from '@tauri-apps/api/core';
 import { Box, Button } from '@mui/material';
 import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 
+import Datepicker from '@/components/ui/datepicker.tsx';
+
 export default function Dashboard() {
   const { preferences } = usePreferencesStore();
 
@@ -16,6 +18,7 @@ export default function Dashboard() {
       >
         get preferences from backend
       </Button>
+      <Datepicker />
     </Box>
   );
 }

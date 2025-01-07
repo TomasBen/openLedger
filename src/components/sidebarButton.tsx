@@ -1,22 +1,22 @@
-import { useState } from 'react';
 import { Tooltip, IconButton } from '@mui/material';
 import { PanelLeftOpen, PanelLeftClose } from 'lucide-react';
+import { usePreferencesStore } from '@/stores/UserPreferencesStore';
+import { Sidebar } from '@/types/user-preferences';
 
-import { PanelState } from '../types/components';
 
 export default function NavbarButton() {
-  const [panelState, setPanelState] = useState<PanelState>('open');
+  const { preferences, updatePreferences } = usePreferencesStore();
 
   const handleClick = () => {
-    const navbar = document.getElementById('sidebar');
-    navbar!.classList.toggle('close');
-    setPanelState(panelState == 'open' ? 'closed' : 'open');
+    preferences.SidebarSetting === Sidebar.Expanded
+      ? updatePreferences({ SidebarSetting: Sidebar.Minimzed })
+      : updatePreferences({ SidebarSetting: Sidebar.Expanded });
   };
 
   return (
     <Tooltip title="Left Panel">
       <IconButton onClick={() => handleClick()}>
-        {panelState === 'open' ? (
+        {preferences.SidebarSetting === Sidebar.Expanded ? (
           <PanelLeftClose style={{ pointerEvents: 'none' }} />
         ) : (
           <PanelLeftOpen style={{ pointerEvents: 'none' }} />

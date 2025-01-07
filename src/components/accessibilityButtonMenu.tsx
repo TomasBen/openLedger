@@ -22,12 +22,6 @@ const AccessibilityButtonMenu = forwardRef<HTMLDivElement, {}>((_, ref: Forwarde
   return (
     <Paper ref={ref} className={'accessibilityButtonMenu'} aria-hidden="true">
       <MenuList>
-        {/* high contrast option disabled since its automatically propagated from
-          the system configuration, might add independent option in the future
-          <MenuItem disableRipple>
-          <Checkbox onChange={() => Window.setHighContastMode(preferences)} />
-          High Contrast
-        </MenuItem> */}
         <MenuItem disableRipple>Select theme</MenuItem>
         <MenuItem disableRipple>
           <ToggleButtonGroup exclusive value={preferences.Theme}>

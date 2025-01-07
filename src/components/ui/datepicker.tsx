@@ -25,9 +25,6 @@ export default function Datepicker() {
 
   const { previousDays, monthDays, upcomingDays } = useMemo(() => useCalendar(selectedDate), [selectedDate]);
 
-  console.log(monthDays)
-  console.log(selectedDate.date())
-
   // local naming of the strings used
   const DAYS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sabado"];
   const MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];

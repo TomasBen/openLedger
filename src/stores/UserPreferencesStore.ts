@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { invoke } from '@tauri-apps/api/core';
 
-import { Language, Theme, UserPreferences, PreferencesStore } from '@/types/user-preferences';
+import { Language, Theme, Sidebar, UserPreferences, PreferencesStore } from '@/types/user-preferences';
 
 const defaultPreferences: UserPreferences = {
   Language: Language.English,
   Theme: Theme.Light,
+  SidebarSetting: Sidebar.Expanded,
   ScaleFactor: 1.0,
   Fullscreen: false,
 };

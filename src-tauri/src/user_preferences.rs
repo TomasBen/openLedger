@@ -9,6 +9,14 @@ pub use tauri::webview::Webview;
 pub use tauri::window::Window;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum Sidebar {
+    #[serde(rename = "expanded")]
+    Expanded,
+    #[serde(rename = "minimized")]
+    Minimized,
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum Language {
     #[serde(rename = "english")]
     English,
@@ -22,6 +30,8 @@ pub struct UserPreferences {
     pub language: Language,
     #[serde(rename = "Theme")]
     pub theme: Option<Theme>,
+    #[serde(rename = "SidebarMode")]
+    pub sidebar_mode: Sidebar,
     #[serde(rename = "ScaleFactor")]
     pub scale_factor: f64,
     #[serde(rename = "Fullscreen")]
@@ -32,6 +42,7 @@ pub struct UserPreferences {
 pub enum PreferenceUpdate {
     Full(UserPreferences),
     Language(Language),
+    SidebarSetting(Sidebar),
     Theme(Theme),
     ScaleFactor(f64),
     Fullscreen(bool),
@@ -48,6 +59,7 @@ impl Default for UserPreferences {
         UserPreferences {
             language: Language::English,
             theme: Some(Theme::Light),
+            sidebar_mode: Sidebar::Expanded,
             scale_factor: 1.0,
             fullscreen: true,
         }
@@ -69,6 +81,9 @@ impl UserPreferences {
             PreferenceUpdate::Full(prefs) => *self = prefs,
             PreferenceUpdate::Language(language) => self.language = language,
             PreferenceUpdate::Theme(theme) => self.theme = Some(theme),
+            PreferenceUpdate::SidebarSetting(sidebar_setting) => {
+                self.sidebar_mode = sidebar_setting
+            }
             PreferenceUpdate::ScaleFactor(scale_factor) => self.scale_factor = scale_factor,
             PreferenceUpdate::Fullscreen(fullscreen) => self.fullscreen = fullscreen,
         }

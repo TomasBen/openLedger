@@ -21,7 +21,6 @@ pub fn run() {
         .setup(|app| {
             // get the app's config dir
             let app_config_dir = app.handle().path().app_config_dir()?;
-            println!("{:?}", app_config_dir);
             let state = app.state::<Mutex<AppState>>();
 
             // get the AppState struct previously initialized
@@ -34,8 +33,6 @@ pub fn run() {
 
             app_state.user_preferences = user_preferences.load_from_file(&app_state).unwrap();
             app.set_theme(app_state.user_preferences.theme);
-
-            // http.start(app.handle());
 
             Ok(())
         })

@@ -197,7 +197,6 @@ main {
 
 .sidebar {
   height: 100%;
-  width: 15vw;
   background-color: var(--color-surface-container-low);
   padding: 0.3em;
   display: flex;
@@ -220,11 +219,12 @@ main {
 
 .sidebarLink {
     width: 100%;
+    padding: 0.3em;
     display: flex;
-    padding: 0.5em;
     gap: 0.5em;
     color: var(--color-on-surface);
     font-size: 1.2rem;
+    text-align: center;
     text-decoration: none;
     border-radius: 0.3rem;
 }

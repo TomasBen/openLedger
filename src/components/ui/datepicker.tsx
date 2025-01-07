@@ -37,7 +37,7 @@ export default function Datepicker() {
       <Field helperText={selectedDate.format('dddd, MMMM D, YYYY ')} width='fit-content'>
         <Input value={formattedDate} readOnly mb={1} />
       </Field>
-      <PopoverRoot>
+      <PopoverRoot positioning={{ placement: "bottom-end" }}>
         <PopoverTrigger>
           <IconButton variant="outline">
             <Calendar />

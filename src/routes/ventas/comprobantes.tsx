@@ -1,5 +1,3 @@
-import Database from '@/lib/database';
-import Datepicker from '@/components/ui/datepicker';
 import { Box } from '@chakra-ui/react';
 import ActionBar from '@/components/actionBar.tsx';
 import Topbar from '@/components/topbar.tsx';
@@ -87,7 +85,6 @@ export default function ComprobantesDeVentas() {
     <Box w="100%">
       <Topbar items={items} />
       <ActionBar placeholder="Buscar por fecha, comprobante, tipo, importe, moneda, CAE, cliente..." />
-      <Datepicker />
     </Box>
   );
 }

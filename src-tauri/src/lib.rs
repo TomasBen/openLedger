@@ -21,6 +21,7 @@ pub fn run() {
         .setup(|app| {
             // get the app's config dir
             let app_config_dir = app.handle().path().app_config_dir()?;
+            println!("{:?}", app_config_dir);
             let state = app.state::<Mutex<AppState>>();
 
             // get the AppState struct previously initialized

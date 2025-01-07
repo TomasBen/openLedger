@@ -1,12 +1,18 @@
 import LowerPanel from './components/layout/LowerPanel.tsx';
 import Sidebar from './components/layout/Sidebar.tsx';
+import { ShoppingCart, ShoppingBag, House} from 'lucide-react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
-    { name: 'Dashboard', path: '/' },
     {
+      icon: House,
+      name: 'Dashboard',
+      path: '/'
+    },
+    {
+      icon: ShoppingCart,
       name: 'Ventas',
-      path: '/ventas',
+      path: '/ventas/comprobantes',
       subitems: [
         { name: 'Comprobantes', path: '/ventas/comprobantes' },
         { name: 'Presupuestos', path: '/ventas/presupuestos' },
@@ -18,6 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       ],
     },
     {
+      icon: ShoppingBag,
       name: 'Compras',
       path: '/compras',
       subitems: [

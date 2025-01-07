@@ -1,10 +1,17 @@
+import { LucideIcon } from 'lucide-react'
+
 export type PanelState = 'open' | 'closed';
 
+export interface SidebarSubitems {
+  name: string,
+  path: string
+}
+
 export interface SidebarGroup {
-  icon?: JSX.Element;
+  icon: LucideIcon;
   name: string;
   path: string;
-  subitems?: SidebarGroup[];
+  subitems?: SidebarSubitems[]
 }
 
 export type Location = {

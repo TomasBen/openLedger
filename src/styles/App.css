@@ -210,34 +210,32 @@ main {
   overflow-x: visible;
 }
 
-.sidebar.close {
-  display: none;
-}
-
 .sidebarEntry {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  align-items: center;
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
 }
 
 .sidebarLink {
-  width: 100%;
-  padding: 0.5rem;
-  color: var(--color-on-surface);
-  font-size: 1.2rem;
-  text-decoration: none;
-  border-radius: 0.3rem;
+    width: 100%;
+    display: flex;
+    padding: 0.5em;
+    gap: 0.5em;
+    color: var(--color-on-surface);
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 0.3rem;
 }
 
 .sidebarLink.active {
-  color: var(--color-on-primary-container);
-  background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+    background-color: var(--color-primary-container);
 }
 
 .sidebarLink:hover {
-  background-color: var(--color-primary-container-hover);
+    background-color: var(--color-primary-container-hover);
 }
 
 .sidebarEntry > .floatingMenu {

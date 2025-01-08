@@ -1,5 +1,5 @@
-import LowerPanel from './components/layout/LowerPanel.tsx';
 import Sidebar from './components/layout/Sidebar.tsx';
+import { Titlebar } from '@/components/layout/titlebar.tsx';
 import { ShoppingCart, ShoppingBag, House} from 'lucide-react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -43,6 +43,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* react root opening tag */}
+      <Titlebar />
       <main id="main-content" role="main">
         <Sidebar navItems={navItems} />
         {children}

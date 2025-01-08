@@ -1,9 +1,10 @@
 import { lazy, Suspense } from 'react';
-import './styles/App.css';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './Layout.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import MainSkeleton from './components/layout/MainSkeleton.tsx';
+import './styles/App.css';
+import '@mantine/core/styles.css'
 
 const ComprobantesDeVentas = lazy(() => import('./routes/ventas/comprobantes.tsx'));
 const Presupuestos = lazy(() => import('./routes/ventas/presupuestos.tsx'));

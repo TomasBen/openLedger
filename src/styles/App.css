@@ -186,10 +186,29 @@ body {
 }
 
 main {
-  height: 100vh;
+  height: 95vh;
   width: 100vw;
   display: flex;
   background: var(--color-surface);
+}
+
+.titlebar {
+    position: relative;
+    height: 15vh;
+    width: 100%;
+    padding: 0 0.5em 0 0.5em;
+    background-color: var(--color-surface-dim);
+    border-bottom: 1px solid;
+    border-color: var(--color-outline-variant);
+}
+
+.titlebar-title {
+    color: var(--color-on-surface-variant);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 /* ---------- SIDEBAR STYLES ---------- */
@@ -258,6 +277,10 @@ main {
 
 .sidebarEntry:hover > .floatingMenu {
   transform: scaleX(1);
+}
+
+.sidebarButton {
+    margin-top: auto;
 }
 
 /* ---------- LAYOUT STYLES ---------- */

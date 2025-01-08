@@ -12,7 +12,8 @@
   "app": {
     "windows": [
       {
-        "title": "Tauri App",
+        "decorations": false,
+        "title": "OpenLedger",
         "center": true,
         "width": 1500,
         "height": 900

@@ -26,9 +26,7 @@ export default function Sidebar({ navItems }: SidebarProps) {
           </div>
         ))}
       </div>
-      <div>
-        <SidebarButton />
-      </div>
+      <SidebarButton />
     </Stack>
   );
 }
@@ -44,7 +42,7 @@ const SidebarButton = () => {
 
   return (
       <Tooltip label="Left Panel" position="right" withinPortal={true}>
-        <ActionIcon onClick={() => handleClick()}>
+        <ActionIcon variant="subtle" color="black" onClick={() => handleClick()} className='sidebarButton'>
           <PanelLeft />
         </ActionIcon>
       </Tooltip>

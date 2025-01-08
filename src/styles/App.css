@@ -186,8 +186,7 @@ body {
 }
 
 main {
-  /* main takes 95% of the vieport height since the footer takes the remaining 5 */
-  height: 95vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   background: var(--color-surface);
@@ -202,7 +201,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
   gap: 0px;
   border-right: 1px solid;
   border-color: var(--color-outline-variant);

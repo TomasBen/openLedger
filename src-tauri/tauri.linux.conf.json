@@ -1,12 +1,11 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "identifier": "Tauri App",
+  "identifier": "com.openledger.app",
   "app": {
     "windows": [
       {
         "width": 1500,
-        "height": 900,
-        "zoomHotkeysEnabled": true
+        "height": 900
       }
     ]
   }

@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Tauri App",
+  "productName": "openLedger",
   "version": "0.1.0",
-  "identifier": "com.tauri.app",
+  "identifier": "com.openledger.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -15,8 +15,7 @@
         "title": "Tauri App",
         "center": true,
         "width": 1500,
-        "height": 900,
-        "zoomHotkeysEnabled": true
+        "height": 900
       }
     ],
     "security": {

@@ -47,7 +47,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar navItems={navItems} />
         {children}
       </main>
-      <LowerPanel />
       {/* react root closing tag */}
     </>
   );

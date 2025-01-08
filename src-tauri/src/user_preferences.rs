@@ -1,3 +1,4 @@
+use log::{error, info};
 use serde::{Deserialize, Serialize};
 use serde_json::to_string_pretty;
 use std::fs;
@@ -88,8 +89,6 @@ impl UserPreferences {
             PreferenceUpdate::Fullscreen(fullscreen) => self.fullscreen = fullscreen,
         }
 
-        println!("{:?}", &self);
-
         Ok(())
     }
 
@@ -124,21 +123,21 @@ impl UserPreferences {
         path.push("preferences.json");
 
         if !path.exists() {
-            println!("[RUST::load_from_file] Preferences file not found, initializing defaults");
+            error!("Preferences file not found, initializing defaults");
             return Ok(UserPreferences::default());
         }
 
         match fs::read_to_string(&path) {
             Ok(content) => {
-                println!("reading preferences from path: {:?} \n\n", path);
+                info!("reading preferences from path: {:?} \n\n", path);
 
                 match serde_json::from_str::<UserPreferences>(&content) {
                     Ok(preferences) => {
-                        println!("successfully loaded preferences! \n\n");
+                        info!("successfully loaded preferences! \n\n");
                         Ok(preferences)
                     }
                     Err(e) => {
-                        println!(
+                        error!(
                             "Failed to parse preferences JSON: {:?}, using defaults \n\n",
                             e
                         );
@@ -147,7 +146,7 @@ impl UserPreferences {
                 }
             }
             Err(e) => {
-                println!("Failed to read preferences file: {:?}, using defaults", e);
+                error!("Failed to read preferences file: {:?}, using defaults", e);
                 Ok(UserPreferences::default())
             }
         }
@@ -162,8 +161,8 @@ pub async fn update_preferences(
     {
         let mut app_state = state.lock().unwrap();
         match app_state.user_preferences.update(update) {
-            Ok(()) => println!("preferences updated successfuly"),
-            Err(e) => println!("errro when updating preferences: {}", e),
+            Ok(()) => info!("preferences updated successfuly"),
+            Err(e) => error!("error when updating preferences: {}", e),
         }
     }
     {

@@ -37,6 +37,12 @@ pub fn run() {
             Ok(())
         })
         .plugin(
+            tauri_plugin_log::Builder::new()
+                .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal)
+                .level(log::LevelFilter::Info)
+                .build(),
+        )
+        .plugin(
             tauri_plugin_sql::Builder::new()
                 .add_migrations("sqlite:accsw.db", migrations)
                 .build(),

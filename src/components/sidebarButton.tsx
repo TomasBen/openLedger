@@ -1,5 +1,5 @@
-import { Tooltip, IconButton } from '@mui/material';
-import { PanelLeftOpen, PanelLeftClose } from 'lucide-react';
+import { Tooltip, ActionIcon } from '@mantine/core';
+import { PanelLeft } from 'lucide-react';
 import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 import { Sidebar } from '@/types/user-preferences';
 
@@ -14,14 +14,10 @@ export default function NavbarButton() {
   };
 
   return (
-    <Tooltip title="Left Panel">
-      <IconButton onClick={() => handleClick()}>
-        {preferences.SidebarSetting === Sidebar.Expanded ? (
-          <PanelLeftClose style={{ pointerEvents: 'none' }} />
-        ) : (
-          <PanelLeftOpen style={{ pointerEvents: 'none' }} />
-        )}
-      </IconButton>
+    <Tooltip label="Left Panel" position="right">
+      <ActionIcon onClick={() => handleClick()}>
+        <PanelLeft />
+      </ActionIcon>
     </Tooltip>
   );
 }

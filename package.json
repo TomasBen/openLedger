@@ -1,5 +1,5 @@
 {
-  "name": "tauri-lab",
+  "name": "openledger",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -21,6 +21,7 @@
     "@tanstack/react-form": "^0.41.0",
     "@tanstack/react-table": "^8.20.6",
     "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-log": "~2",
     "@tauri-apps/plugin-shell": "^2.2.0",
     "@tauri-apps/plugin-sql": "~2.0.2",
     "@tauri-apps/plugin-window-state": "~2.0.0",

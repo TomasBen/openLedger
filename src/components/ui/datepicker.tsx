@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Input } from "@chakra-ui/react";
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { HStack, Grid, GridItem, IconButton } from '@chakra-ui/react';
-import { Field } from './field';
+import { Field } from './ui/field';
 import { PopoverRoot, PopoverBody, PopoverTrigger, PopoverContent, PopoverArrow } from '@/components/ui/popover.tsx';
 import useCalendar from '@/hooks/useCalendar';
 import dayjs from 'dayjs';

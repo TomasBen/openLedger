@@ -3,7 +3,6 @@
 ::after {
   box-sizing: border-box;
   margin: 0;
-  cursor: default;
   transition: background-color 200ms ease-in;
 }
 
@@ -177,8 +176,6 @@ it doesnt seem to take effect and defaults to light mode high contrast */
 body {
   height: 100vh;
   width: 100vw;
-  display: flex;
-  overflow: hidden;
 }
 
 #root {
@@ -194,7 +191,7 @@ main {
 
 .titlebar {
     position: relative;
-    height: 15vh;
+    height: 5vh;
     width: 100%;
     padding: 0 0.5em 0 0.5em;
     background-color: var(--color-surface-dim);
@@ -209,6 +206,9 @@ main {
     top: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 /* ---------- SIDEBAR STYLES ---------- */
@@ -221,7 +221,6 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 0px;
   border-right: 1px solid;
   border-color: var(--color-outline-variant);
   overflow-x: visible;
@@ -239,7 +238,6 @@ main {
     width: 100%;
     padding: 0.3em;
     display: flex;
-    gap: 0.5em;
     color: var(--color-on-surface);
     font-size: 1.2rem;
     text-align: center;
@@ -315,25 +313,9 @@ footer.lower_panel > section {
   justify-content: center;
 }
 
-.breadcrumb-container {
-  padding: 0.5em;
-  gap: 0.5em;
-  border-bottom: 1px solid;
-  border-color: var(--color-outline-variant);
-}
-
-.breadcrumb-container > a {
-  color: var(--color-on-surface);
-  text-transform: capitalize;
-  text-decoration: none;
-}
-
-.breadcrumb-container > a:last-child {
-  font-weight: bold;
-}
-
-.breadcrumb-container > a:hover {
-  text-decoration: underline;
+.mantine-breadcrumbs-root > a {
+    color: black;
+    text-transform: capitalize;
 }
 
 /* ---------- MAIN SKELETON STYLES ---------- */

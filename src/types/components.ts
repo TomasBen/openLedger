@@ -21,8 +21,3 @@ export type Location = {
   state: any;
   key: string;
 };
-
-export interface BreadcrumbItem {
-  name: string;
-  path: string;
-}

@@ -14,18 +14,16 @@ export default function Sidebar({ navItems }: SidebarProps) {
   const { preferences } = usePreferencesStore();
 
   return (
-    <Stack className={'sidebar'} aria-label="main navigation">
-      <div>
-        {navItems.map((item, index) => (
-          <div className="sidebarEntry" key={index}>
-            <NavLink to={item.path} className={'sidebarLink'}>
-              <item.icon />
-              {preferences.SidebarSetting === SidebarType.Expanded && item.name}
-            </NavLink>
-            {/* item.subitems && <FloatingMenu subitems={item.subitems} /> */}
-          </div>
-        ))}
-      </div>
+    <Stack gap='xs' className={'sidebar'} aria-label="main navigation">
+      {navItems.map((item, index) => (
+        <div className="sidebarEntry" key={index}>
+          <NavLink to={item.path} className={'sidebarLink'}>
+            <item.icon />
+            {preferences.SidebarSetting === SidebarType.Expanded && item.name}
+          </NavLink>
+          {/* item.subitems && <FloatingMenu subitems={item.subitems} /> */}
+        </div>
+      ))}
       <SidebarButton />
     </Stack>
   );

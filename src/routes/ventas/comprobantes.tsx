@@ -1,7 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import ActionBar from '@/components/actionBar.tsx';
-import Topbar from '@/components/topbar.tsx';
-import { BreadcrumbItem } from '../../types/components';
+import { Container, Breadcrumbs, Anchor, Divider } from '@mantine/core';
+import ActionBar from '@/components/ui/actionBar';
 
 {
   /* interface ComprobanteDeVenta {
@@ -76,15 +74,21 @@ export default function ComprobantesDeVentas() {
     ]; */
   }
 
-  const items: BreadcrumbItem[] = [
+  const items = [
+    { name: 'dashboard', path: '/' },
     { name: 'ventas', path: '/ventas' },
     { name: 'comprobantes', path: '/ventas/comprobantes' },
-  ];
+  ].map((item, index) => (
+    <Anchor href={item.path} key={index}>
+      {item.name}
+    </Anchor>
+  ));
 
   return (
-    <Box w="100%">
-      <Topbar items={items} />
+  <Container fluid w="100%" pt="md">
+      <Breadcrumbs>{items}</Breadcrumbs>
+      <Divider my="md" />
       <ActionBar placeholder="Buscar por fecha, comprobante, tipo, importe, moneda, CAE, cliente..." />
-    </Box>
+  </Container>
   );
 }

@@ -1,4 +1,4 @@
-import { createTheme } from '@mantine/core';
+import { ActionIcon, Anchor, createTheme } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'navy-blue',
@@ -15,5 +15,17 @@ export const theme = createTheme({
       "#195cc5",
       "#004fad"
     ],
+  },
+  components: {
+    ActionIcon: ActionIcon.extend({
+      defaultProps: {
+        color: 'var(--color-on-surface-variant)'
+      }
+    }),
+    Anchor: Anchor.extend({
+      defaultProps: {
+        color: 'var(--color-on-surface-variant)',
+      }
+    })
   }
 });

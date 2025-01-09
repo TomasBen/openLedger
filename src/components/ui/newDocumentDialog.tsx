@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { useDisclosure } from '@mantine/hooks'
-import { Modal, Group, Button } from '@mantine/core';
+import { Modal, Loader, Group, Button } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+const BodyForm = lazy(() => import('./bodyForm'));
 
 interface DialogProps {
   trigger: string;
@@ -10,7 +12,14 @@ interface DialogProps {
 export default function NewDocumentDialog({ trigger, title }: DialogProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const BodyForm = lazy(() => import('./bodyForm'));
+  const handleClose = () => {
+    close();
+    notifications.show({
+      title: 'new notification',
+      message: 'the modal was succesfully closed!!',
+      withCloseButton: false,
+    });
+  }
 
   return (
     <>
@@ -24,14 +33,14 @@ export default function NewDocumentDialog({ trigger, title }: DialogProps) {
           backgroundOpacity: 0.5,
         }}
       >
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<Loader m='auto' type='dots' />}>
           <BodyForm />
         </Suspense>
         <Group wrap='nowrap' mt='md'>
           <Button variant="solid">Crear Documento</Button>
           <Button variant="outline" disabled>Crear y enviar a ARCA</Button>
           <Button variant="outline" disabled>Vista Previa</Button>
-          <Button variant="outline">Cancelar</Button>
+          <Button variant="outline" onClick={() => handleClose()}>Cancelar</Button>
         </Group>
       </Modal>
       <Button variant='filled' onClick={open}>{trigger}</Button>

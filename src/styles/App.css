@@ -7,8 +7,6 @@
 }
 
 :root {
-  --mantine-color-blue-filled: #D8E2FF;
-
   --color-primary: rgb(68 94 145);
   --color-surface-tint: rgb(68 94 145);
   --color-on-primary: rgb(255 255 255);
@@ -202,21 +200,25 @@ main {
 }
 
 .titlebar-title {
-    color: var(--color-on-surface-variant);
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+  color: var(--color-on-surface-variant);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
-.mantine-Input-input {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* high specificity to overshadow mantine defaults */
+div.mantine-Breadcrumbs-root > a.mantine-Breadcrumbs-breadcrumb,
+div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
+  color: var(--color-on-surface-variant);
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 /* ---------- SIDEBAR STYLES ---------- */
@@ -235,33 +237,33 @@ main {
 }
 
 .sidebarEntry {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: start;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
 }
 
 .sidebarLink {
-    width: 100%;
-    padding: 0.5em;
-    border-radius: 0.3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    line-height: 1.2rem;
-    font-size: 1.2rem;
-    text-decoration: none;
-    color: var(--color-on-surface);
+  width: 100%;
+  padding: 0.5em;
+  border-radius: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  line-height: 1.2rem;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: var(--color-on-surface);
 }
 
 .sidebarLink.active {
-    color: var(--color-on-primary-container);
-    background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  background-color: var(--color-primary-container);
 }
 
 .sidebarLink:hover {
-    background-color: var(--color-primary-container-hover);
+  background-color: var(--color-primary-container-hover);
 }
 
 .sidebarEntry > .floatingMenu {
@@ -287,8 +289,11 @@ main {
   transform: scaleX(1);
 }
 
-.sidebarButton {
-    margin-top: auto;
+.sidebarLowerBelt {
+  padding: 0.3rem;
+  margin-top: auto;
+  margin-right: auto;
+  justify-content: space-between;
 }
 
 /* ---------- LAYOUT STYLES ---------- */

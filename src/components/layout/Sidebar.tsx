@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import FloatingMenu from './SidebarFloatingMenu';
-import { Stack, ActionIcon, Tooltip } from '@mantine/core';
+import { Stack, Group, ActionIcon, Tooltip } from '@mantine/core';
 import { Sidebar as SidebarType } from '@/types/user-preferences';
 import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 import { SidebarGroup } from '@/types/components';
@@ -24,7 +24,9 @@ export default function Sidebar({ navItems }: SidebarProps) {
           {/* item.subitems && <FloatingMenu subitems={item.subitems} /> */}
         </div>
       ))}
-      <SidebarButton />
+      <Group className='sidebarLowerBelt'>
+        <SidebarButton />
+      </Group>
     </Stack>
   );
 }
@@ -40,7 +42,7 @@ const SidebarButton = () => {
 
   return (
       <Tooltip label="Left Panel" position="right" withinPortal={true}>
-        <ActionIcon variant="subtle" color="black" onClick={() => handleClick()} className='sidebarButton'>
+        <ActionIcon variant="subtle" onClick={() => handleClick()}>
           <PanelLeft />
         </ActionIcon>
       </Tooltip>

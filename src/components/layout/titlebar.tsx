@@ -30,22 +30,22 @@ export function Titlebar() {
       onMouseDown={(e) => handleMousedown(e)}
     >
       <Group gap="xs">
-        <ActionIcon variant="subtle" color="black" onClick={() => handlePagination(-1)}>
+        <ActionIcon variant="subtle" onClick={() => handlePagination(-1)}>
           <Undo size="18px" />
         </ActionIcon>
-        <ActionIcon variant="subtle" color="black" onClick={() => handlePagination(1)}>
+        <ActionIcon variant="subtle" onClick={() => handlePagination(1)}>
           <Redo size="18px" />
         </ActionIcon>
       </Group>
       <Title order={5} className='titlebar-title'>OpenLedger</Title>
       <Group gap='xs'>
-        <ActionIcon variant="subtle" color="black" onClick={(e) => { e.preventDefault(), appWindow.minimize() }}>
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.minimize() }}>
           <Minimize size="18px" />
         </ActionIcon>
-        <ActionIcon variant="subtle" color="black" onClick={(e) => { e.preventDefault(), appWindow.toggleMaximize() }}>
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.toggleMaximize() }}>
           <Maximize size="18px" />
         </ActionIcon>
-        <ActionIcon variant="subtle" color="black" onClick={(e) => { e.preventDefault(), appWindow.close() }}>
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.close() }}>
           <SquareX size="18px" />
         </ActionIcon>
       </Group>

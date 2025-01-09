@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group, Button } from '@mantine/core';
 
@@ -9,18 +10,24 @@ interface DialogProps {
 export default function NewDocumentDialog({ trigger, title }: DialogProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const BodyForm = lazy(() => import('./bodyForm'));
+
   return (
     <>
       <Modal
         opened={opened}
         onClose={close}
         title={title}
+        size='auto'
         centered
         overlayProps={{
           backgroundOpacity: 0.5,
         }}
       >
-        <Group>
+        <Suspense fallback={<div>loading...</div>}>
+          <BodyForm />
+        </Suspense>
+        <Group wrap='nowrap' mt='md'>
           <Button variant="solid">Crear Documento</Button>
           <Button variant="outline" disabled>Crear y enviar a ARCA</Button>
           <Button variant="outline" disabled>Vista Previa</Button>

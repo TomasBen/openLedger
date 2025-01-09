@@ -7,6 +7,8 @@
 }
 
 :root {
+  --mantine-color-blue-filled: #D8E2FF;
+
   --color-primary: rgb(68 94 145);
   --color-surface-tint: rgb(68 94 145);
   --color-on-primary: rgb(255 255 255);
@@ -211,6 +213,12 @@ main {
     -ms-user-select: none;
 }
 
+.mantine-Input-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ---------- SIDEBAR STYLES ---------- */
 
 .sidebar {
@@ -236,13 +244,15 @@ main {
 
 .sidebarLink {
     width: 100%;
-    padding: 0.3em;
-    display: flex;
-    color: var(--color-on-surface);
-    font-size: 1.2rem;
-    text-align: center;
-    text-decoration: none;
+    padding: 0.5em;
     border-radius: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    line-height: 1.2rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--color-on-surface);
 }
 
 .sidebarLink.active {

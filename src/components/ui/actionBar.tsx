@@ -1,6 +1,6 @@
 import NewDocumentDialog from './newDocumentDialog';
 import { Search, ChevronDown } from 'lucide-react';
-import { Group, Menu, Input, Button, Divider } from '@mantine/core';
+import { Group, Menu, TextInput, Button, Divider } from '@mantine/core';
 
 interface ActionBarProps {
   placeholder: string;
@@ -9,7 +9,7 @@ interface ActionBarProps {
 export default function ActionBar({ placeholder }: ActionBarProps) {
   return (
     <Group align="center">
-      <Input placeholder={placeholder} leftSection={<Search size="20px" />} flex={1} />
+      <TextInput placeholder={placeholder} leftSection={<Search size="20px" />} flex={1} />
       <Divider orientation='vertical' />
       <NewDocumentDialog trigger="Nuevo Comprobante" title="Nuevo Comprobante" />
       <Menu>

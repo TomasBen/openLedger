@@ -4,22 +4,38 @@ import { Modal, Table, Stack, Group, Menu, Divider, NativeSelect, TextInput, Tex
 import { notifications } from '@mantine/notifications';
 import { DateInput } from '@mantine/dates';
 import { CalendarCog, Settings } from 'lucide-react'
-import { Field, FieldApi, useForm } from "@tanstack/react-form"
+import { FieldApi, useForm } from "@tanstack/react-form"
+import dayjs from 'dayjs';
 import '@mantine/dates/styles.css';
+
+import { parseFactura } from '@/schema/newDocumentSchema';
 
 interface DialogProps {
   trigger: string;
   title: string;
 }
 
+  const prueba = {
+    client: 'Pedro',
+    doc: 'Factura',
+    docNum: 8,
+    docType: 'A',
+    startDate: dayjs().add(1, 'month').toDate(),
+    endDate: dayjs().toDate(),
+    prodId: 10,
+    prodDesc: 'producto de prueba',
+    prodPrice: 18000,
+  }
+
 export default function NewDocumentDialog({ trigger, title }: DialogProps) {
   const [opened, { open, close }] = useDisclosure(false);
+
 
   const form = useForm({
     defaultValues: {
       client: '',
-      document: '',
-      documentNr: 0,
+      doc: '',
+      docNum: 0,
       docType: '',
       startDate: '',
       endDate: '',
@@ -29,7 +45,7 @@ export default function NewDocumentDialog({ trigger, title }: DialogProps) {
     },
     onSubmit: async ({ value }) => {
       close();
-      console.log(value);
+      console.log(parseFactura(prueba));
     }
   })
 
@@ -66,35 +82,41 @@ export default function NewDocumentDialog({ trigger, title }: DialogProps) {
               name='client'
               validators={{
                 onChangeAsyncDebounceMs: 500,
-                onChangeAsync: async ({value}) => {
+                onChangeAsync: async ({ value }) => {
                   await new Promise((resolve) => setTimeout(resolve, 1000))
                   return (
-                    value.includes('error') &&
-                    'No "error" allowed in client'
+                    value.includes('error')  &&
+                    'No error allowed in client'
                   )
               }
               }}
             children={(field) => (
               <>
                 <NativeSelect
+                  required
+                  data={[ 'Cliente A', 'Cliente B', 'Cliente C' ]}
                   label='Cliente'
                   w='fit-content'
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  data={[ 'Cliente A', 'Cliente B', 'Cliente C' ]}
-                />
+                >
+                  <option value='Cliente A'>Cliente A</option>
+                  <option value='Cliente B'>Cliente B</option>
+                  <option value='Cliente C'>Cliente C</option>
+                </NativeSelect>
                 <FieldInfo field={field} />
               </>
             )}
           />
             <Group>
               <form.Field
-                name='document'
+                name='doc'
                 children={(field) => (
                   <>
                     <NativeSelect
+                      required
                       label='Comprobante'
                       w='fit-content'
                       name={field.name}

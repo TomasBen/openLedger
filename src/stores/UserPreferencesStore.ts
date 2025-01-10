@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { invoke } from '@tauri-apps/api/core';
+import { error, info } from '@tauri-apps/plugin-log';
 
 import { Language, Theme, Sidebar, UserPreferences, PreferencesStore } from '@/types/user-preferences';
 
@@ -22,10 +23,12 @@ export const usePreferencesStore = create<PreferencesStore>((set) => ({
   },
 }));
 
+
 invoke<UserPreferences>('get_preferences')
   .then((preferences) => {
     usePreferencesStore.setState({ preferences });
+    info(`preferences from backend: ${JSON.stringify(preferences)}`);
   })
-  .catch((error) => {
-    console.error('Failed to load preferences:', error);
+  .catch((e) => {
+    error(`Failed to load preferences: ${e}`);
   });

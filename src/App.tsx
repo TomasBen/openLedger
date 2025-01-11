@@ -5,6 +5,7 @@ import { usePreferencesStore } from './stores/UserPreferencesStore.ts';
 import Layout from './Layout.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import './styles/App.css';
 

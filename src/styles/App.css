@@ -249,7 +249,7 @@ div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
   padding: 0.5em;
   border-radius: 0.3rem;
   display: flex;
-  align-items: center;
+  align-items: end;
   gap: 0.5em;
   line-height: 1.2rem;
   font-size: 1.2rem;
@@ -266,27 +266,26 @@ div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
   background-color: var(--color-primary-container-hover);
 }
 
-.sidebarEntry > .floatingMenu {
-  color: var(--color-on-surface);
-  background-color: var(--color-surface-container-low);
-  position: absolute;
-  top: 0;
-  left: 105%;
-  padding: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border: 1px solid;
-  border-color: var(--color-outline-variant);
-  border-radius: 0.3em;
-  z-index: 10;
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 100ms ease-in-out;
+.sidebarEntry > .subitemCollapsible {
+  margin-left: 0.5rem;
+  border-left: 1px solid;
+  boder-color: var(--color-outline);
 }
 
-.sidebarEntry:hover > .floatingMenu {
-  transform: scaleX(1);
+.subitemLink {
+  padding: 0.5rem;
+  display: flex;
+  align-items: start;
+  gap: 0.3rem;
+  border-radius: 0 0.3rem 0.3rem 0;
+  text-decoration: none;
+  color: var(--color-on-surface);
+}
+
+.subitemLink:hover,
+.subitemLink.active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-container);
 }
 
 .sidebarLowerBelt {

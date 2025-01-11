@@ -16,7 +16,7 @@ import ActionBar from '@/components/ui/actionBar';
   } */
 }
 
-export default function ComprobantesDeVentas() {
+export default function Comprobantes() {
   {
     /* useEffect(() => {
     setData([

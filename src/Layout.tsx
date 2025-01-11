@@ -1,11 +1,13 @@
 import Sidebar from './components/layout/Sidebar.tsx';
 import { Titlebar } from '@/components/layout/titlebar.tsx';
-import { ShoppingCart, ShoppingBag, House} from 'lucide-react';
+import { ShoppingCart, ShoppingBag, LayoutDashboard, FileInput, FileOutput, FileDigit, Truck } from 'lucide-react';
+
+/* Expandir iconos */
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
     {
-      icon: House,
+      icon: LayoutDashboard,
       name: 'Dashboard',
       path: '/'
     },
@@ -14,13 +16,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: 'Ventas',
       path: '/ventas/comprobantes',
       subitems: [
-        { name: 'Comprobantes', path: '/ventas/comprobantes' },
-        { name: 'Presupuestos', path: '/ventas/presupuestos' },
-        { name: 'Remitos', path: '/ventas/remitos' },
-        { name: 'Cobranzas', path: '/ventas/cobranzas' },
+        { icon: FileOutput, name: 'Comprobantes', path: '/ventas/comprobantes' },
+        { icon: FileDigit, name: 'Presupuestos', path: '/ventas/presupuestos' },
+        { icon: Truck, name: 'Remitos', path: '/ventas/remitos' },
+        /* { name: 'Cobranzas', path: '/ventas/cobranzas' },
         { name: 'Ingresos', path: '/ventas/ingresos-fondos' },
         { name: 'Cuentas a cobrar', path: '/ventas/cuentas-cobrar' },
-        { name: 'Saldo de clientes', path: '/ventas/saldo-clientes' },
+        { name: 'Saldo de clientes', path: '/ventas/saldo-clientes' }, */
       ],
     },
     {
@@ -28,10 +30,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       name: 'Compras',
       path: '/compras',
       subitems: [
-        { name: 'Comprobantes', path: '/compras/comprobantes' },
-        { name: 'Ordenes de compra', path: '/compras/ordenes' },
+        { icon: FileInput, name: 'Comprobantes', path: '/compras/comprobantes' },
+        /* { name: 'Ordenes de compra', path: '/compras/ordenes' },
         { name: 'Pagos', path: '/compras/pagos' },
-        { name: 'Egresos', path: '/compras/salida-fondos' },
+        { name: 'Egresos', path: '/compras/salida-fondos' }, */
       ],
     },
     /* { name: 'clientes', path: '/clientes', subitems: [] },

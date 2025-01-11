@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, createTheme } from '@mantine/core';
+import { ActionIcon, Anchor, createTheme, TextInput } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'navy-blue',

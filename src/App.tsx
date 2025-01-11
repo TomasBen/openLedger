@@ -31,7 +31,9 @@ export default function App() {
               <Route path="presupuestos" element={<Presupuestos />} />
               <Route path="remitos" element={<Remitos />} />
             </Route>
-            <Route path='/compras' element={<ComprobantesDeCompras />} />
+            <Route path='/compras'>
+              <Route path='comprobantes' element={<ComprobantesDeCompras />} />
+            </Route>
           </Routes>
         </Suspense>
       </Layout>

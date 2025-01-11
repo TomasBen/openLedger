@@ -2,16 +2,11 @@ import { LucideIcon } from 'lucide-react'
 
 export type PanelState = 'open' | 'closed';
 
-export interface SidebarSubitems {
-  name: string,
-  path: string
-}
-
 export interface SidebarGroup {
   icon: LucideIcon;
   name: string;
   path: string;
-  subitems?: SidebarSubitems[]
+  subitems?: SidebarGroup[]
 }
 
 export type Location = {

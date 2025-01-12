@@ -1,8 +1,7 @@
 import Sidebar from './components/layout/Sidebar.tsx';
 import { Titlebar } from '@/components/layout/titlebar.tsx';
-import { ShoppingCart, ShoppingBag, LayoutDashboard, FileInput, FileOutput, FileDigit, Truck, CreditCard, BookUser, TrendingDown, TrendingUp } from 'lucide-react';
-
-/* Expandir iconos */
+import { ShoppingCart, ShoppingBag, LayoutDashboard, FileInput, FileOutput, FileDigit, Truck, CreditCard, BookUser, TrendingDown, TrendingUp,
+Blocks, ChartSpline, Package, FileSearch, HandCoins, Scale } from 'lucide-react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
@@ -21,35 +20,44 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { icon: Truck, name: 'Remitos', path: '/ventas/remitos' },
         { icon: CreditCard, name: 'Cobranzas', path: '/ventas/cobranzas' },
         { icon: TrendingUp, name: 'Ingresos', path: '/ventas/ingresos-fondos' },
-        { icon: BookUser, name: 'Saldo de clientes', path: '/ventas/saldo-clientes' },
+        { icon: Scale, name: 'Saldo de clientes', path: '/ventas/saldo-clientes' },
       ],
     },
     {
       icon: ShoppingBag,
       name: 'Compras',
-      path: '/compras',
+      path: '/purchases',
       subitems: [
-        { icon: FileInput, name: 'Comprobantes', path: '/compras/comprobantes' },
-        /* { name: 'Ordenes de compra', path: '/compras/ordenes' },
-        { name: 'Pagos', path: '/compras/pagos' },
-        { name: 'Egresos', path: '/compras/salida-fondos' }, */
+        { icon: FileInput, name: 'Comprobantes', path: '/purchases/documents' },
+        { icon: FileSearch, name: 'Ordenes de compra', path: '/purchases/orders' },
+        { icon: HandCoins, name: 'Pagos', path: '/purchases/payments' },
+        { icon: TrendingDown, name: 'Egresos', path: '/purchases/egreses' },
       ],
     },
-    /* { name: 'clientes', path: '/clientes', subitems: [] },
-    { name: 'productos', path: '/productos', subitems: [] },
-    { name: 'categorias', path: '/categorias', subitems: [] },
-    { name: 'perfiles', path: '/perfiles', subitems: [] }, */
+    { icon: Package,
+      name: 'Producots',
+      path: '/products',
+      subitems: [
+        { icon: Blocks, name: 'Inventory', path: '/products/inventory' }
+      ]},
+    { icon: BookUser,
+      name: 'Clientes',
+      path: '/clients',
+    },
+    {
+      icon: ChartSpline,
+      name: 'Reportes y Analíticas',
+      path: '/reports',
+    },
   ];
 
   return (
     <>
-      {/* react root opening tag */}
       <Titlebar />
       <main id="main-content" role="main">
         <Sidebar navItems={navItems} />
         {children}
       </main>
-      {/* react root closing tag */}
     </>
   );
 }

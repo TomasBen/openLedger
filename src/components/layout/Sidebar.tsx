@@ -20,19 +20,23 @@ export default function Sidebar({ navItems }: SidebarProps) {
 
         return (
           <Stack className="sidebarEntry" key={index} onMouseEnter={toggle} onMouseLeave={toggle}>
-            <NavLink to={item.path} className={'sidebarLink'}>
-              <item.icon size='26px' />
-              {preferences.SidebarSetting === SidebarType.Expanded && item.name}
-            </NavLink>
+            <Tooltip label={item.name} position='right' disabled={preferences.SidebarSetting === SidebarType.Expanded}>
+              <NavLink to={item.path} className={'sidebarLink'}>
+                <item.icon size='26px' />
+                {preferences.SidebarSetting === SidebarType.Expanded && item.name}
+              </NavLink>
+            </Tooltip>
 
-            {item.subitems &&
-              <Collapse in={opened} className='subitemCollapsible'>
+            {item.subitems != undefined &&
+              <Collapse in={opened} className='subitemCollapsible' transitionDuration={300}>
                 <Stack>
                   {item.subitems.map(subitem => (
-                    <NavLink to={subitem.path} className='subitemLink'>
-                      <subitem.icon size='20px' />
-                      {preferences.SidebarSetting === SidebarType.Expanded && subitem.name}
-                    </NavLink>
+                    <Tooltip label={subitem.name} position='right'>
+                      <NavLink to={subitem.path} className='subitemLink'>
+                        <subitem.icon size='20px' />
+                        {preferences.SidebarSetting === SidebarType.Expanded && subitem.name}
+                      </NavLink>
+                    </Tooltip>
                   ))}
                 </Stack>
               </Collapse>

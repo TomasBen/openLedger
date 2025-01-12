@@ -225,6 +225,7 @@ div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
 
 .sidebar {
   height: 100%;
+  width: max-content;
   background-color: var(--color-surface-container-low);
   padding: 0.3em;
   display: flex;
@@ -233,7 +234,8 @@ div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
   justify-content: space-between;
   border-right: 1px solid;
   border-color: var(--color-outline-variant);
-  overflow-x: visible;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .sidebarEntry {
@@ -242,6 +244,7 @@ div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
   display: flex;
   justify-content: start;
   align-items: start;
+  border-radius: 0.3rem;
 }
 
 .sidebarLink {

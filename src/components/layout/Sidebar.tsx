@@ -21,7 +21,7 @@ export default function Sidebar({ navItems }: SidebarProps) {
         return (
           <Stack className="sidebarEntry" key={index} onMouseEnter={toggle} onMouseLeave={toggle}>
             <NavLink to={item.path} className={'sidebarLink'}>
-              <item.icon />
+              <item.icon size='26px' />
               {preferences.SidebarSetting === SidebarType.Expanded && item.name}
             </NavLink>
 

@@ -16,8 +16,8 @@ const Remitos = lazy(() => import('./routes/ventas/remitos.tsx'));
 
 export default function App() {
   const { preferences } = usePreferencesStore();
-  const { setColorScheme } = useMantineColorScheme();
 
+  const { setColorScheme } = useMantineColorScheme();
   setColorScheme(preferences.Theme.toString() as MantineColorScheme);
 
   return (

@@ -23,7 +23,6 @@ export const usePreferencesStore = create<PreferencesStore>((set) => ({
   },
 }));
 
-
 invoke<UserPreferences>('get_preferences')
   .then((preferences) => {
     usePreferencesStore.setState({ preferences });

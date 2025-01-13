@@ -12,7 +12,7 @@ export enum Theme {
 }
 
 export enum Sidebar {
-  Minimzed = "minimized",
+  Minimized = "minimized",
   Expanded = "expanded",
 }
 

@@ -31,8 +31,8 @@ pub struct UserPreferences {
     pub language: Language,
     #[serde(rename = "Theme")]
     pub theme: Option<Theme>,
-    #[serde(rename = "SidebarMode")]
-    pub sidebar_mode: Sidebar,
+    #[serde(rename = "SidebarSetting")]
+    pub sidebar_setting: Sidebar,
     #[serde(rename = "ScaleFactor")]
     pub scale_factor: f64,
     #[serde(rename = "Fullscreen")]
@@ -60,7 +60,7 @@ impl Default for UserPreferences {
         UserPreferences {
             language: Language::English,
             theme: Some(Theme::Light),
-            sidebar_mode: Sidebar::Expanded,
+            sidebar_setting: Sidebar::Expanded,
             scale_factor: 1.0,
             fullscreen: true,
         }
@@ -83,7 +83,7 @@ impl UserPreferences {
             PreferenceUpdate::Language(language) => self.language = language,
             PreferenceUpdate::Theme(theme) => self.theme = Some(theme),
             PreferenceUpdate::SidebarSetting(sidebar_setting) => {
-                self.sidebar_mode = sidebar_setting
+                self.sidebar_setting = sidebar_setting
             }
             PreferenceUpdate::ScaleFactor(scale_factor) => self.scale_factor = scale_factor,
             PreferenceUpdate::Fullscreen(fullscreen) => self.fullscreen = fullscreen,
@@ -102,8 +102,6 @@ impl UserPreferences {
                 format!("JSON serialization error: {}", e),
             )
         })?;
-
-        path.push("preferences.json");
 
         fs::write(path, json).map_err(|e| {
             std::io::Error::new(
@@ -124,7 +122,14 @@ impl UserPreferences {
 
         if !path.exists() {
             error!("Preferences file not found, initializing defaults");
-            return Ok(UserPreferences::default());
+
+            let preferences = UserPreferences::default();
+            match preferences.save_to_file(path) {
+                Err(e) => error!("Error when writting out default preferences file: {e}"),
+                Ok(()) => info!("Default preferences succesfully saved"),
+            }
+
+            return Ok(preferences);
         }
 
         match fs::read_to_string(&path) {
@@ -141,7 +146,16 @@ impl UserPreferences {
                             "Failed to parse preferences JSON: {:?}, using defaults \n\n",
                             e
                         );
-                        Ok(UserPreferences::default())
+
+                        let preferences = UserPreferences::default();
+                        match preferences.save_to_file(path) {
+                            Err(e) => {
+                                error!("Error when writting out default preferences file: {e}")
+                            }
+                            Ok(()) => info!("Default preferences succesfully saved"),
+                        }
+
+                        Ok(preferences)
                     }
                 }
             }
@@ -167,7 +181,8 @@ pub async fn update_preferences(
     }
     {
         let app_state = state.lock().unwrap();
-        let path = app_state.app_config_path.clone();
+        let mut path = app_state.app_config_path.clone();
+        path.push("preferences.json");
 
         app_state.user_preferences.save_to_file(path)?;
     }

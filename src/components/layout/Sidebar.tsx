@@ -56,7 +56,7 @@ const SidebarButton = () => {
 
   const handleClick = () => {
     preferences.SidebarSetting === SidebarType.Expanded
-      ? updatePreferences({ SidebarSetting: SidebarType.Minimzed })
+      ? updatePreferences({ SidebarSetting: SidebarType.Minimized })
       : updatePreferences({ SidebarSetting: SidebarType.Expanded });
   };
 

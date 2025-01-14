@@ -19,6 +19,7 @@ export const theme = createTheme({
   components: {
     ActionIcon: ActionIcon.extend({
       defaultProps: {
+        size: 'lg',
         color: 'var(--color-on-surface-variant)'
       }
     }),

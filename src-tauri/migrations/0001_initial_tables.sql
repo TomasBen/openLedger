@@ -73,3 +73,15 @@ CREATE TABLE entities (
     FOREIGN KEY (tax_category) REFERENCES tax_categories (name),
     FOREIGN KEY (associated_account) REFERENCES accounts (name)
   );
+
+CREATE TABLE products (
+    code INTEGER PRIMARY KEY,
+    product TEXT NOT NULL,
+    description TEXT,
+    price REAL NOT NULL,
+    currency TEXT,
+    entity_associated INTEGER,
+    FOREIGN KEY (entity_associated) REFERENCES entities (id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);

@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useDisclosure } from '@mantine/hooks';
 import { Collapse, Stack, Group, ActionIcon, Tooltip } from '@mantine/core';
 import { usePreferencesStore } from '@/stores/UserPreferencesStore';
 import { Sidebar as SidebarType } from '@/types/user-preferences';
@@ -11,15 +11,19 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ navItems }: SidebarProps) {
+  const [hoveredIndex, setHoveredIndex] = useState <Number | null> (null);
   const { preferences } = usePreferencesStore();
 
   return (
     <Stack gap='xs' className={'sidebar'} aria-label="main navigation">
       {navItems.map((item, index) => {
-        const [opened, { toggle }] = useDisclosure(false);
-
         return (
-          <Stack className="sidebarEntry" key={index} onMouseEnter={toggle} onMouseLeave={toggle}>
+          <Stack
+            className="sidebarEntry"
+            key={index}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
             <Tooltip label={item.name} position='right' disabled={preferences.SidebarSetting === SidebarType.Expanded}>
               <NavLink to={item.path} className={'sidebarLink'}>
                 <item.icon size='26px' />
@@ -28,7 +32,7 @@ export default function Sidebar({ navItems }: SidebarProps) {
             </Tooltip>
 
             {item.subitems != undefined &&
-              <Collapse in={opened} className='subitemCollapsible' transitionDuration={300}>
+              <Collapse in={hoveredIndex === index} className='subitemCollapsible'>
                 <Stack>
                   {item.subitems.map(subitem => (
                     <Tooltip label={subitem.name} position='right'>

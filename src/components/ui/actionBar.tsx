@@ -17,8 +17,10 @@ export default function ActionBar({ placeholder }: ActionBarProps) {
           <Button variant="outline" rightSection={<ChevronDown />}>Acciones</Button>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item>Importar .CSV</Menu.Item>
-          <Menu.Item>Importar EXCEL</Menu.Item>
+          <Menu.Label>Importar</Menu.Label>
+          <Menu.Item>Importardesde .CSV</Menu.Item>
+          <Menu.Item>Importardesde EXCEL</Menu.Item>
+          <Menu.Item>Importar desde PDF</Menu.Item>
           <Menu.Label>Servicios</Menu.Label>
           <Menu.Item>Importar desde mis comprobantes (ARCA)</Menu.Item>
           <Menu.Item>Importar desde comprobantes en línea (ARCA)</Menu.Item>

@@ -29,9 +29,10 @@ pub fn run() {
             // set the app_config_path to the previously retrieved AppData dir. Platform agnostic.
             app_state.app_config_path = app_config_dir;
 
-            let user_preferences = app_state.user_preferences;
-
-            app_state.user_preferences = user_preferences.load_from_file(&app_state).unwrap();
+            app_state.user_preferences = app_state
+                .user_preferences
+                .load_from_file(&app_state)
+                .unwrap();
             app.set_theme(app_state.user_preferences.theme);
 
             Ok(())

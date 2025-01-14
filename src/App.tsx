@@ -9,10 +9,11 @@ import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import './styles/App.css';
 
-const ComprobantesDeVentas = lazy(() => import('./routes/ventas/comprobantes.tsx'));
-const ComprobantesDeCompras = lazy(() => import('./routes/compras/comprobantes.tsx'));
-const Presupuestos = lazy(() => import('./routes/ventas/presupuestos.tsx'));
-const Remitos = lazy(() => import('./routes/ventas/remitos.tsx'));
+const ComprobantesDeVentas = lazy(() => import('./routes/sales/documents.tsx'));
+const Presupuestos = lazy(() => import('./routes/sales/orders.tsx'));
+const Remitos = lazy(() => import('./routes/sales/deliveryNote.tsx'));
+const ComprobantesDeCompras = lazy(() => import('./routes/purchases/documents.tsx'));
+const Inventory = lazy(() => import('./routes/products/inventory.tsx'));
 
 export default function App() {
   const { preferences } = usePreferencesStore();
@@ -33,6 +34,10 @@ export default function App() {
             </Route>
             <Route path='/compras'>
               <Route path='comprobantes' element={<ComprobantesDeCompras />} />
+            </Route>
+            <Route path='/products'>
+              <Route index element={<h1>products page</h1>} />
+              <Route path='inventory' element={<Inventory />} />
             </Route>
           </Routes>
         </Suspense>

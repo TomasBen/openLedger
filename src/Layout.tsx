@@ -34,13 +34,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { icon: TrendingDown, name: 'Egresos', path: '/purchases/egreses' },
       ],
     },
-    { icon: Package,
-      name: 'Producots',
+    {
+      icon: Package,
+      name: 'Productos',
       path: '/products',
       subitems: [
-        { icon: Blocks, name: 'Inventory', path: '/products/inventory' }
+        { icon: Blocks, name: 'Inventario', path: '/products/inventory' }
       ]},
-    { icon: BookUser,
+    {
+      icon: BookUser,
       name: 'Clientes',
       path: '/clients',
     },

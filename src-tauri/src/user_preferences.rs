@@ -94,7 +94,7 @@ impl UserPreferences {
 
     /* Consider using tokio for async I/O operations in the future */
 
-    fn save_to_file(self: &Self, mut path: PathBuf) -> Result<(), Error> {
+    fn save_to_file(self: &Self, path: PathBuf) -> Result<(), Error> {
         // conver the UserPreferences struct to a pretty printed json
         let json = to_string_pretty(self).map_err(|e| {
             std::io::Error::new(

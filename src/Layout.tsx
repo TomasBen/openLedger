@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { icon: CreditCard, name: 'Cobranzas', path: '/ventas/cobranzas' },
         { icon: TrendingUp, name: 'Ingresos', path: '/ventas/ingresos-fondos' },
         { icon: Scale, name: 'Saldo de clientes', path: '/ventas/saldo-clientes' },
-      ],
+      ]
     },
     {
       icon: ShoppingBag,

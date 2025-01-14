@@ -1,5 +1,4 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
-
 import { UserPreferences, Theme } from '../types/user-preferences';
 
 export const window = getCurrentWindow();
@@ -28,6 +27,16 @@ export class Window {
       updatePreferences({ Theme: Theme.Light });
     } catch (error) {
       return error;
+    }
+  }
+
+  static async toggleMaximize(){
+    if (await window.isMaximized()) {
+      document.documentElement.setAttribute('data-maximize', 'false')
+      window.toggleMaximize()
+    } else {
+      document.documentElement.setAttribute('data-maximize', 'true')
+      window.toggleMaximize()
     }
   }
 

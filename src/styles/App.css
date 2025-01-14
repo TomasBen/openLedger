@@ -182,6 +182,12 @@ body {
   flex-direction: column;
 }
 
+html[data-maximize='false'],
+html[data-maximize='false'] > body {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
 main {
   height: 95vh;
   width: 100vw;
@@ -190,13 +196,13 @@ main {
 }
 
 .titlebar {
-    position: relative;
-    height: 5vh;
-    width: 100%;
-    padding: 0 0.5em 0 0.5em;
-    background-color: var(--color-surface-dim);
-    border-bottom: 1px solid;
-    border-color: var(--color-outline-variant);
+  position: relative;
+  height: 5vh;
+  width: 100%;
+  padding: 0 0.5em 0 0.5em;
+  background-color: var(--color-surface-dim);
+  border-bottom: 1px solid;
+  border-color: var(--color-outline-variant);
 }
 
 .titlebar-title {

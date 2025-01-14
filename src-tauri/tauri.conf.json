@@ -13,12 +13,14 @@
     "windows": [
       {
         "decorations": false,
+        "transparent": true,
         "title": "OpenLedger",
         "center": true,
         "width": 1500,
         "height": 900
       }
     ],
+    "macOSPrivateApi": true,
     "security": {
       "csp": null
     }

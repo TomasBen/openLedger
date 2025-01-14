@@ -1,11 +1,12 @@
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentWindow } from '@tauri-apps/api/window';
+import { Window } from '@/lib/window';
 import { Flex, Group, Title, ActionIcon } from '@mantine/core';
-import { Undo, Redo, Minimize, Maximize, SquareX } from 'lucide-react';
+import { Undo, Redo, Minus, Square, X } from 'lucide-react';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 export function Titlebar() {
-  const appWindow = getCurrentWindow();
+  const window = getCurrentWindow();
   const navigate = useNavigate();
 
   const handleMousedown = (e: MouseEvent) => {
@@ -15,7 +16,7 @@ export function Titlebar() {
       return
     };
 
-    e.buttons === 1 && e.detail === 2 ? appWindow.toggleMaximize() : appWindow.startDragging();
+    e.buttons === 1 && e.detail === 2 ? Window.toggleMaximize() : window.startDragging();
   };
 
   const handlePagination = (page: number) => {
@@ -39,14 +40,14 @@ export function Titlebar() {
       </Group>
       <Title order={5} className='titlebar-title'>OpenLedger</Title>
       <Group gap='xs'>
-        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.minimize() }}>
-          <Minimize size="18px" />
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), window.minimize() }}>
+          <Minus size="18px" />
         </ActionIcon>
-        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.toggleMaximize() }}>
-          <Maximize size="18px" />
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), Window.toggleMaximize() }}>
+          <Square size="18px" />
         </ActionIcon>
-        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), appWindow.close() }}>
-          <SquareX size="18px" />
+        <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), window.close() }}>
+          <X size="18px" />
         </ActionIcon>
       </Group>
     </Flex>

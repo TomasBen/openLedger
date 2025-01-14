@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Loader, MantineColorScheme, useMantineColorScheme } from '@mantine/core';
 import { usePreferencesStore } from './stores/UserPreferencesStore.ts';
@@ -8,6 +8,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import './styles/App.css';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 const ComprobantesDeVentas = lazy(() => import('./routes/sales/documents.tsx'));
 const Presupuestos = lazy(() => import('./routes/sales/orders.tsx'));
@@ -20,6 +21,18 @@ export default function App() {
 
   const { setColorScheme } = useMantineColorScheme();
   setColorScheme(preferences.Theme.toString() as MantineColorScheme);
+
+  useEffect(() => {
+    const setMaximizeAttribute = async () => {
+      if (await getCurrentWindow().isMaximized()) {
+        document.documentElement.setAttribute('data-maximize', 'true')
+      } else {
+        document.documentElement.setAttribute('data-maximize', 'false')
+      }
+    }
+
+    setMaximizeAttribute()
+  }, [])
 
   return (
     <>

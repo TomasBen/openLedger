@@ -2,12 +2,21 @@ import tsql from '@tauri-apps/plugin-sql';
 
 export type AccountType = 'corporate' | 'accounting study' | 'independent accountant' | 'end user';
 
-export interface Account {
+interface Account {
   name: string;
   email: string;
   account_type: AccountType;
   country?: string;
   industry?: string;
+}
+
+export interface Product {
+  code: string;
+  name: string;
+  description?: string;
+  price: number;
+  currency: string;
+  entity_assoc: string;
 }
 
 export const DB = await tsql.load('sqlite:accsw.db');
@@ -31,5 +40,13 @@ export default class Database {
     );
 
     console.log(operation);
+  }
+
+  static async createProduct({ code, name, description, price, currency, entity_assoc}: Product) {
+    const operation = await DB.execute('INSERT INTO products (code, name, description, price, currency, entity_associated) VALUES (?, ?, ?, ?, ?, ?)',
+      [code, name, description, price, currency, entity_assoc]
+    );
+
+    return operation
   }
 }

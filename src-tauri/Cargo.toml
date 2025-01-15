@@ -1,5 +1,5 @@
 [package]
-name = "openLedger"
+name = "OpenLedger"
 version = "0.1.0"
 description = "a tauri app"
 authors = ["you"]

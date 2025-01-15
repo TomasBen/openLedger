@@ -59,6 +59,7 @@ CREATE TABLE tax_categories (
 );
 
 INSERT INTO tax_categories (name, description) VALUES ('monotributo', 'regimen simplificado de la AFIP');
+INSERT INTO tax_categories (name, description) VALUES ('responsable inscripto', 'régimen general de la AFIP');
 
 CREATE TABLE entities (
     id INTEGER PRIMARY KEY,
@@ -75,13 +76,13 @@ CREATE TABLE entities (
   );
 
 CREATE TABLE products (
-    code INTEGER PRIMARY KEY,
-    product TEXT NOT NULL,
+    code TEXT PRIMARY KEY,
+    name TEXT,
     description TEXT,
     price REAL NOT NULL,
     currency TEXT,
-    entity_associated INTEGER,
-    FOREIGN KEY (entity_associated) REFERENCES entities (id)
+    entity_associated TEXT NOT NULL,
+    FOREIGN KEY (entity_associated) REFERENCES entities (name)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );

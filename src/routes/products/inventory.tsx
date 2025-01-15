@@ -1,5 +1,6 @@
-import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Button, } from '@mantine/core';
 import { info } from '@tauri-apps/plugin-log';
+import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Button, Grid, ScrollArea } from '@mantine/core';
+import { NewProductModal } from '@/components/ui/newProductModal';
 import { LayoutGrid, Package, Search, List } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,7 +24,7 @@ export default function Inventory() {
         <Group>
           <TextInput leftSection={<Search size='20px' />} w='15rem' />
           <Divider orientation='vertical' />
-          <Button>Añadir</Button>
+          <NewProductModal />
           <SegmentedControl
             value={mode}
             onChange={(e) => handleModeChange(e)}
@@ -48,6 +49,17 @@ export default function Inventory() {
         </Group>
       </Group>
       <Divider my='md' />
+      <GridView />
     </Container>
   );
+}
+
+function GridView(){
+  return (
+    <ScrollArea>
+      <Grid gutter='md'>
+        <Grid.Col span={3}></Grid.Col>
+      </Grid>
+    </ScrollArea>
+  )
 }

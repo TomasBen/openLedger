@@ -4,8 +4,8 @@ import { Modal, Table, Stack, Group, Menu, Divider, NativeSelect, TextInput, Tex
 import { notifications } from '@mantine/notifications';
 import { DatePickerInput } from '@mantine/dates';
 import { CalendarCog, Settings } from 'lucide-react'
-import { FieldApi, useForm } from "@tanstack/react-form"
-import { factura } from '@/schema/newDocumentSchema.ts'
+import { useForm } from "@tanstack/react-form"
+import { factura } from '@/schema/ARCA.ts'
 import dayjs from 'dayjs';
 
 interface DialogProps {
@@ -13,7 +13,7 @@ interface DialogProps {
   title: string;
 }
 
-export default function NewDocumentDialog({ trigger, title }: DialogProps) {
+export default function NewDocumentModal({ trigger, title }: DialogProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm({
@@ -96,9 +96,6 @@ export default function NewDocumentDialog({ trigger, title }: DialogProps) {
         title={<Text fw={700} size='lg'>{title}</Text>}
         size='auto'
         centered
-        overlayProps={{
-          backgroundOpacity: 0.5,
-        }}
       >
         <form
           onSubmit={(e) => {
@@ -275,17 +272,6 @@ export default function NewDocumentDialog({ trigger, title }: DialogProps) {
       <Button variant='filled' onClick={open}>{trigger}</Button>
     </>
   );
-}
-
-function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
-  return (
-    <>
-      {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <em>{field.state.meta.errors.join(", ")}</em>
-      ) : null}
-      {field.state.meta.isValidating ? 'Validating...' : null}
-    </>
-  )
 }
 
 const ProductForm = () => {

@@ -1,4 +1,4 @@
-import NewDocumentDialog from './newDocumentDialog';
+import NewDocumentDialog from './newDocumentModal';
 import { Search, ChevronDown } from 'lucide-react';
 import { Group, Menu, TextInput, Button, Divider } from '@mantine/core';
 

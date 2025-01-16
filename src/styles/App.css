@@ -182,6 +182,10 @@ body {
   flex-direction: column;
 }
 
+html {
+  overflow: hidden;
+}
+
 html[data-maximize='false'],
 html[data-maximize='false'] > body {
   border-radius: 10px;

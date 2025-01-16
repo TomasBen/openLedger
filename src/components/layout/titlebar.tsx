@@ -1,9 +1,11 @@
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Window } from '@/lib/window';
-import { Flex, Group, Title, ActionIcon } from '@mantine/core';
+import { AccountSelector } from '../ui/accountSelector';
+import { Flex, Group, ActionIcon } from '@mantine/core';
 import { Undo, Redo, Minus, Square, X } from 'lucide-react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
+
 
 export function Titlebar() {
   const window = getCurrentWindow();
@@ -12,7 +14,7 @@ export function Titlebar() {
   const handleMousedown = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
 
-    if (target.closest('button')) {
+    if (target.closest('button') || target.closest('select')) {
       return
     };
 
@@ -38,7 +40,7 @@ export function Titlebar() {
           <Redo size="18px" />
         </ActionIcon>
       </Group>
-      <Title order={5} className='titlebar-title'>OpenLedger</Title>
+      <AccountSelector />
       <Group gap='xs'>
         <ActionIcon variant="subtle" onClick={(e) => { e.preventDefault(), window.minimize() }}>
           <Minus size="18px" />

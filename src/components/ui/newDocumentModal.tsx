@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications';
 import { DatePickerInput } from '@mantine/dates';
 import { CalendarCog, Settings } from 'lucide-react'
 import { useForm } from "@tanstack/react-form"
-import { factura } from '@/schema/ARCA.ts'
+import { factura } from '@/schemas/ARCA.ts'
 import dayjs from 'dayjs';
 
 interface DialogProps {

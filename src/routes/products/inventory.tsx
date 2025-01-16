@@ -1,5 +1,5 @@
 import { info } from '@tauri-apps/plugin-log';
-import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Button, Grid, ScrollArea } from '@mantine/core';
+import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Grid, ScrollArea } from '@mantine/core';
 import { NewProductModal } from '@/components/ui/newProductModal';
 import { LayoutGrid, Package, Search, List } from 'lucide-react';
 import { useState } from 'react';

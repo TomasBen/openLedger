@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, createTheme, TextInput } from '@mantine/core';
+import { ActionIcon, Anchor, createTheme, NativeSelect } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'navy-blue',
@@ -17,6 +17,11 @@ export const theme = createTheme({
     ],
   },
   components: {
+    NativeSelect: NativeSelect.extend({
+      defaultProps: {
+        radius: 'md',
+      }
+    }),
     ActionIcon: ActionIcon.extend({
       defaultProps: {
         size: 'lg',

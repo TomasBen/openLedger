@@ -4,7 +4,6 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::AppState;
 
 pub use tauri::window::Window;
-
 pub mod user_preferences;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -52,7 +51,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             user_preferences::update_preferences,
             user_preferences::get_preferences,
-            user_preferences::set_to_fullscreen
+            user_preferences::set_to_fullscreen,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

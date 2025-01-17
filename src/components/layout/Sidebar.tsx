@@ -35,8 +35,8 @@ export default function Sidebar({ navItems }: SidebarProps) {
               <Collapse in={hoveredIndex === index} className='subitemCollapsible'>
                 <Stack>
                   {item.subitems.map((subitem, index) => (
-                    <Tooltip label={subitem.name} position='right'>
-                      <NavLink to={subitem.path} className='subitemLink' key={index}>
+                    <Tooltip label={subitem.name} position='right' key={index}>
+                      <NavLink to={subitem.path} className='subitemLink'>
                         <subitem.icon size='20px' />
                         {preferences.SidebarSetting === SidebarType.Expanded && subitem.name}
                       </NavLink>

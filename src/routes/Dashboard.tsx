@@ -1,33 +1,32 @@
 import Database from "@/lib/database"
+import { invoke } from "@tauri-apps/api/core"
+import { useAccountantStore } from "@/stores/accountantStore";
+
+interface Account {
+  account_id: string;
+  name: string;
+  email: string;
+  account_type: string;
+  country: string;
+  industry: string;
+  created_at: string;
+}
 
 export default function Dashboard(){
-  const data = {
-    code: 'bce2ff5e-e3f4-4728-a5b6-79829dd242bb',
-    name: 'Cattail Hearts',
-    description: 'Nullam porttitor lacus at turpis.',
-    price: 924.18,
-    currency: 'USD',
-    entity_assoc: 'gonzalo'
-  }
+  const { accountant } = useAccountantStore();
 
   const handleClick = async () => {
-    console.time('db insert')
-    try {
-      const result = await Database.createProduct(data)
-      console.log(result)
-      console.timeEnd('db insert')
-    } catch (errr) {
-      console.log(errr)
-      console.timeEnd('db insert')
-    }
+    console.log(accountant);
   }
 
   return (
-    <button
-      style={{ height: "50px", width: "auto", margin: "auto" }}
-      onClick={() => handleClick()}
-    >
-      this is a button in the center
-    </button>
+    <>
+      <button
+        style={{ height: "50px", width: "auto", margin: "auto" }}
+        onClick={() => handleClick()}
+      >
+        print Accountant Session
+      </button>
+    </>
   )
 }

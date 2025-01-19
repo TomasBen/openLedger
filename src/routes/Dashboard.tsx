@@ -1,16 +1,5 @@
-import Database from "@/lib/database"
-import { invoke } from "@tauri-apps/api/core"
 import { useAccountantStore } from "@/stores/accountantStore";
-
-interface Account {
-  account_id: string;
-  name: string;
-  email: string;
-  account_type: string;
-  country: string;
-  industry: string;
-  created_at: string;
-}
+import { Center, Select } from "@mantine/core";
 
 export default function Dashboard(){
   const { accountant } = useAccountantStore();
@@ -20,13 +9,14 @@ export default function Dashboard(){
   }
 
   return (
-    <>
-      <button
-        style={{ height: "50px", width: "auto", margin: "auto" }}
-        onClick={() => handleClick()}
-      >
-        print Accountant Session
-      </button>
-    </>
+    <Center w='100%' h='100%'>
+      <Select
+        radius='md'
+        w='200px'
+        maxDropdownHeight={200}
+        comboboxProps={{ shadow: 'md' }}
+        data={['React', 'Svelte', 'Solid', 'Vue']}
+      />
+    </Center>
   )
 }

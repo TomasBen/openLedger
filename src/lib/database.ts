@@ -2,6 +2,14 @@ import tsql from '@tauri-apps/plugin-sql';
 
 export type AccountType = 'corporate' | 'accounting study' | 'independent accountant' | 'end user';
 
+export interface AccountSessionQuery {
+  id: string;
+  name: string;
+  accountant_name: string;
+  email: string;
+  account_type: string;
+}
+
 interface Account {
   account_id: string;
   name: string;
@@ -10,11 +18,6 @@ interface Account {
   country?: string;
   industry?: string;
   created_at: string;
-}
-
-interface AccountSession {
-  account_id?: string;
-  name?: string;
 }
 
 export interface Product {
@@ -29,10 +32,14 @@ export interface Product {
 export const DB = await tsql.load('sqlite:accsw.db');
 
 export default class Database {
-  static async getAccountantSession({ account_id, name }: AccountSession){
-    const operation = await DB.select("SELECT * FROM accountantSession");
-
-    return operation
+  static async getAccountantSession({ name }: Partial<Account>): Promise<AccountSessionQuery[]> {
+    if (name) {
+      const operation: AccountSessionQuery[] = await DB.select("SELECT * FROM accountantSession WHERE name = ?", ['Ovis ammon']);
+      return operation
+    } else {
+      const operation: AccountSessionQuery[] = await DB.select("SELECT * FROM accountantSession");
+      return operation
+    }
   }
 
   static async createAccount({ name, email, account_type, country, industry }: Partial<Account>) {
@@ -46,9 +53,12 @@ export default class Database {
     console.log(operation);
   }
 
-  static async getAccount({ name, email, account_type, country, industry }: Partial<Account>){
-    const operation: Account = await DB.select("SELECT * FROM accounts");
+  static async getAccount({ name, email, account_type }: Partial<Account>){
+    if (name || email || account_type){
+      return
+    }
 
+    const operation: Account = await DB.select("SELECT * FROM accounts");
     return operation
   }
 

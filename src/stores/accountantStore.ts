@@ -1,17 +1,18 @@
 import { create } from 'zustand';
 import Database from '@/lib/database';
+import { AccountSessionQuery } from '@/lib/database';
 
-type Entities = {
+type Entity = {
   id: string;
   name: string;
 };
 
-interface AccountantSession {
+export interface AccountantSession {
   name: string;
   email: string;
   account_type: string;
-  entities: Entities[];
-  currently_representing: string | undefined;
+  entities: Entity[];
+  currently_representing: Entity | undefined;
 }
 
 interface AccountantStoreType {
@@ -32,11 +33,11 @@ export const useAccountantStore = create<AccountantStoreType>((set) => ({
 }));
 
 const initializeStore = async () => {
-  let query = await Database.getAccountantSession({ });
+  let query: AccountSessionQuery[] = await Database.getAccountantSession({ });
 
   if (query) {
     let initialSession: AccountantSession = {
-      name: query[0].name,
+      name: query[0].accountant_name,
       email: query[0].email,
       account_type: query[0].account_type,
       entities: [],

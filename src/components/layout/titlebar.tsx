@@ -14,9 +14,10 @@ export function Titlebar() {
   const handleMousedown = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
 
-    if (target.closest('button') || target.closest('select')) {
-      return
-    };
+    if (['button', '.mantine-Group-root', '.mantine-Select-dropdown']
+      .some(selector => target.closest(selector))) {
+        return
+      }
 
     e.buttons === 1 && e.detail === 2 ? Window.toggleMaximize() : window.startDragging();
   };

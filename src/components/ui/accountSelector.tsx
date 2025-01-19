@@ -1,19 +1,27 @@
 import { useAccountantStore } from "@/stores/accountantStore"
-import { Group, Text, NativeSelect } from "@mantine/core"
+import { Group, Text, Select } from "@mantine/core"
 import { Building2, UserRound } from "lucide-react"
 
 export function AccountSelector(){
+  const { accountant, updateAccountant } = useAccountantStore();
+
   return (
     <Group align="center" gap='sm'>
       <UserRound />
-      <Text fw={700} mr='2rem'>Roberto Díaz</Text>
+      <Group mr='2rem' gap='xs'>
+        <Text c='dimmed'>{accountant?.email + ','}</Text>
+        <Text fw={700}>{accountant?.name}</Text>
+      </Group>
       <Building2 />
-      <NativeSelect data={[
-        { label: 'Gonzalo Acevedo, 30459452576', value: 'Gonzalo Acevedo'},
-        { label: 'Maggie Acevedo, 30459452576', value: 'Maggie Acevedo'},
-        { label: 'Silvia Lobos, 30459452576', value: 'Silvia Lobos'}
-      ]}>
-      </NativeSelect>
+      <Select
+        radius='md'
+        maxDropdownHeight={200}
+        comboboxProps={{
+          shadow: 'md',
+          classNames: { dropdown: 'no-drag-region '}
+        }}
+        data={['React', 'Svelte', 'Solid', 'Vue']}
+      />
     </Group>
   )
 }

@@ -221,6 +221,13 @@ main {
   -ms-user-select: none;
 }
 
+div.mantine-Select-option > span {
+  max-width: 15rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 /* high specificity to overshadow mantine defaults */
 div.mantine-Breadcrumbs-root > a.mantine-Breadcrumbs-breadcrumb,
 div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {

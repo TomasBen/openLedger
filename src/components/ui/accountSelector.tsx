@@ -5,6 +5,11 @@ import { Building2, UserRound } from "lucide-react"
 export function AccountSelector(){
   const { accountant, updateAccountant } = useAccountantStore();
 
+  const data = accountant?.entities.map(entity => ({
+    value: entity.id,
+    label: `${entity.name}, ${entity.id}`,
+  }))
+
   return (
     <Group align="center" gap='sm'>
       <UserRound />
@@ -14,13 +19,15 @@ export function AccountSelector(){
       </Group>
       <Building2 />
       <Select
+        w='18rem'
         radius='md'
+        limit={50}
+        searchable
+        checkIconPosition='right'
         maxDropdownHeight={200}
-        comboboxProps={{
-          shadow: 'md',
-          classNames: { dropdown: 'no-drag-region '}
-        }}
-        data={['React', 'Svelte', 'Solid', 'Vue']}
+        comboboxProps={{ shadow: 'md', position: 'bottom' }}
+        onChange={(value) => updateAccountant({ currently_representing: accountant?.entities.find(item => item.id === value) })}
+        data={data}
       />
     </Group>
   )

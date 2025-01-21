@@ -16,8 +16,6 @@
     "core:window:allow-set-theme",
     "core:webview:allow-set-webview-zoom",
     "shell:allow-open",
-    "sql:default",
-    "sql:allow-execute",
     "log:default"
   ]
 }

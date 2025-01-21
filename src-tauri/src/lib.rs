@@ -1,19 +1,19 @@
 use std::sync::Mutex;
 use tauri::Manager;
-use tauri_plugin_sql::{Migration, MigrationKind};
 use user_preferences::AppState;
 
 pub use tauri::window::Window;
+pub mod database;
 pub mod user_preferences;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let migrations = vec![Migration {
+    /* let migrations = vec![Migration {
         version: 1,
         description: "initial database creation",
         sql: include_str!("../migrations/0001_initial_tables.sql"),
         kind: MigrationKind::Up,
-    }];
+    }]; */
 
     tauri::Builder::default()
         .manage(Mutex::new(AppState::default()))
@@ -40,11 +40,6 @@ pub fn run() {
             tauri_plugin_log::Builder::new()
                 .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal)
                 .level(log::LevelFilter::Info)
-                .build(),
-        )
-        .plugin(
-            tauri_plugin_sql::Builder::new()
-                .add_migrations("sqlite:accsw.db", migrations)
                 .build(),
         )
         .plugin(tauri_plugin_shell::init())

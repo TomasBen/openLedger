@@ -22,7 +22,6 @@
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-log": "~2.2.0",
     "@tauri-apps/plugin-shell": "^2.2.0",
-    "@tauri-apps/plugin-sql": "~2.0.2",
     "@tauri-apps/plugin-window-state": "~2.0.0",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.461.0",

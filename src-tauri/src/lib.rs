@@ -47,6 +47,8 @@ pub fn run() {
             user_preferences::update_preferences,
             user_preferences::get_preferences,
             user_preferences::set_to_fullscreen,
+            database::create_account,
+            database::get_account,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

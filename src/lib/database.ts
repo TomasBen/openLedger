@@ -1,5 +1,3 @@
-import tsql from '@tauri-apps/plugin-sql';
-
 export type AccountType = 'corporate' | 'accounting study' | 'independent accountant' | 'end user';
 
 export interface AccountSessionQuery {
@@ -26,10 +24,7 @@ export interface Product {
   description?: string;
   price: number;
   currency: string;
-  entity_assoc: string;
 }
-
-export const DB = await tsql.load('sqlite:accsw.db');
 
 export default class Database {
   static async getAccountantSession({ name }: Partial<Account>): Promise<AccountSessionQuery[]> {
@@ -53,15 +48,6 @@ export default class Database {
     console.log(operation);
   }
 
-  static async getAccount({ name, email, account_type }: Partial<Account>){
-    if (name || email || account_type){
-      return
-    }
-
-    const operation: Account = await DB.select("SELECT * FROM accounts");
-    return operation
-  }
-
   private static async createSelfEntity({ name, email }: Partial<Account>) {
     const operation = await DB.execute(
       'INSERT INTO entities (name, email, tax_category, associated_account) VALUES (?, ?, ?, ?)',
@@ -71,11 +57,19 @@ export default class Database {
     console.log(operation);
   }
 
-  static async createProduct({ code, name, description, price, currency, entity_assoc}: Product) {
-    const operation = await DB.execute('INSERT INTO products (code, name, description, price, currency, entity_associated) VALUES (?, ?, ?, ?, ?, ?)',
-      [code, name, description, price, currency, entity_assoc]
-    );
+  static async createProduct({ code, name, description, price, currency}: Product, entity_name: string | undefined) {
+    if (entity_name === undefined) {
+      throw new Error('No client selected')
+    }
 
-    return operation
+    try {
+      const operation = await DB.execute('INSERT INTO products (code, name, description, price, currency, entity_associated) VALUES (?, ?, ?, ?, ?, ?)',
+        [code, name, description, price, currency, entity_name]
+      );
+
+      return operation
+    } catch (error) {
+      return new Error('SQL statement failed')
+    }
   }
 }

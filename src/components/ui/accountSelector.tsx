@@ -26,8 +26,8 @@ export function AccountSelector(){
         checkIconPosition='right'
         maxDropdownHeight={200}
         comboboxProps={{ shadow: 'md', position: 'bottom' }}
-        onChange={(value) => updateAccountant({ currently_representing: accountant?.entities.find(item => item.id === value) })}
         data={data}
+        onChange={(value) => updateAccountant({ currently_representing: accountant?.entities.find(item => item.id === value) })}
       />
     </Group>
   )

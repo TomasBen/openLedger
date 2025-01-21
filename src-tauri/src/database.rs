@@ -1,8 +1,20 @@
 use once_cell::sync::Lazy;
-use rusqlite::{Connection, Error, Result};
+use rusqlite::{params, Connection, Result};
+use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 
+#[derive(Serialize, Deserialize)]
 pub struct Account {
+    account_id: String,
+    name: String,
+    email: String,
+    account_type: String,
+    country: Option<String>,
+    industry: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct AccountQuery {
     account_id: String,
     name: String,
     email: String,
@@ -19,11 +31,28 @@ static DB: Lazy<Mutex<Connection>> = Lazy::new(|| {
 });
 
 #[tauri::command]
-pub fn get_account(name: &str) -> Result<Account, Error> {
+pub fn create_account(account: Account) -> Result<usize, String> {
+    let conn = DB.lock().unwrap();
+
+    conn.execute(
+        "INSERT INTO accounts (account_id, name, email, account_type, country, industry) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+        params![
+            &account.account_id,
+            &account.name,
+            &account.email,
+            &account.account_type,
+            &account.country,
+            &account.industry,
+        ],
+    ).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn get_account(name: &str) -> Result<AccountQuery, String> {
     let conn = DB.lock().unwrap();
 
     conn.query_row("SELECT * FROM accounts WHERE name = ?", [name], |row| {
-        Ok(Account {
+        Ok(AccountQuery {
             account_id: row.get(0)?,
             name: row.get(1)?,
             email: row.get(2)?,
@@ -33,4 +62,5 @@ pub fn get_account(name: &str) -> Result<Account, Error> {
             created_at: row.get(6)?,
         })
     })
+    .map_err(|e| e.to_string())
 }

@@ -78,8 +78,8 @@ export function NewProductModal() {
               clearable
               leftSection={<Upload size='16px' />}
             />
-            <Group>
-              <Button variant='default' type='submit'>Guardar</Button>
+            <Group justify='end'>
+              <Button variant='filled' type='submit'>Guardar</Button>
               <Button variant='outline' onClick={close}>Cancelar</Button>
             </Group>
           </Stack>

@@ -76,10 +76,10 @@ CREATE TABLE entities (
   );
 
 CREATE TABLE products (
-    code TEXT PRIMARY KEY,
+    code TEXT PRIMARY KEY NOT NULL,
     name TEXT,
     description TEXT,
-    price REAL NOT NULL,
+    price REAL DEFAULT 0.0,
     currency TEXT,
     entity_associated TEXT NOT NULL,
     FOREIGN KEY (entity_associated) REFERENCES entities (name)

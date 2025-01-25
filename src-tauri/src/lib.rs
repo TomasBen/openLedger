@@ -49,6 +49,10 @@ pub fn run() {
             user_preferences::set_to_fullscreen,
             database::create_account,
             database::get_account,
+            database::get_accountant_session,
+            database::create_product,
+            database::get_products,
+            database::search_products,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

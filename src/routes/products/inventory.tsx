@@ -1,18 +1,52 @@
-import { info } from '@tauri-apps/plugin-log';
-import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Grid, ScrollArea } from '@mantine/core';
+import { invoke } from '@tauri-apps/api/core';
+import { useEffect, useState } from 'react';
+import { useAccountantStore } from '@/stores/accountantStore';
+import { useDebouncedCallback } from '@mantine/hooks';
 import { NewProductModal } from '@/components/ui/newProductModal';
+import { Container, Table, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Grid, ScrollArea, Checkbox, LoadingOverlay } from '@mantine/core';
 import { LayoutGrid, Package, Search, List } from 'lucide-react';
-import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
+import { Product } from '@/lib/database';
 
 export default function Inventory() {
   const [mode, setMode] = useState<string | undefined>(localStorage.getItem('InventoryDisplaySetting') || undefined);
-  console.log(mode);
+  const [products, setProducts] = useState<Product[]>([]);
+  const { accountant } = useAccountantStore();
 
   const handleModeChange = (value: string) => {
-    info(`localStorage value set to: ${value}`);
     setMode(value);
     localStorage.setItem('InventoryDisplaySetting', value);
   }
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        let result: Product[] = await invoke('get_products', { entity: "Ramphastos tucanus" });
+        setProducts(result)
+      } catch (error) {
+        notifications.show({
+          color: "red",
+          title: "error when getting the products",
+          message: `error: ${error}`
+        })
+      }
+    }
+
+    getProducts();
+  }, [])
+
+  const handleSearch = useDebouncedCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      let results: Product[] = await invoke('search_products', { searchTerm: event.target.value, entity: "Ramphastos tucanus" })
+      setProducts(results)
+    } catch (error) {
+      notifications.show({
+        color: 'red',
+        title: 'error when searching',
+        message: `${error}`
+      })
+    }
+  }, 500);
 
   return (
     <Container fluid w='100%' pt='md' className='inventory'>
@@ -22,7 +56,7 @@ export default function Inventory() {
           <Title order={1}>Inventario</Title>
         </Flex>
         <Group>
-          <TextInput leftSection={<Search size='20px' />} w='15rem' />
+          <TextInput leftSection={<Search size='20px' />} w='15rem' onChange={handleSearch} />
           <Divider orientation='vertical' />
           <NewProductModal />
           <SegmentedControl
@@ -49,9 +83,42 @@ export default function Inventory() {
         </Group>
       </Group>
       <Divider my='md' />
-      <GridView />
+      {mode === 'list' ? (
+        <ListView products={products} />
+      ) : ( null
+        /* <GridView items={products} /> */
+      )}
     </Container>
   );
+}
+
+function ListView({ products }: { products: Product[] }) {
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  return (
+    <Table highlightOnHover>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Code</Table.Th>
+          <Table.Th>Name</Table.Th>
+          <Table.Th>description</Table.Th>
+          <Table.Th>Price</Table.Th>
+          <Table.Th></Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {products.map((item, index) => (
+          <Table.Tr key={index}>
+            <Table.Td>{item.code}</Table.Td>
+            <Table.Td>{item.name}</Table.Td>
+            <Table.Td>{item.description}</Table.Td>
+            <Table.Td>{item.price}</Table.Td>
+            <Table.Td><Checkbox size='md' /></Table.Td>
+          </Table.Tr>
+        ))}
+      </Table.Tbody>
+    </Table>
+  )
 }
 
 function GridView(){

@@ -2,28 +2,25 @@ import { invoke } from '@tauri-apps/api/core';
 import { useEffect, useState } from 'react';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { useDebouncedCallback } from '@mantine/hooks';
+import { InventoryTable } from '@/components/ui/inventoryTable.tsx';
 import { NewProductModal } from '@/components/ui/newProductModal';
-import { Container, Table, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl, Grid, ScrollArea, Checkbox, LoadingOverlay } from '@mantine/core';
+import { Container, Flex, Group, Title, Divider, TextInput, Text, SegmentedControl } from '@mantine/core';
 import { LayoutGrid, Package, Search, List } from 'lucide-react';
 import { notifications } from '@mantine/notifications';
-import { Product } from '@/lib/database';
+import { Product } from "@/components/ui/inventoryTable.tsx";
 
 export default function Inventory() {
-  const [mode, setMode] = useState<string | undefined>(localStorage.getItem('InventoryDisplaySetting') || undefined);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [data, setData] = useState<Product[]>([]);
   const { accountant } = useAccountantStore();
-
-  const handleModeChange = (value: string) => {
-    setMode(value);
-    localStorage.setItem('InventoryDisplaySetting', value);
-  }
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         let result: Product[] = await invoke('get_products', { entity: "Ramphastos tucanus" });
-        setProducts(result)
+        console.log(data);
+        setData(result)
       } catch (error) {
+        console.log(error)
         notifications.show({
           color: "red",
           title: "error when getting the products",
@@ -38,8 +35,10 @@ export default function Inventory() {
   const handleSearch = useDebouncedCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       let results: Product[] = await invoke('search_products', { searchTerm: event.target.value, entity: "Ramphastos tucanus" })
-      setProducts(results)
+      console.log(data)
+      setData(results)
     } catch (error) {
+      console.log(error)
       notifications.show({
         color: 'red',
         title: 'error when searching',
@@ -56,12 +55,18 @@ export default function Inventory() {
           <Title order={1}>Inventario</Title>
         </Flex>
         <Group>
-          <TextInput leftSection={<Search size='20px' />} w='15rem' onChange={handleSearch} />
+          <TextInput
+            w='15rem'
+            placeholder='search by code, name, currency or storage unit'
+            leftSection={<Search size='20px' />}
+            onChange={handleSearch}
+          />
           <Divider orientation='vertical' />
           <NewProductModal />
           <SegmentedControl
-            value={mode}
-            onChange={(e) => handleModeChange(e)}
+            /* value={mode}
+            onChange={(e) => handleChange(e.target.value)} */
+            defaultValue='list'
             data={[{
               value: 'grid',
               label: (
@@ -83,50 +88,7 @@ export default function Inventory() {
         </Group>
       </Group>
       <Divider my='md' />
-      {mode === 'list' ? (
-        <ListView products={products} />
-      ) : ( null
-        /* <GridView items={products} /> */
-      )}
+      <InventoryTable products={data} />
     </Container>
   );
-}
-
-function ListView({ products }: { products: Product[] }) {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
-  return (
-    <Table highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Code</Table.Th>
-          <Table.Th>Name</Table.Th>
-          <Table.Th>description</Table.Th>
-          <Table.Th>Price</Table.Th>
-          <Table.Th></Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {products.map((item, index) => (
-          <Table.Tr key={index}>
-            <Table.Td>{item.code}</Table.Td>
-            <Table.Td>{item.name}</Table.Td>
-            <Table.Td>{item.description}</Table.Td>
-            <Table.Td>{item.price}</Table.Td>
-            <Table.Td><Checkbox size='md' /></Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
-  )
-}
-
-function GridView(){
-  return (
-    <ScrollArea>
-      <Grid gutter='md'>
-        <Grid.Col span={3}></Grid.Col>
-      </Grid>
-    </ScrollArea>
-  )
 }

@@ -18,14 +18,6 @@ interface Account {
   created_at: string;
 }
 
-export interface Product {
-  code: string;
-  name: string;
-  description?: string;
-  price: number;
-  currency: string;
-}
-
 export default class Database {
   static async getAccountantSession({ name }: Partial<Account>): Promise<AccountSessionQuery[]> {
     if (name) {

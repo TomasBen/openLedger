@@ -45,9 +45,12 @@ pub struct Product {
     code: String,
     name: Option<String>,
     description: Option<String>,
+    amount: Option<f32>,
+    measure_unit: Option<String>,
     price: Option<f32>,
-    currency: String,
-    entity_assoc: String,
+    currency: Option<String>,
+    storage_unit: Option<String>,
+    entity_name: String,
 }
 
 static DB: Lazy<Mutex<Connection>> = Lazy::new(|| {
@@ -130,8 +133,8 @@ pub fn get_accountant_session(name: Option<String>) -> Result<AccountantSession,
 pub fn create_product(product: Product) -> Result<usize, String> {
     let conn = DB.lock().unwrap();
 
-    conn.execute("INSERT INTO products (code, name, description, price, currency, entity_associated) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
-        params![product.code, product.name, product.description, product.price, product.currency, product.entity_assoc])
+    conn.execute("INSERT INTO products (code, name, description, amount, measure_unit, price, currency, storage_unit, entity_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+        params![product.code, product.name, product.description, product.amount, product.measure_unit, product.price, product.currency, product.storage_unit, product.entity_name])
     .map_err(|e| e.to_string())
 }
 
@@ -140,7 +143,7 @@ pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
     let conn = DB.lock().unwrap();
 
     let mut stmt = conn
-        .prepare("SELECT * FROM products WHERE entity_associated = ?")
+        .prepare("SELECT * FROM products WHERE entity_name = ?")
         .map_err(|e| e.to_string())?;
 
     let products: Result<Vec<Product>, rusqlite::Error> = stmt
@@ -149,9 +152,12 @@ pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
                 code: row.get(0)?,
                 name: row.get(1)?,
                 description: row.get(2)?,
-                price: row.get(3)?,
-                currency: row.get(4)?,
-                entity_assoc: row.get(5)?,
+                amount: row.get(3)?,
+                measure_unit: row.get(4)?,
+                price: row.get(5)?,
+                currency: row.get(6)?,
+                storage_unit: row.get(7)?,
+                entity_name: row.get(8)?,
             })
         })
         .map_err(|e| e.to_string())?
@@ -166,10 +172,7 @@ pub fn search_products(search_term: String, entity: String) -> Result<Vec<Produc
 
     let mut stmt = conn
         .prepare(
-            "SELECT * FROM products WHERE (code LIKE '%' || ?1 || '%'
-                                    OR name LIKE '%' || ?1 || '%'
-                                    OR currency LIKE '%' || ?1 || '%')
-                                    AND entity_associated = ?2",
+            "SELECT * FROM products WHERE (code LIKE '%' || ?1 || '%' OR name LIKE '%' || ?1 || '%' OR currency LIKE '%' || ?1 || '%') AND entity_name = ?2",
         )
         .map_err(|e| e.to_string())?;
 
@@ -179,9 +182,12 @@ pub fn search_products(search_term: String, entity: String) -> Result<Vec<Produc
                 code: row.get(0)?,
                 name: row.get(1)?,
                 description: row.get(2)?,
-                price: row.get(3)?,
-                currency: row.get(4)?,
-                entity_assoc: row.get(5)?,
+                amount: row.get(3)?,
+                measure_unit: row.get(4)?,
+                price: row.get(5)?,
+                currency: row.get(6)?,
+                storage_unit: row.get(7)?,
+                entity_name: row.get(8)?,
             })
         })
         .map_err(|e| e.to_string())?

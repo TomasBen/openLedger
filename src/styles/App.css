@@ -348,8 +348,8 @@ footer.lower_panel > section {
 }
 
 .mantine-breadcrumbs-root > a {
-    color: black;
-    text-transform: capitalize;
+  color: black;
+  text-transform: capitalize;
 }
 
 /* ---------- MAIN SKELETON STYLES ---------- */
@@ -413,14 +413,36 @@ footer.lower_panel > section {
   }
 }
 
-/* ---------- CALENDAR COMPONENT STYLES ---------- */
+/* ---------- TABLE STYLES ---------- */
 
-.adjacent-day {
-    color: gray;
+table {
+  height: 100%;
+  width: 100%;
+  border-spacing: 0;
+  border: thin solid;
+  border-radius: 0.5rem;
+  border-color: var(--color-outline);
+  overflow: hidden;
 }
 
-.selected-date {
-    background-color: var(--color-primary-container);
+thead {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-outline);
 }
 
-/* ---------- SIDEBAR STYLES ---------- */
+td,
+th {
+  padding: 0.5rem;
+  max-lines: 2;
+  min-width: 5vw;
+  max-width: 15vw;
+  border-bottom: thin solid;
+  border-color: var(--color-outline-variant);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+tr:hover {
+  background-color: var(--color-surface-container-high);
+}

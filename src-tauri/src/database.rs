@@ -96,27 +96,17 @@ pub fn get_account(name: &str) -> Result<AccountQuery, String> {
 }
 
 #[tauri::command]
-pub fn get_accountant_session(name: Option<String>) -> Result<AccountantSession, String> {
+pub fn get_accountant_session(
+    accountant_name: Option<String>,
+) -> Result<Vec<AccountantSession>, String> {
     let conn = DB.lock().unwrap();
+    let mut stmt = conn
+        .prepare("SELECT * FROM accountantSession WHERE accountant_name = ?1")
+        .map_err(|e| e.to_string())?;
 
-    match name {
-        Some(n) => conn
-            .query_row(
-                "SELECT * FROM accountantSession WHERE name = ?",
-                [n],
-                |row| {
-                    Ok(AccountantSession {
-                        id: row.get(0)?,
-                        name: row.get(1)?,
-                        accountant_name: row.get(2)?,
-                        email: row.get(3)?,
-                        account_type: row.get(4)?,
-                    })
-                },
-            )
-            .map_err(|e| e.to_string()),
-        None => conn
-            .query_row("SELECT * FROM accountantSession", [], |row| {
+    if accountant_name.is_some() {
+        let results: Result<Vec<AccountantSession>, rusqlite::Error> = stmt
+            .query_map([accountant_name], |row| {
                 Ok(AccountantSession {
                     id: row.get(0)?,
                     name: row.get(1)?,
@@ -125,7 +115,31 @@ pub fn get_accountant_session(name: Option<String>) -> Result<AccountantSession,
                     account_type: row.get(4)?,
                 })
             })
-            .map_err(|e| e.to_string()),
+            .map_err(|e| e.to_string())?
+            .collect();
+
+        results.map_err(|e| e.to_string())
+    } else if accountant_name.is_none() {
+        let mut stmt = conn
+            .prepare("SELECT * FROM accountantSession;")
+            .map_err(|e| e.to_string())?;
+
+        let results: Result<Vec<AccountantSession>, rusqlite::Error> = stmt
+            .query_map([], |row| {
+                Ok(AccountantSession {
+                    id: row.get(0)?,
+                    name: row.get(1)?,
+                    accountant_name: row.get(2)?,
+                    email: row.get(3)?,
+                    account_type: row.get(4)?,
+                })
+            })
+            .map_err(|e| e.to_string())?
+            .collect();
+
+        results.map_err(|e| e.to_string())
+    } else {
+        Err("Error: No accountant_name provided".to_string())
     }
 }
 
@@ -139,31 +153,56 @@ pub fn create_product(product: Product) -> Result<usize, String> {
 }
 
 #[tauri::command]
-pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
+pub fn get_products(entity: Option<String>) -> Result<Vec<Product>, String> {
     let conn = DB.lock().unwrap();
 
     let mut stmt = conn
         .prepare("SELECT * FROM products WHERE entity_name = ?")
         .map_err(|e| e.to_string())?;
 
-    let products: Result<Vec<Product>, rusqlite::Error> = stmt
-        .query_map([entity], |row| {
-            Ok(Product {
-                code: row.get(0)?,
-                name: row.get(1)?,
-                description: row.get(2)?,
-                amount: row.get(3)?,
-                measure_unit: row.get(4)?,
-                price: row.get(5)?,
-                currency: row.get(6)?,
-                storage_unit: row.get(7)?,
-                entity_name: row.get(8)?,
+    if entity.is_some() {
+        let products: Result<Vec<Product>, rusqlite::Error> = stmt
+            .query_map([entity], |row| {
+                Ok(Product {
+                    code: row.get(0)?,
+                    name: row.get(1)?,
+                    description: row.get(2)?,
+                    amount: row.get(3)?,
+                    measure_unit: row.get(4)?,
+                    price: row.get(5)?,
+                    currency: row.get(6)?,
+                    storage_unit: row.get(7)?,
+                    entity_name: row.get(8)?,
+                })
             })
-        })
-        .map_err(|e| e.to_string())?
-        .collect();
+            .map_err(|e| e.to_string())?
+            .collect();
 
-    products.map_err(|e| e.to_string())
+        products.map_err(|e| e.to_string())
+    } else {
+        let mut stmt = conn
+            .prepare("SELECT * FROM products")
+            .map_err(|e| e.to_string())?;
+
+        let products: Result<Vec<Product>, rusqlite::Error> = stmt
+            .query_map([], |row| {
+                Ok(Product {
+                    code: row.get(0)?,
+                    name: row.get(1)?,
+                    description: row.get(2)?,
+                    amount: row.get(3)?,
+                    measure_unit: row.get(4)?,
+                    price: row.get(5)?,
+                    currency: row.get(6)?,
+                    storage_unit: row.get(7)?,
+                    entity_name: row.get(8)?,
+                })
+            })
+            .map_err(|e| e.to_string())?
+            .collect();
+
+        products.map_err(|e| e.to_string())
+    }
 }
 
 #[tauri::command]

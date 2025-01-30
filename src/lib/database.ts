@@ -1,13 +1,5 @@
 export type AccountType = 'corporate' | 'accounting study' | 'independent accountant' | 'end user';
 
-export interface AccountSessionQuery {
-  id: string;
-  name: string;
-  accountant_name: string;
-  email: string;
-  account_type: string;
-}
-
 interface Account {
   account_id: string;
   name: string;

@@ -1,6 +1,5 @@
+import { invoke } from '@tauri-apps/api/core';
 import { create } from 'zustand';
-import Database from '@/lib/database';
-import { AccountSessionQuery } from '@/lib/database';
 
 type Entity = {
   id: string;
@@ -13,6 +12,14 @@ export interface AccountantSession {
   account_type: string;
   entities: Entity[];
   currently_representing: Entity | undefined;
+}
+
+export interface AccountSessionQuery {
+  id: string;
+  name: string;
+  accountant_name: string;
+  email: string;
+  account_type: string;
 }
 
 interface AccountantStoreType {
@@ -33,7 +40,9 @@ export const useAccountantStore = create<AccountantStoreType>((set) => ({
 }));
 
 const initializeStore = async () => {
-  let query: AccountSessionQuery[] = await Database.getAccountantSession({ });
+  let query: AccountSessionQuery[] = await invoke('get_accountant_session', { accountantName: 'Tomás' });
+
+  console.log(query);
 
   if (query) {
     let initialSession: AccountantSession = {

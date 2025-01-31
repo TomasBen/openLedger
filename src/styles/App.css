@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 ::before,
 ::after {
@@ -169,20 +173,8 @@
   }
 }
 
-/* @media (prefers-color-scheme: dark) and (prefers-contrast: more) not implemented since
-it doesnt seem to take effect and defaults to light mode high contrast */
-
-#root,
-body {
-  height: 100vh;
-  width: 100vw;
-}
-
+html,
 #root {
-  flex-direction: column;
-}
-
-html {
   overflow: hidden;
 }
 
@@ -190,23 +182,6 @@ html[data-maximize='false'],
 html[data-maximize='false'] > body {
   border-radius: 10px;
   overflow: hidden;
-}
-
-main {
-  height: 95vh;
-  width: 100vw;
-  display: flex;
-  background: var(--color-surface);
-}
-
-.titlebar {
-  position: relative;
-  height: 5vh;
-  width: 100%;
-  padding: 0 0.5em 0 0.5em;
-  background-color: var(--color-surface-dim);
-  border-bottom: 1px solid;
-  border-color: var(--color-outline-variant);
 }
 
 .titlebar-title {
@@ -221,228 +196,83 @@ main {
   -ms-user-select: none;
 }
 
-div.mantine-Select-option > span {
-  max-width: 15rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-/* high specificity to overshadow mantine defaults */
-div.mantine-Breadcrumbs-root > a.mantine-Breadcrumbs-breadcrumb,
-div.mantine-Breadcrumbs-root > div.mantine-Breadcrumbs-separator {
-  color: var(--color-on-surface-variant);
-  cursor: default;
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-
-/* ---------- SIDEBAR STYLES ---------- */
-
-.sidebar {
-  height: 100%;
-  width: max-content;
-  background-color: var(--color-surface-container-low);
-  padding: 0.3em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  border-right: 1px solid;
-  border-color: var(--color-outline-variant);
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.sidebarEntry {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  border-radius: 0.3rem;
-}
-
-.sidebarLink {
-  width: 100%;
-  padding: 0.5em;
-  border-radius: 0.3rem;
-  display: flex;
-  align-items: end;
-  gap: 0.5em;
-  line-height: 1.2rem;
-  font-size: 1.2rem;
-  text-decoration: none;
-  color: var(--color-on-surface);
-}
-
-.sidebarLink.active {
-  color: var(--color-on-primary-container);
-  background-color: var(--color-primary-container);
-}
-
-.sidebarLink:hover {
-  background-color: var(--color-primary-container-hover);
-}
-
-.sidebarEntry > .subitemCollapsible {
-  margin-left: 0.5rem;
-  border-left: 1px solid;
-  boder-color: var(--color-outline);
-}
-
-.subitemLink {
-  padding: 0.5rem;
-  display: flex;
-  align-items: start;
-  gap: 0.3rem;
-  border-radius: 0 0.3rem 0.3rem 0;
-  text-decoration: none;
-  color: var(--color-on-surface);
-}
-
-.subitemLink:hover,
-.subitemLink.active {
-  color: var(--color-primary);
-  background-color: var(--color-primary-container);
-}
-
-.sidebarLowerBelt {
-  padding: 0.3rem;
-  margin-top: auto;
-  margin-right: auto;
-  justify-content: space-between;
-}
-
-/* ---------- LAYOUT STYLES ---------- */
-
-footer.lower_panel {
-  height: 5vh;
-  width: 100%;
-  padding: 0.5em 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--color-surface-bright);
-  border: 1px solid;
-  border-color: var(--color-outline-variant);
-}
-
-footer.lower_panel > a.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background-color: white;
-}
-
-footer.lower_panel > section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.accessibilityButtonMenu {
-  display: flex;
-  justify-content: center;
-}
-
-.mantine-breadcrumbs-root > a {
-  color: black;
-  text-transform: capitalize;
-}
-
-/* ---------- MAIN SKELETON STYLES ---------- */
-
-.skeleton {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: space-between;
-}
-
-.skeleton-section {
-  padding: 1em 2em 1em 2em;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-  animation: pulse 1.5s infinite alternate;
-}
-
-.skeleton-section.path {
-  width: full;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex: 0;
-  gap: 1em;
-  border-bottom: 1px solid var(--color-outline-variant);
-}
-
-.skeleton-chip {
-  height: 2em;
-  width: 5em;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-
-.skeleton-line {
-  height: 100%;
-  width: 100%;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-
-.skeleton-square {
-  height: 100%;
-  width: 100%;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  100% {
-    opacity: 0.3;
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
-/* ---------- TABLE STYLES ---------- */
-
-table {
-  height: 100%;
-  width: 100%;
-  border-spacing: 0;
-  border: thin solid;
-  border-radius: 0.5rem;
-  border-color: var(--color-outline);
-  overflow: hidden;
-}
-
-thead {
-  background-color: var(--color-surface-container-high);
-  color: var(--color-outline);
-}
-
-td,
-th {
-  padding: 0.5rem;
-  max-lines: 2;
-  min-width: 5vw;
-  max-width: 15vw;
-  border-bottom: thin solid;
-  border-color: var(--color-outline-variant);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow-x: hidden;
-}
-
-tr:hover {
-  background-color: var(--color-surface-container-high);
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

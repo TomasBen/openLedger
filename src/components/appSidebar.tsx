@@ -45,21 +45,21 @@ const items = [
   {
     icon: ShoppingCart,
     name: 'Ventas',
-    path: '/ventas/comprobantes',
+    path: '/sales',
     subitems: [
       {
         icon: FileOutput,
         name: 'Comprobantes',
-        path: '/ventas/comprobantes',
+        path: '/sales/invoices',
       },
-      { icon: FileDigit, name: 'Presupuestos', path: '/ventas/presupuestos' },
-      { icon: Truck, name: 'Remitos', path: '/ventas/remitos' },
-      { icon: CreditCard, name: 'Cobranzas', path: '/ventas/cobranzas' },
-      { icon: TrendingUp, name: 'Ingresos', path: '/ventas/ingresos-fondos' },
+      { icon: FileDigit, name: 'Presupuestos', path: '/sales/quotes' },
+      { icon: Truck, name: 'Remitos', path: '/sales/transport' },
+      { icon: CreditCard, name: 'Cobranzas', path: '/sales/collection' },
+      { icon: TrendingUp, name: 'Ingresos', path: '/sales/revenue' },
       {
         icon: Scale,
         name: 'Saldo de clientes',
-        path: '/ventas/saldo-clientes',
+        path: '/sales/clients',
       },
     ],
   },
@@ -68,7 +68,7 @@ const items = [
     name: 'Compras',
     path: '/purchases',
     subitems: [
-      { icon: FileInput, name: 'Comprobantes', path: '/purchases/documents' },
+      { icon: FileInput, name: 'Comprobantes', path: '/purchases/invoices' },
       {
         icon: FileSearch,
         name: 'Ordenes de compra',
@@ -118,7 +118,7 @@ export default function AppSidebar() {
                 item.subitems.length > 0 ? (
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton className="h-fit">
+                      <SidebarMenuSubButton className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]">
                         <NavLink to={subitem.path} className="flex">
                           {subitem.name}
                         </NavLink>

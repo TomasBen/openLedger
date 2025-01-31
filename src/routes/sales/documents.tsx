@@ -1,5 +1,5 @@
 import { Container, Breadcrumbs, Anchor, Divider } from '@mantine/core';
-import ActionBar from '@/components/ui/actionBar';
+import ActionBar from '@/components/actionBar';
 
 {
   /* interface ComprobanteDeVenta {
@@ -85,10 +85,10 @@ export default function Comprobantes() {
   ));
 
   return (
-  <Container fluid w="100%" pt="md">
+    <Container fluid w="100%" pt="md">
       <Breadcrumbs>{items}</Breadcrumbs>
       <Divider my="md" />
       <ActionBar placeholder="Buscar por fecha, comprobante, tipo, importe, moneda, CAE, cliente..." />
-  </Container>
+    </Container>
   );
 }

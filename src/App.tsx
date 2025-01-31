@@ -45,14 +45,14 @@ export default function App() {
       <Layout>
         <Suspense fallback={<Loader m="auto" type="dots" />}>
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/home">
-              <Route path="comprobantes" element={<ComprobantesDeVentas />} />
-              <Route path="presupuestos" element={<Presupuestos />} />
-              <Route path="remitos" element={<Remitos />} />
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/sales">
+              <Route path="invoices" element={<ComprobantesDeVentas />} />
+              <Route path="quotes" element={<Presupuestos />} />
+              <Route path="transport" element={<Remitos />} />
             </Route>
-            <Route path="/compras">
-              <Route path="comprobantes" element={<ComprobantesDeCompras />} />
+            <Route path="/purchases">
+              <Route path="invoices" element={<ComprobantesDeCompras />} />
             </Route>
             <Route path="/products">
               <Route index element={<h1>products page</h1>} />

@@ -1,11 +1,11 @@
 import { invoke } from '@tauri-apps/api/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { NewProductDialog } from '@/components/ui/newProductDialog';
-import { InventoryTable } from '@/components/ui/inventoryTable.tsx';
+import { NewProductDialog } from '@/components/newProductDialog';
+import { InventoryTable } from '@/components/inventoryTable.tsx';
 import { LayoutGrid, Package, List, Ellipsis } from 'lucide-react';
 import { notifications } from '@mantine/notifications';
-import { Product } from '@/components/ui/inventoryTable.tsx';
+import { Product } from '@/components/inventoryTable.tsx';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

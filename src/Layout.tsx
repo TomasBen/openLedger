@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <main
           id="main-content" // <- used for "skipping to main content button for accessibility"
           role="main"
-          className="flex w-full h-[95vh] bg-red-700 overflow-hidden"
+          className="flex w-full h-[95vh]"
         >
           {children}
         </main>

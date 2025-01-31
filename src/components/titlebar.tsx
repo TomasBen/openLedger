@@ -1,9 +1,8 @@
 import { MouseEvent } from 'react';
-import { Window } from '@/lib/window';
-import { SidebarTrigger } from './ui/sidebar';
-import { Minus, Square, X } from 'lucide-react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { Button } from './ui/button';
+import { Window } from '@/lib/window';
+import { SidebarToggle } from './sidebarToggle';
+import { WindowActions } from './windowActions';
 
 export function Titlebar() {
   const window = getCurrentWindow();
@@ -26,37 +25,12 @@ export function Titlebar() {
 
   return (
     <header
-      className="flex relative h-[5vh] w-full px-2 bg-[var(--color-surface-dim)] justify-between items-center border border-[var(--color-outline-variant)]"
+      className="flex relative h-[5vh] w-full px-2 bg-[var(--color-surface)] justify-between items-center border-b border-[var(--color-outline-variant)]"
       onMouseDown={(e) => handleMousedown(e)}
     >
-      <SidebarTrigger />
+      <SidebarToggle />
       {/* <TitlebarBreadcrumb /> */}
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          onClick={(e) => {
-            e.preventDefault(), window.minimize();
-          }}
-        >
-          <Minus size="18px" />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={(e) => {
-            e.preventDefault(), Window.toggleMaximize();
-          }}
-        >
-          <Square size="18px" />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={(e) => {
-            e.preventDefault(), window.close();
-          }}
-        >
-          <X size="18px" />
-        </Button>
-      </div>
+      <WindowActions />
     </header>
   );
 }

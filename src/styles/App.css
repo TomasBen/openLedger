@@ -36,7 +36,7 @@
   --color-surface-variant: rgb(225 226 236);
   --color-on-surface-variant: rgb(68 71 79);
   --color-outline: rgb(117 119 127);
-  --color-outline-variant: rgb(196 198 208);
+  --color-outline-variant: hsl(220, 13%, 91%);
   --color-shadow: rgb(0 0 0);
   --color-scrim: rgb(0 0 0);
   --color-inverse-surface: rgb(47 48 54);
@@ -178,23 +178,11 @@ html,
   overflow: hidden;
 }
 
-html[data-maximize='false'],
+/* html[data-maximize='false'],
 html[data-maximize='false'] > body {
   border-radius: 10px;
   overflow: hidden;
-}
-
-.titlebar-title {
-  color: var(--color-on-surface-variant);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
+} */
 
 @layer base {
   :root {

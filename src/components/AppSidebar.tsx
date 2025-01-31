@@ -31,6 +31,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 
 const items = [
@@ -102,21 +105,31 @@ export default function AppSidebar() {
         <EntitySelector />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-lg">Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.name} className="list-none">
-                <SidebarMenuButton asChild>
-                  <NavLink to={item.path} className="flex text-lg">
-                    <item.icon />
-                    {item.name}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.name} className="list-none">
+              <SidebarMenuButton asChild>
+                <NavLink to={item.path} className="flex">
+                  <item.icon />
+                  {item.name}
+                </NavLink>
+              </SidebarMenuButton>
+              {item.subitems?.map((subitem) =>
+                item.subitems.length > 0 ? (
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton className="h-fit">
+                        <NavLink to={subitem.path} className="flex">
+                          {subitem.name}
+                        </NavLink>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                ) : null,
+              )}
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <AccountSelector />

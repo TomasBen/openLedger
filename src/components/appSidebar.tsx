@@ -9,7 +9,7 @@ import {
   SidebarMenu,
 } from './ui/sidebar';
 
-export default function AppSidebar() {
+export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>

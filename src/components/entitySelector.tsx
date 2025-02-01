@@ -12,10 +12,18 @@ import {
 export function EntitySelector() {
   const { accountant, updateAccountant } = useAccountantStore();
 
+  const handleChange = (value: string) => {
+    updateAccountant({
+      currently_representing: accountant?.entities.find(
+        (item) => item.id === value,
+      ),
+    });
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Select>
+        <Select onValueChange={handleChange}>
           <SelectTrigger>
             <SelectValue placeholder="select a client" />
           </SelectTrigger>

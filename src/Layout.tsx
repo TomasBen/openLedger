@@ -1,6 +1,7 @@
+import { Toaster } from './components/ui/sonner.tsx';
 import { SidebarInset, SidebarProvider } from './components/ui/sidebar.tsx';
 import { Titlebar } from '@/components/titlebar.tsx';
-import AppSidebar from './components/appSidebar.tsx';
+import { AppSidebar } from './components/appSidebar.tsx';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         >
           {children}
         </main>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

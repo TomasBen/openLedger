@@ -3,20 +3,19 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { NewProductDialog } from '@/components/newProductDialog';
 import { InventoryTable } from '@/components/inventoryTable.tsx';
-import { LayoutGrid, Package, List, Ellipsis } from 'lucide-react';
-import { notifications } from '@mantine/notifications';
 import { Product } from '@/components/inventoryTable.tsx';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ArrowUpDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { LayoutGrid, Package, List, Ellipsis, ArrowUpDown } from 'lucide-react';
 import {
   ColumnDef,
   useReactTable,
   getCoreRowModel,
 } from '@tanstack/react-table';
+import { toast } from 'sonner';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -184,14 +183,10 @@ export default function Inventory() {
           entity: accountant?.currently_representing?.name,
         });
         setData(result);
-        console.log(data);
+        console.log(result);
       } catch (error) {
         console.log(error);
-        notifications.show({
-          color: 'red',
-          title: 'error when getting the products',
-          message: `error: ${error}`,
-        });
+        toast(`an error has ocurred: ${error}`);
       }
     };
 

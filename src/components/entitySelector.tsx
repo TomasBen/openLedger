@@ -22,7 +22,9 @@ export function EntitySelector() {
           <SelectContent>
             <SelectGroup>
               {accountant?.entities.map((item) => (
-                <SelectItem value={item.id}>{item.name}</SelectItem>
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>

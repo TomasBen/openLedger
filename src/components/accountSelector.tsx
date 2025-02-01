@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,7 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { ArrowUpDown, LogOut, Settings } from 'lucide-react';
 
-export function AccountSelector() {
+function AccountSelector() {
   const { accountant } = useAccountantStore();
 
   return (
@@ -87,3 +88,5 @@ export function AccountSelector() {
     </SidebarMenu>
   );
 }
+
+export const MemoAccountSelector = memo(AccountSelector);

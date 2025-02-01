@@ -14,10 +14,9 @@ pub fn run() {
         sql: include_str!("../migrations/0001_initial_tables.sql"),
         kind: MigrationKind::Up,
     }]; */
-
     tauri::Builder::default()
         .manage(Mutex::new(AppState::default()))
-        .setup(|app| {
+        .setup(move |app| {
             // get the app's config dir
             let app_config_dir = app.handle().path().app_config_dir()?;
             let state = app.state::<Mutex<AppState>>();

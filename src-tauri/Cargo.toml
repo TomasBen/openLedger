@@ -35,6 +35,9 @@ rusqlite = { version = "0.31.0", features = [
 [profile.release]
 opt-level = 3
 panic = 'abort'
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-window-state = "2"
 # lto = true <- investigate
 # strip = true <- investigate
 # rustflags = ["-C", "target-cpu=x86-64-v4"] <- requires a newer or nightly version of cargo

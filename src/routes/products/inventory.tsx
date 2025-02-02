@@ -27,6 +27,7 @@ import {
   ColumnDef,
   useReactTable,
   getCoreRowModel,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable.tsx'));
@@ -214,7 +215,10 @@ export default function Inventory() {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
+
+  console.log(table.getState().sorting);
 
   return (
     <div className="w-full h-auto m-4 flex flex-col justify-between gap-2">

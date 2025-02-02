@@ -27,7 +27,7 @@ export const InventoryTableRows = function InventoryTableRows({
             colSpan={table.getAllColumns().length}
             className="py-20 border-t text-xl text-center"
           >
-            <DogSVG width="40rem" className="block mx-auto mb-2" />
+            <DogSVG className="block mx-auto mb-2 w-[40rem] h-auto" />
             <span>No results</span>
           </TableCell>
         </TableRow>

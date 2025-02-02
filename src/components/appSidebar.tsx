@@ -23,10 +23,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
-          <MemoAccountSelector />
-        </SidebarGroup>
+        <MemoAccountSelector />
       </SidebarFooter>
     </Sidebar>
   );

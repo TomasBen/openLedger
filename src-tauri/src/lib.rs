@@ -15,6 +15,7 @@ pub fn run() {
         kind: MigrationKind::Up,
     }]; */
     tauri::Builder::default()
+        .plugin(tauri_plugin_window_state::Builder::new().build())
         .manage(Mutex::new(AppState::default()))
         .setup(move |app| {
             // get the app's config dir

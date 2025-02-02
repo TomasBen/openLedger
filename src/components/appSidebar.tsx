@@ -1,11 +1,13 @@
 import { EntitySelector } from './entitySelector';
 import { MemoAccountSelector } from './accountSelector';
-import { MemoSidebarMenuItems } from './sidebarMenuItems';
+import { SidebarMenuItems } from './sidebarMenuItems';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarGroup,
+  SidebarGroupLabel,
   SidebarMenu,
 } from './ui/sidebar';
 
@@ -17,11 +19,14 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          <MemoSidebarMenuItems />
+          <SidebarMenuItems />
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <MemoAccountSelector />
+        <SidebarGroup>
+          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <MemoAccountSelector />
+        </SidebarGroup>
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,12 +1,7 @@
-import {
-  Table,
-  TableHeader,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@/components/ui/table';
-import { flexRender, Table as TableType } from '@tanstack/react-table';
+import { InventoryTableHeaders } from './inventoryTableHeaders';
+import { InventoryTableRows } from './inventoryTableRows';
+import { Table, TableHeader, TableBody } from '@/components/ui/table';
+import { Table as TableType } from '@tanstack/react-table';
 import { ScrollArea } from './ui/scroll-area';
 
 export interface Product {
@@ -20,36 +15,19 @@ export interface Product {
   storage_unit?: string;
 }
 
-export function InventoryTable({ table }: { table: TableType<Product> }) {
+export default function InventoryTable({
+  table,
+}: {
+  table: TableType<Product>;
+}) {
   return (
-    <ScrollArea className="flex-1 rounded-md border">
-      <Table>
+    <ScrollArea className="flex-1">
+      <Table className="h-auto h-max-full border border-separate rounded-md">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
+          <InventoryTableHeaders headers={table.getHeaderGroups()} />
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="max-w-[15vw] truncate">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+          <InventoryTableRows table={table} />
         </TableBody>
       </Table>
     </ScrollArea>

@@ -90,7 +90,7 @@ const SIDEBAR_ITEMS: SidebarGroup[] = [
   },
 ] as const;
 
-function SidebarMenuItems() {
+export const SidebarMenuItems = memo(function SidebarMenuItems() {
   return (
     <>
       {SIDEBAR_ITEMS.map((item: SidebarGroup) => (
@@ -102,13 +102,14 @@ function SidebarMenuItems() {
             </NavLink>
           </SidebarMenuButton>
           {item.subitems?.map((subitem) =>
-            item.subitems ? (
+            item.subitems != undefined ? (
               <SidebarMenuSub key={subitem.path}>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]">
-                    <NavLink to={subitem.path} className="flex">
-                      {subitem.name}
-                    </NavLink>
+                  <SidebarMenuSubButton
+                    asChild
+                    className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]"
+                  >
+                    <NavLink to={subitem.path}>{subitem.name}</NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
@@ -118,6 +119,4 @@ function SidebarMenuItems() {
       ))}
     </>
   );
-}
-
-export const MemoSidebarMenuItems = memo(SidebarMenuItems);
+});

@@ -31,18 +31,18 @@ export const useAccountantStore = create<AccountantStoreType>((set) => ({
   accountant: undefined,
 
   updateAccountant: async (update: Partial<AccountantSession>) => {
-    set(state => ({
+    set((state) => ({
       accountant: state.accountant
-        ? { ...state.accountant, ...update}
-        : update as AccountantSession,
-    }))
-  }
+        ? { ...state.accountant, ...update }
+        : (update as AccountantSession),
+    }));
+  },
 }));
 
 const initializeStore = async () => {
-  let query: AccountSessionQuery[] = await invoke('get_accountant_session', { accountantName: 'Tomás' });
-
-  console.log(query);
+  let query: AccountSessionQuery[] = await invoke('get_accountant_session', {
+    accountantName: 'Tomás',
+  });
 
   if (query) {
     let initialSession: AccountantSession = {
@@ -51,15 +51,15 @@ const initializeStore = async () => {
       account_type: query[0].account_type,
       entities: [],
       currently_representing: undefined,
-    }
+    };
 
-    initialSession.entities = query.map(item => ({
+    initialSession.entities = query.map((item) => ({
       id: item.id,
-      name: item.name
-    }))
+      name: item.name,
+    }));
 
     useAccountantStore.setState({ accountant: initialSession });
   }
-}
+};
 
 initializeStore();

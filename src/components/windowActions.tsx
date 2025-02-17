@@ -9,28 +9,31 @@ export function WindowActions() {
   return (
     <div className="flex items-center gap-2">
       <Button
+        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), window.minimize();
         }}
       >
-        <Minus size="18px" />
+        <Minus />
       </Button>
       <Button
+        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), Window.toggleMaximize();
         }}
       >
-        <Square size="18px" />
+        <Square />
       </Button>
       <Button
+        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), window.close();
         }}
       >
-        <X size="18px" />
+        <X />
       </Button>
     </div>
   );

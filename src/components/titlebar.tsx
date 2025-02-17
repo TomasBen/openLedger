@@ -25,7 +25,7 @@ export function Titlebar() {
 
   return (
     <header
-      className="flex relative h-[50px] w-full justify-between items-center px-2"
+      className="flex h-[30px] w-full justify-between items-center px-2 pb-2"
       onMouseDown={(e) => handleMousedown(e)}
     >
       <SidebarTrigger />

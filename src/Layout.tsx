@@ -39,7 +39,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           className="flex w-full h-[calc(100vh-30px-16px)] bg-white rounded-sm drop-shadow-lg"
           style={{
             contain: 'layout',
-            willChange: 'transform',
           }}
         >
           {children}

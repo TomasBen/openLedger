@@ -1,20 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { InventoryTableHeaders } from './inventoryTableHeaders';
-import { InventoryTableRows } from './inventoryTableRows';
+import { useTableStore } from '@/stores/tablesStore';
 import { ScrollArea } from './ui/scroll-area';
-import { Table, TableHeader, TableBody } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from './ui/button';
 import { Ellipsis, ArrowUpDown } from 'lucide-react';
+import { DogSVG } from '@/media/dogSVG';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import {
+  Table,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
 import {
   ColumnDef,
+  HeaderGroup,
   useReactTable,
   getCoreRowModel,
+  flexRender,
 } from '@tanstack/react-table';
-import { useTableStore } from '@/stores/tablesStore';
-import { InventoryTablePagination } from './inventoryTablePagination';
 
 export interface Product {
   code: string;
@@ -26,6 +34,31 @@ export interface Product {
   currency?: string;
   storage_unit?: string;
 }
+
+const TableHeaders = memo(function TableHeaders({
+  headers,
+}: {
+  headers: HeaderGroup<Product>[] | undefined;
+}) {
+  return (
+    <>
+      {headers?.map((headerGroup) => (
+        <TableRow key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <TableHead key={header.id}>
+              {header.isPlaceholder
+                ? null
+                : flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
+                  )}
+            </TableHead>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  );
+});
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
@@ -192,6 +225,16 @@ export default function InventoryTable() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const { rows } = table.getRowModel();
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 20,
+    overscan: 5,
+  });
+
   useEffect(() => {
     const getProducts = async () => {
       const results: Product[] = await invoke('get_products', {
@@ -207,17 +250,54 @@ export default function InventoryTable() {
 
   return (
     <>
-      <ScrollArea className="flex-1 border rounded-md">
-        <Table className="border-separate border-spacing-0">
-          <TableHeader>
-            <InventoryTableHeaders headers={tableInstance?.getHeaderGroups()} />
-          </TableHeader>
-          <TableBody>
-            <InventoryTableRows tableLength={columns.length} />
-          </TableBody>
-        </Table>
+      <ScrollArea className="flex-1 border rounded-md" ref={parentRef}>
+        <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
+          <Table className="border-separate border-spacing-0">
+            <TableHeader>
+              <TableHeaders headers={tableInstance?.getHeaderGroups()} />
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                virtualizer.getVirtualItems().map((virtualRow, index) => {
+                  const row = rows[virtualRow.index];
+                  return (
+                    <TableRow
+                      key={row.id}
+                      style={{
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="max-w-[15vw] truncate"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+              ) : (
+                <TableRow key="no-data-row">
+                  <TableCell
+                    key="no-data-cell"
+                    className="py-20 border-t text-xl text-center"
+                  >
+                    <DogSVG className="block mx-auto mb-2 w-[40rem] h-auto" />
+                    <span>No results</span>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </ScrollArea>
-      <InventoryTablePagination />
+      <span className="text-center">showing {table.getRowCount()} results</span>
     </>
   );
 }

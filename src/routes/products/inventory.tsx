@@ -11,7 +11,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { InventoryTablePagination } from '@/components/inventoryTablePagination';
 
 export default function Inventory({ children }: { children: React.ReactNode }) {
   return (

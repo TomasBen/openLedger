@@ -13,7 +13,6 @@
     "windows": [
       {
         "decorations": false,
-        "transparent": true,
         "title": "OpenLedger",
         "center": true,
         "width": 1500,

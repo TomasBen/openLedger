@@ -1,4 +1,3 @@
-import { Container, Breadcrumbs, Anchor, Divider } from '@mantine/core';
 import ActionBar from '@/components/actionBar';
 
 {

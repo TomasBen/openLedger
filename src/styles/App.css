@@ -6,8 +6,10 @@
   transition: background-color 200ms ease-in;
 }
 
-element:focus-visible {
-  outline-offset: 1rem;
+html,
+body {
+  background-color: var(--color-surface-dim);
+  overflow: hidden;
 }
 
 :root {

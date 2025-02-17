@@ -1,17 +1,21 @@
-import { flexRender, Table } from '@tanstack/react-table';
-import { Product } from './inventoryTable';
+import { useTableStore } from '@/stores/tablesStore';
+import { flexRender } from '@tanstack/react-table';
 import { TableCell, TableRow } from './ui/table';
 import { DogSVG } from '@/media/dogSVG';
+import { useAccountantStore } from '@/stores/accountantStore';
 
 export const InventoryTableRows = function InventoryTableRows({
-  table,
+  tableLength,
 }: {
-  table: Table<Product>;
+  tableLength: number;
 }) {
+  const { accountant } = useAccountantStore();
+  const { tableInstance } = useTableStore();
+
   return (
     <>
-      {table.getCoreRowModel().rows.length >= 1 ? (
-        table.getCoreRowModel().rows.map((row) => (
+      {tableInstance != undefined && accountant?.currently_representing ? (
+        tableInstance.getCoreRowModel().rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id} className="max-w-[15vw] truncate">
@@ -24,7 +28,7 @@ export const InventoryTableRows = function InventoryTableRows({
         <TableRow key="no-data-row">
           <TableCell
             key="no-data-cell"
-            colSpan={table.getAllColumns().length}
+            colSpan={tableLength}
             className="py-20 border-t text-xl text-center"
           >
             <DogSVG className="block mx-auto mb-2 w-[40rem] h-auto" />

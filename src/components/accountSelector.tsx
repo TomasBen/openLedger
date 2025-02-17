@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { ArrowUpDown, LogOut, Settings } from 'lucide-react';
+import { ChevronRight, LogOut, Plus, Settings } from 'lucide-react';
 
 function AccountSelector() {
   const { accountant } = useAccountantStore();
@@ -42,7 +42,7 @@ function AccountSelector() {
                 </span>
                 <span className="truncate text-xs">{accountant?.email}</span>
               </div>
-              <ArrowUpDown className="ml-auto size-4" />
+              <ChevronRight className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -68,6 +68,12 @@ function AccountSelector() {
                 </div>
               </div>
             </DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuItem disabled>
+                <Plus />
+                Add account
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>

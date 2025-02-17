@@ -5,11 +5,11 @@ import { Product } from './inventoryTable';
 export function InventoryTableHeaders({
   headers,
 }: {
-  headers: HeaderGroup<Product>[];
+  headers: HeaderGroup<Product>[] | undefined;
 }) {
   return (
     <>
-      {headers.map((headerGroup) => (
+      {headers?.map((headerGroup) => (
         <TableRow key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
             <TableHead key={header.id}>

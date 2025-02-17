@@ -92,11 +92,8 @@ export function NewProductDialog() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input disabled placeholder="" {...field} />
+                    <Input placeholder="" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Pictures are not yet supported
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -5,10 +5,10 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
+  SidebarSeparator,
 } from './ui/sidebar';
 
 export function AppSidebar() {
@@ -18,9 +18,11 @@ export function AppSidebar() {
         <EntitySelector />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          <SidebarMenuItems />
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItems />
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <MemoAccountSelector />

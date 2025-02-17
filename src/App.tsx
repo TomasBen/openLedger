@@ -1,16 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import {
-  Loader,
-  MantineColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core';
-import { usePreferencesStore } from './stores/UserPreferencesStore.ts';
 import Layout from './Layout.tsx';
 import Dashboard from './routes/Dashboard.tsx';
-import '@mantine/core/styles.css';
-import '@mantine/dates/styles.css';
-import '@mantine/notifications/styles.css';
+import { Skeleton } from './components/ui/skeleton.tsx';
 import './styles/App.css';
 
 const ComprobantesDeVentas = lazy(() => import('./routes/sales/documents.tsx'));
@@ -20,13 +12,9 @@ const ComprobantesDeCompras = lazy(
   () => import('./routes/purchases/documents.tsx'),
 );
 const Inventory = lazy(() => import('./routes/products/inventory.tsx'));
+const InventoryTable = lazy(() => import('./components/inventoryTable.tsx'));
 
 export default function App() {
-  const { preferences } = usePreferencesStore();
-
-  const { setColorScheme } = useMantineColorScheme();
-  setColorScheme(preferences.Theme.toString() as MantineColorScheme);
-
   /* useEffect(() => {
     const setMaximizeAttribute = async () => {
       if (await getCurrentWindow().isMaximized()) {
@@ -42,7 +30,7 @@ export default function App() {
   return (
     <>
       <Layout>
-        <Suspense fallback={<Loader m="auto" type="dots" />}>
+        <Suspense fallback={<Skeleton className="w-full h-full" />}>
           <Routes>
             <Route path="/home" element={<Dashboard />} />
             <Route path="/sales">
@@ -55,7 +43,14 @@ export default function App() {
             </Route>
             <Route path="/products">
               <Route index element={<h1>products page</h1>} />
-              <Route path="inventory" element={<Inventory />} />
+              <Route
+                path="inventory"
+                element={
+                  <Inventory>
+                    <InventoryTable />
+                  </Inventory>
+                }
+              />
             </Route>
           </Routes>
         </Suspense>

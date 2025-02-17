@@ -95,7 +95,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
     <>
       {SIDEBAR_ITEMS.map((item: SidebarGroup) => (
         <SidebarMenuItem key={item.name} className="list-none">
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild tooltip={item.name}>
             <NavLink to={item.path} className="flex">
               <item.icon />
               {item.name}

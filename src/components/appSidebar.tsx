@@ -8,7 +8,6 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
-  SidebarSeparator,
 } from './ui/sidebar';
 
 export function AppSidebar() {

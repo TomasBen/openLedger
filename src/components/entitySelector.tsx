@@ -1,5 +1,5 @@
 import { useAccountantStore } from '@/stores/accountantStore';
-import { SidebarMenu, SidebarMenuItem } from './ui/sidebar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
 import {
   Select,
   SelectContent,
@@ -8,6 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronsUpDown, Command, Plus } from 'lucide-react';
+import { Input } from './ui/input';
+import { ScrollArea } from './ui/scroll-area';
 
 export function EntitySelector() {
   const { accountant, updateAccountant } = useAccountantStore();
@@ -23,21 +36,76 @@ export function EntitySelector() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Select onValueChange={handleChange}>
-          <SelectTrigger>
-            <SelectValue placeholder="select a client" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {accountant?.entities.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
-                  {item.name}
-                </SelectItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <Command />
+              </div>
+              <div className="ml-2">
+                <span className="truncate">
+                  {accountant?.currently_representing?.name}
+                </span>
+                <br />
+                <span className="truncate">
+                  {accountant?.currently_representing?.id}
+                </span>
+              </div>
+              <ChevronsUpDown className="ml-auto" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="start"
+            side="right"
+            sideOffset={4}
+            className="rounded-lg max-w-80"
+          >
+            <DropdownMenuLabel>Entities</DropdownMenuLabel>
+            <ScrollArea className="max-h-96 overflow-scroll">
+              {accountant?.entities.map((entity) => (
+                <DropdownMenuItem
+                  key={entity.id}
+                  onClick={() => handleChange(entity.id)}
+                  className="flex gap-2 truncate"
+                >
+                  <span className="truncate">{entity.name}</span>
+                  <span className="text-muted-foreground truncate">
+                    {entity.id}
+                  </span>
+                </DropdownMenuItem>
               ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            </ScrollArea>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="gap-2 p-2">
+              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                <Plus className="size-4" />
+              </div>
+              <span className="fonfont-medium text-muted-foreground">
+                Add entity
+              </span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
   );
 }
+
+/*
+<Select onValueChange={handleChange}>
+  <SelectTrigger>
+    <SelectValue placeholder="select a client" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      {accountant?.entities.map((item) => (
+        <SelectItem key={item.id} value={item.id}>
+          {item.name}
+        </SelectItem>
+      ))}
+    </SelectGroup>
+  </SelectContent>
+</Select>*/

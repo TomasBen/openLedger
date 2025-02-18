@@ -232,7 +232,7 @@ export default function InventoryTable() {
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 20,
-    overscan: 5,
+    overscan: 2,
   });
 
   useEffect(() => {

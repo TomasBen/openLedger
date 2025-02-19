@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogClose,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -29,20 +30,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { invoke } from '@tauri-apps/api/core';
+import { toast } from 'sonner';
+import { useAccountantStore } from '@/stores/accountantStore';
 
 export function NewProductDialog() {
+  const { accountant } = useAccountantStore();
+
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      /* fil... */
+      code: '' /* <- add function to auto generate code */,
+      name: undefined,
+      description: undefined,
+      amount: 0,
+      measure_unit: 'piece',
+      price: 0,
+      currency: 'USD',
+      storage_unit: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof productSchema>) {
+  async function onSubmit(values: z.infer<typeof productSchema>) {
     console.log(values);
+    try {
+      await invoke('create_product', {
+        product: {
+          ...values,
+          entityName: accountant?.currently_representing?.name,
+        },
+      });
+      toast('Success!', {
+        description: 'Product created succesfully',
+      });
+    } catch (error) {
+      toast('Error D:', {
+        description: `${error}`,
+      });
+    }
   }
-
-  /* TODO: add file input */
 
   return (
     <Dialog>
@@ -52,6 +78,7 @@ export function NewProductDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Product</DialogTitle>
+          <DialogDescription>Fill the necessary fields</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -61,11 +88,11 @@ export function NewProductDialog() {
             <FormField
               name="code"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Code</FormLabel>
                   <FormControl>
-                    <Input placeholder="SKU7318LE" {...field} />
+                    <Input placeholder="" {...field} />
                   </FormControl>
                   <FormDescription>Identifier for the product</FormDescription>
                   <FormMessage />
@@ -75,7 +102,7 @@ export function NewProductDialog() {
             <FormField
               name="name"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
@@ -88,7 +115,7 @@ export function NewProductDialog() {
             <FormField
               name="description"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
@@ -101,9 +128,9 @@ export function NewProductDialog() {
             <FormField
               name="amount"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Amount</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -114,7 +141,7 @@ export function NewProductDialog() {
             <FormField
               name="measure_unit"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Measure Unit</FormLabel>
                   <FormControl>
@@ -140,7 +167,7 @@ export function NewProductDialog() {
             <FormField
               name="price"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
@@ -153,7 +180,7 @@ export function NewProductDialog() {
             <FormField
               name="currency"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Currency</FormLabel>
                   <FormControl>
@@ -166,7 +193,7 @@ export function NewProductDialog() {
             <FormField
               name="storage_unit"
               control={form.control}
-              render={(field) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Storage Unit</FormLabel>
                   <FormControl>

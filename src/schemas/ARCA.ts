@@ -37,7 +37,7 @@ export const productSchema = z.object({
   description: z.optional(z.string()),
   amount: z.optional(z.number()),
   measure_unit: z.optional(z.string()),
-  price: z.optional(z.number().positive()),
+  price: z.optional(z.number()),
   currency: z.string(), // <- default to 'main currency' per entity profile
   storage_unit: z.optional(z.string()),
 });

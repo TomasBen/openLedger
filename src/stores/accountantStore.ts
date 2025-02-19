@@ -1,9 +1,11 @@
 import { invoke } from '@tauri-apps/api/core';
 import { create } from 'zustand';
 
-type Entity = {
+export type Entity = {
   id: string;
   name: string;
+  email?: string;
+  taxCategory?: string;
 };
 
 export interface AccountantSession {

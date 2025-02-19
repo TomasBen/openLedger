@@ -11,7 +11,6 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarProvider,
-  SidebarRail,
 } from './components/ui/sidebar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

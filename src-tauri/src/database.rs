@@ -41,6 +41,14 @@ pub struct AccountantSession {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct Entity {
+    id: String,
+    name: String,
+    email: String,
+    tax_category: String,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Product {
     code: String,
     name: Option<String>,
@@ -141,6 +149,25 @@ pub fn get_accountant_session(
     } else {
         Err("Error: No accountant_name provided".to_string())
     }
+}
+
+#[tauri::command]
+pub fn get_entity(entity_id: String, accountant: String) -> Result<Entity, String> {
+    let conn = DB.lock().unwrap();
+
+    conn.query_row(
+        "SELECT id, name, email, tax_category FROM entities WHERE id = ?1 AND associated_account = ?2",
+        [entity_id, accountant],
+        |row| {
+            Ok(Entity {
+                id: row.get(0)?,
+                name: row.get(1)?,
+                email: row.get(2)?,
+                tax_category: row.get(3)?,
+            })
+        },
+    )
+    .map_err(|e| e.to_string())
 }
 
 #[tauri::command]

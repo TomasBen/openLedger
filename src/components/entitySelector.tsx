@@ -1,36 +1,28 @@
+import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronsUpDown, Command, Plus } from 'lucide-react';
-import { Input } from './ui/input';
 import { ScrollArea } from './ui/scroll-area';
+import { Entity } from '@/stores/accountantStore';
 
 export function EntitySelector() {
   const { accountant, updateAccountant } = useAccountantStore();
 
-  const handleChange = (value: string) => {
-    updateAccountant({
-      currently_representing: accountant?.entities.find(
-        (item) => item.id === value,
-      ),
+  const handleChange = async (id: string) => {
+    const result: Entity = await invoke('get_entity', {
+      entityId: id,
+      accountant: accountant?.name,
     });
+
+    updateAccountant({ currently_representing: result });
   };
 
   return (
@@ -45,15 +37,19 @@ export function EntitySelector() {
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Command />
               </div>
-              <div className="ml-2">
-                <span className="truncate">
-                  {accountant?.currently_representing?.name}
-                </span>
-                <br />
-                <span className="truncate">
-                  {accountant?.currently_representing?.id}
-                </span>
-              </div>
+              {accountant?.currently_representing != undefined ? (
+                <div className="ml-2">
+                  <span className="truncate">
+                    {accountant?.currently_representing?.name}
+                  </span>
+                  <br />
+                  <span className="truncate">
+                    {accountant?.currently_representing?.id}
+                  </span>
+                </div>
+              ) : (
+                <span className="ml-2">No entity selected</span>
+              )}
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -93,19 +89,3 @@ export function EntitySelector() {
     </SidebarMenu>
   );
 }
-
-/*
-<Select onValueChange={handleChange}>
-  <SelectTrigger>
-    <SelectValue placeholder="select a client" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectGroup>
-      {accountant?.entities.map((item) => (
-        <SelectItem key={item.id} value={item.id}>
-          {item.name}
-        </SelectItem>
-      ))}
-    </SelectGroup>
-  </SelectContent>
-</Select>*/

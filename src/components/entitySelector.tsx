@@ -32,7 +32,7 @@ export function EntitySelector() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
+              className="flex justify-between data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Command />
@@ -50,7 +50,7 @@ export function EntitySelector() {
               ) : (
                 <span className="ml-2">No entity selected</span>
               )}
-              <ChevronsUpDown className="ml-auto" />
+              <ChevronsUpDown />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

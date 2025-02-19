@@ -15,8 +15,8 @@
         "decorations": false,
         "title": "OpenLedger",
         "center": true,
-        "width": 1500,
-        "height": 900
+        "minWidth": 1000,
+        "minHeight": 600
       }
     ],
     "macOSPrivateApi": true,

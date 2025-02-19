@@ -11,32 +11,34 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTableStore } from '@/stores/tablesStore';
+import useDebounce from '@/hooks/useDebounce';
 
 export default function Inventory({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
       <div className="flex flex-none">
         <div className="w-full flex items-center gap-2">
-          <Input placeholder="search by code, name..." className="flex-1" />
+          <SearchBar />
           <Separator orientation="vertical" />
           <NewProductDialog />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary">Acciones</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                Importar desde Mis Comprobantes
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem disabled>
+                Importar desde CSV
                 <DropdownMenuShortcut className="ml-auto">
                   ⌘M
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                Importar desde Comprobantes en línea
+              <DropdownMenuItem disabled>
+                Importar desde XLS o XLSX
                 <DropdownMenuShortcut className="ml-5">⌘B</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                Settings
+              <DropdownMenuItem disabled>
+                Opciones
                 <DropdownMenuShortcut className="ml-auto">
                   ⌘S
                 </DropdownMenuShortcut>
@@ -60,5 +62,21 @@ export default function Inventory({ children }: { children: React.ReactNode }) {
       <Separator className="my-2" />
       <Suspense fallback={<Skeleton className="h-full" />}>{children}</Suspense>
     </div>
+  );
+}
+
+function SearchBar() {
+  const { tableInstance } = useTableStore();
+
+  const search = useDebounce((value: string) => {
+    tableInstance?.setGlobalFilter(value);
+  }, 200);
+
+  return (
+    <Input
+      placeholder="search by code, name..."
+      className="flex-1"
+      onChange={(e) => search(e.target.value)}
+    />
   );
 }

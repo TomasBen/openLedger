@@ -5,7 +5,7 @@ import { useTableStore } from '@/stores/tablesStore';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from './ui/button';
-import { Ellipsis, ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { DogSVG } from '@/media/dogSVG';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
@@ -22,6 +22,7 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
 
 export interface Product {
@@ -204,17 +205,6 @@ export default function InventoryTable() {
         header: 'Storage',
         enableSorting: false,
       },
-      {
-        id: 'options',
-        header: '',
-        cell: () => (
-          <Button variant="ghost">
-            <Ellipsis />
-          </Button>
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
     ],
     [],
   );
@@ -223,6 +213,8 @@ export default function InventoryTable() {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: 'includesString',
   });
 
   const { rows } = table.getRowModel();
@@ -231,7 +223,7 @@ export default function InventoryTable() {
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 20,
+    estimateSize: () => 15,
     overscan: 2,
   });
 

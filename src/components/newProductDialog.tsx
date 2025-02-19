@@ -33,47 +33,45 @@ import {
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
 import { useAccountantStore } from '@/stores/accountantStore';
+import { useState } from 'react';
 
 export function NewProductDialog() {
+  const [open, setOpen] = useState(false);
   const { accountant } = useAccountantStore();
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       code: '' /* <- add function to auto generate code */,
-      name: undefined,
-      description: undefined,
-      amount: 0,
-      measure_unit: 'piece',
-      price: 0,
-      currency: 'USD',
-      storage_unit: undefined,
+      currency: 'USD' /* <- should get the preferred currency by the entity */,
     },
   });
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     console.log(values);
-    try {
-      await invoke('create_product', {
-        product: {
-          ...values,
-          entityName: accountant?.currently_representing?.name,
-        },
+    await invoke('create_product', {
+      product: {
+        ...values,
+        entityName: accountant?.currently_representing?.name,
+      },
+    })
+      .then(() => {
+        setOpen(false);
+        toast('Success!', {
+          description: 'Product created succesfully',
+        });
+      })
+      .catch((error) => {
+        toast('Error D:', {
+          description: `${error}`,
+        });
       });
-      toast('Success!', {
-        description: 'Product created succesfully',
-      });
-    } catch (error) {
-      toast('Error D:', {
-        description: `${error}`,
-      });
-    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
-        <Button>Añadir</Button>
+        <Button onClick={() => setOpen(true)}>Añadir</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -132,7 +130,7 @@ export function NewProductDialog() {
                 <FormItem>
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input type="number" placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -171,7 +169,7 @@ export function NewProductDialog() {
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input type="number" placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -206,7 +204,9 @@ export function NewProductDialog() {
             <DialogFooter>
               <Button type="submit">Guardar</Button>
               <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
+                <Button variant="outline" onClick={() => setOpen(false)}>
+                  Cancelar
+                </Button>
               </DialogClose>
             </DialogFooter>
           </form>

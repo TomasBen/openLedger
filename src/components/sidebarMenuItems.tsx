@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import {
   SidebarMenuButton,
   SidebarMenuItem,
@@ -32,7 +32,7 @@ const SIDEBAR_ITEMS: SidebarGroup[] = [
   {
     icon: LayoutDashboard,
     name: 'Dashboard',
-    path: '/home',
+    path: '/',
   },
   {
     icon: ShoppingCart,
@@ -96,10 +96,10 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
       {SIDEBAR_ITEMS.map((item: SidebarGroup) => (
         <SidebarMenuItem key={item.name} className="list-none">
           <SidebarMenuButton asChild tooltip={item.name}>
-            <NavLink to={item.path} className="flex">
+            <Link to={item.path} className="flex">
               <item.icon />
               {item.name}
-            </NavLink>
+            </Link>
           </SidebarMenuButton>
           {item.subitems?.map((subitem) =>
             item.subitems != undefined ? (
@@ -109,7 +109,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                     asChild
                     className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]"
                   >
-                    <NavLink to={subitem.path}>{subitem.name}</NavLink>
+                    <Link to={subitem.path}>{subitem.name}</Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>

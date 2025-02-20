@@ -13,8 +13,13 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Bold, Italic, Underline } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
 
-export default function Dashboard() {
+export const Route = createFileRoute('/')({
+  component: Dashboard,
+});
+
+function Dashboard() {
   return (
     <div className="w-full h-full flex flex-col p-4 justify-evenly">
       <div className="flex justify-center gap-4">

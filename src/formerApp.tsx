@@ -1,21 +1,16 @@
-import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Layout from './Layout.tsx';
-import Dashboard from './routes/Dashboard.tsx';
-import { Skeleton } from './components/ui/skeleton.tsx';
-import './styles/App.css';
-
-const ComprobantesDeVentas = lazy(() => import('./routes/sales/documents.tsx'));
-const Presupuestos = lazy(() => import('./routes/sales/orders.tsx'));
-const Remitos = lazy(() => import('./routes/sales/deliveryNote.tsx'));
-const ComprobantesDeCompras = lazy(
-  () => import('./routes/purchases/documents.tsx'),
+/* const ComprobantesDeVentas = lazy(
+  () => import('./formerRoutes/sales/documents.tsx'),
 );
-const Inventory = lazy(() => import('./routes/products/inventory.tsx'));
+const Presupuestos = lazy(() => import('./formerRoutes/sales/orders.tsx'));
+const Remitos = lazy(() => import('./formerRoutes/sales/deliveryNote.tsx'));
+const ComprobantesDeCompras = lazy(
+  () => import('./formerRoutes/purchases/documents.tsx'),
+);
+const Inventory = lazy(() => import('./formerRoutes/products/inventory.tsx'));
 const InventoryTable = lazy(() => import('./components/inventoryTable.tsx'));
 
 export default function App() {
-  /* useEffect(() => {
+  useEffect(() => {
     const setMaximizeAttribute = async () => {
       if (await getCurrentWindow().isMaximized()) {
         document.documentElement.setAttribute('data-maximize', 'true');
@@ -25,7 +20,7 @@ export default function App() {
     };
 
     setMaximizeAttribute();
-    }, []); */
+    }, []);
 
   return (
     <>
@@ -57,4 +52,4 @@ export default function App() {
       </Layout>
     </>
   );
-}
+}*/

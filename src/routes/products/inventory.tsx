@@ -13,10 +13,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
+import { createFileRoute } from '@tanstack/react-router';
 
 const SEARCH_DEBOUNCE = 200;
 
-export default function Inventory({ children }: { children: React.ReactNode }) {
+export const Route = createFileRoute('/products/inventory')({
+  component: Inventory,
+});
+
+function Inventory({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
       <div className="flex flex-none">

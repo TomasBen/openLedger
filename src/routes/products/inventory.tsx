@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { NewProductDialog } from '@/components/newProductDialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
@@ -15,13 +15,15 @@ import { useTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
+const InventoryTable = lazy(() => import('@/components/inventoryTable'));
+
 const SEARCH_DEBOUNCE = 200;
 
 export const Route = createFileRoute('/products/inventory')({
   component: Inventory,
 });
 
-function Inventory({ children }: { children: React.ReactNode }) {
+function Inventory() {
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
       <div className="flex flex-none">
@@ -67,7 +69,9 @@ function Inventory({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       <Separator className="my-2" />
-      <Suspense fallback={<Skeleton className="h-full" />}>{children}</Suspense>
+      <Suspense fallback={<Skeleton className="h-full" />}>
+        <InventoryTable />
+      </Suspense>
     </div>
   );
 }

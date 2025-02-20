@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
@@ -13,7 +14,10 @@ import { ChevronsUpDown, Command, Plus } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Entity } from '@/stores/accountantStore';
 
+const ENTITYSELECTOR_KEYBOARD_SHORTCUT = 'p';
+
 export function EntitySelector() {
+  const [open, setOpen] = useState(false);
   const { accountant, updateAccountant } = useAccountantStore();
 
   const handleChange = async (id: string) => {
@@ -25,14 +29,30 @@ export function EntitySelector() {
     updateAccountant({ currently_representing: result });
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === ENTITYSELECTOR_KEYBOARD_SHORTCUT &&
+        (event.metaKey || event.ctrlKey)
+      ) {
+        event.preventDefault();
+        setOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={() => setOpen((prev) => !prev)}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
               className="flex justify-between data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
+              onClick={() => setOpen((prev: boolean) => !prev)}
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Command />

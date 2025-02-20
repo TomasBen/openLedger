@@ -5,8 +5,8 @@ import { useTableStore } from '@/stores/tablesStore';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 import { ArrowUpDown } from 'lucide-react';
-import { DogSVG } from '@/media/dogSVG';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   Table,
@@ -23,6 +23,7 @@ import {
   getCoreRowModel,
   flexRender,
   getFilteredRowModel,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 
 export interface Product {
@@ -99,6 +100,7 @@ export default function InventoryTable() {
           );
         },
         enableSorting: false,
+        enableGlobalFilter: false,
         enableHiding: false,
       },
       {
@@ -115,6 +117,8 @@ export default function InventoryTable() {
         cell: ({ row }) => (
           <div className="capitalize truncate">{row.getValue('code')}</div>
         ),
+        sortingFn: 'alphanumeric',
+        enableHiding: false,
       },
       {
         id: 'name',
@@ -137,6 +141,7 @@ export default function InventoryTable() {
             {row.getValue('description')}
           </div>
         ),
+        sortingFn: 'text',
         enableSorting: false,
       },
       {
@@ -155,6 +160,7 @@ export default function InventoryTable() {
         cell: ({ row }) => (
           <div className="text-center truncate">{row.getValue('amount')}</div>
         ),
+        sortingFn: 'basic',
       },
       {
         id: 'measure_unit',
@@ -163,7 +169,7 @@ export default function InventoryTable() {
         cell: ({ row }) => (
           <div className="text-center">{row.getValue('measure_unit')}</div>
         ),
-        enableSorting: false,
+        sortingFn: 'text',
       },
       {
         id: 'currency',
@@ -172,14 +178,14 @@ export default function InventoryTable() {
         cell: ({ row }) => (
           <div className="text-center">{row.getValue('currency')}</div>
         ),
-        enableSorting: false,
+        sortingFn: 'text',
       },
       {
         accessorKey: 'price',
         header: ({ column }) => (
           <Button
             variant="ghost"
-            className="w-full flex justify-end"
+            className="flex justify-end"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Price
@@ -199,10 +205,13 @@ export default function InventoryTable() {
 
           return <div className="text-right">{formatted}</div>;
         },
+        sortingFn: 'basic',
+        enableGlobalFilter: false,
       },
       {
         accessorKey: 'storage_unit',
         header: 'Storage',
+        enableGlobalFilter: false,
         enableSorting: false,
       },
     ],
@@ -213,6 +222,7 @@ export default function InventoryTable() {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: 'includesString',
   });
@@ -242,46 +252,75 @@ export default function InventoryTable() {
 
   return (
     <>
-      <ScrollArea className="flex-1 border rounded-md" ref={parentRef}>
+      <ScrollArea
+        type="scroll"
+        className="flex-1 border rounded-md"
+        ref={parentRef}
+      >
         <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
           <Table className="border-separate border-spacing-0">
             <TableHeader>
               <TableHeaders headers={tableInstance?.getHeaderGroups()} />
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
-                virtualizer.getVirtualItems().map((virtualRow, index) => {
-                  const row = rows[virtualRow.index];
-                  return (
-                    <TableRow
-                      key={row.id}
-                      style={{
-                        height: `${virtualRow.size}px`,
-                        transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
-                      }}
+              {rows?.length ? (
+                accountant?.currently_representing ? (
+                  virtualizer.getVirtualItems().map((virtualRow, index) => {
+                    const row = rows[virtualRow.index];
+                    return (
+                      <TableRow
+                        key={row.id}
+                        style={{
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            key={cell.id}
+                            className="max-w-[15vw] truncate"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow key="no-data-row" className="hover:bg-transparent">
+                    <TableCell
+                      colSpan={columns.length}
+                      key="no-data-cell"
+                      height={parentRef.current?.clientHeight}
+                      className="min-h-0 border-t text-xl text-center"
                     >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="max-w-[15vw] truncate"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })
+                      <span>Select an entity to start</span>
+                      <br />
+                      <span>
+                        Open entity selector
+                        <Badge variant="secondary" className="mx-2">
+                          Cntrl
+                        </Badge>
+                        +
+                        <Badge variant="secondary" className="mx-2">
+                          P
+                        </Badge>
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                )
               ) : (
-                <TableRow key="no-data-row">
+                <TableRow key="no-data-row" className="hover:bg-transparent">
                   <TableCell
+                    colSpan={columns.length}
                     key="no-data-cell"
-                    className="py-20 border-t text-xl text-center"
+                    height={parentRef.current?.clientHeight}
+                    className="min-h-0 border-t text-xl text-center"
                   >
-                    <DogSVG className="block mx-auto mb-2 w-[40rem] h-auto" />
-                    <span>No results</span>
+                    <span>No results.</span>
                   </TableCell>
                 </TableRow>
               )}
@@ -289,7 +328,13 @@ export default function InventoryTable() {
           </Table>
         </div>
       </ScrollArea>
-      <span className="text-center">showing {table.getRowCount()} results</span>
+      {accountant?.currently_representing ? (
+        <span className="text-center">
+          showing {table.getRowCount()} results
+        </span>
+      ) : (
+        <span className="text-center">showing 0 results</span>
+      )}
     </>
   );
 }

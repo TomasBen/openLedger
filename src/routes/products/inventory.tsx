@@ -14,6 +14,8 @@ import {
 import { useTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 
+const SEARCH_DEBOUNCE = 200;
+
 export default function Inventory({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
@@ -70,7 +72,7 @@ function SearchBar() {
 
   const search = useDebounce((value: string) => {
     tableInstance?.setGlobalFilter(value);
-  }, 200);
+  }, SEARCH_DEBOUNCE);
 
   return (
     <Input

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 import {
   SidebarMenuButton,
   SidebarMenuItem,
@@ -91,12 +91,25 @@ const SIDEBAR_ITEMS: SidebarGroup[] = [
 ] as const;
 
 export const SidebarMenuItems = memo(function SidebarMenuItems() {
+  const { pathname } = useLocation();
+  const location = pathname.split('/');
+  console.log(pathname);
+  console.log(location);
+
   return (
     <>
       {SIDEBAR_ITEMS.map((item: SidebarGroup) => (
         <SidebarMenuItem key={item.name} className="list-none">
           <SidebarMenuButton asChild tooltip={item.name}>
-            <Link to={item.path} className="flex">
+            <Link
+              to={item.path}
+              className="flex"
+              activeOptions={{ exact: false }}
+              activeProps={{
+                className:
+                  'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+              }}
+            >
               <item.icon />
               {item.name}
             </Link>
@@ -109,7 +122,16 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                     asChild
                     className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]"
                   >
-                    <Link to={subitem.path}>{subitem.name}</Link>
+                    <Link
+                      to={subitem.path}
+                      activeOptions={{ exact: false }}
+                      activeProps={{
+                        className:
+                          'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+                      }}
+                    >
+                      {subitem.name}
+                    </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>

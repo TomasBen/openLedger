@@ -1,6 +1,101 @@
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
+import { useVirtualizer, Virtualizer } from '@tanstack/react-virtual';
+import { Table as TableType } from '@tanstack/react-table';
+import { Product } from '../inventoryTable';
+
+interface TableContext {
+  virtualizer: Virtualizer<HTMLDivElement, Element> | undefined;
+  setVirtualizer: React.Dispatch<
+    React.SetStateAction<Virtualizer<HTMLDivElement, Element> | undefined>
+  >;
+  tableInstance: TableType<Product> | undefined;
+}
+
+const TableContext = React.createContext<TableContext | null>(null);
+
+function useTable() {
+  const context = React.useContext(TableContext);
+  if (!context) {
+    throw new Error('TableContext must be used within a TableProvider');
+  }
+
+  return context;
+}
+
+const TableProvider: React.FC<React.ComponentProps<'div'> & TableContext> = (
+  { children },
+  props,
+) => {
+  const [virtualizer, setVirtualizer] = React.useState<
+    Virtualizer<HTMLDivElement, Element> | undefined
+  >(undefined);
+
+  const contextValue = React.useMemo<TableContext>(
+    () => ({
+      virtualizer,
+      setVirtualizer,
+      tableInstance: undefined,
+    }),
+    [],
+  );
+
+  return (
+    <TableContext.Provider value={contextValue} {...props}>
+      {children}
+    </TableContext.Provider>
+  );
+};
+TableProvider.displayName = 'TableProvider';
+
+const TableVirtualizer = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<'div'> & {
+    overscan?: number;
+    parentRef: React.RefObject<HTMLDivElement>;
+    rowCount: number;
+  }
+>(
+  (
+    { className, children, parentRef, overscan = 5, rowCount, ...props },
+    ref,
+  ) => {
+    const { setVirtualizer } = useTable();
+
+    const virtualizer = useVirtualizer({
+      count: rowCount,
+      getScrollElement: () => parentRef.current,
+      estimateSize: () => 15,
+      overscan: overscan,
+    });
+    setVirtualizer(virtualizer);
+
+    return (
+      <div
+        style={{ height: `${virtualizer.getTotalSize()}px` }}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+TableVirtualizer.displayName = 'TableVirtualizer';
+
+const LoadingOverlay = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLProps<'div'> & {
+    isLoading: boolean;
+  }
+>(({ isLoading, children }) => {
+  if (isLoading) {
+    return <div className="loader flex-1 border rounded-md " />;
+  } else {
+    return <>{children}</>;
+  }
+});
+LoadingOverlay.displayName = 'LoadingOverlay';
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -109,6 +204,7 @@ const TableCaption = React.forwardRef<
 TableCaption.displayName = 'TableCaption';
 
 export {
+  LoadingOverlay,
   Table,
   TableHeader,
   TableBody,

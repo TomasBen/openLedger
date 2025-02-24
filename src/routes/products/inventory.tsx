@@ -91,3 +91,33 @@ function SearchBar() {
     />
   );
 }
+
+// function ColumnSelector() {
+//   const columns = useTableStore((state) =>
+//     state.tableInstance?.getAllColumns(),
+//   );
+//   console.log(columns);
+
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <Button variant="outline">
+//           Columns <ChevronDown />
+//         </Button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent>
+//         {columns
+//           ?.filter((column) => column.getCanHide())
+//           .map((column) => (
+//             <DropdownMenuCheckboxItem
+//               key={column.id}
+//               checked={column.getIsVisible()}
+//               onChange={() => column.toggleVisibility()}
+//             >
+//               {column.id}
+//             </DropdownMenuCheckboxItem>
+//           ))}
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   );
+// }

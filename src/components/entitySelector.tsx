@@ -36,7 +36,7 @@ export function EntitySelector() {
         (event.metaKey || event.ctrlKey)
       ) {
         event.preventDefault();
-        setOpen(true);
+        setOpen((prev) => !prev);
       }
     };
 
@@ -58,7 +58,7 @@ export function EntitySelector() {
                 <Command />
               </div>
               {accountant?.currently_representing != undefined ? (
-                <div className="ml-2">
+                <div className="ml-2 truncate">
                   <span className="truncate">
                     {accountant?.currently_representing?.name}
                   </span>

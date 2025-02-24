@@ -22,7 +22,7 @@ export const Route = createRootRoute({
 function Layout() {
   return (
     <>
-      <SidebarProvider defaultOpen={false} className="p-2">
+      <SidebarProvider defaultOpen={false} className="pt-2 pr-2 pb-2">
         <Sidebar collapsible="icon">
           <SidebarHeader>
             <EntitySelector />
@@ -41,7 +41,7 @@ function Layout() {
         <div className="w-full">
           <Titlebar />
           <main
-            id="main-content" // <- used for "skipping to main content button for accessibility"
+            id="main-content"
             role="main"
             className="flex w-full h-[calc(100vh-30px-16px)] bg-white rounded-sm drop-shadow-lg"
             style={{
@@ -53,7 +53,7 @@ function Layout() {
         </div>
         <Toaster />
       </SidebarProvider>
-      <TanStackRouterDevtools position="bottom-right" />
+      {/* <TanStackRouterDevtools position="bottom-right" /> */}
     </>
   );
 }

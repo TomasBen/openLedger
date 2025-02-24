@@ -15,15 +15,16 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  LoadingOverlay,
 } from '@/components/ui/table';
 import {
   ColumnDef,
-  HeaderGroup,
   useReactTable,
   getCoreRowModel,
   flexRender,
   getFilteredRowModel,
   getSortedRowModel,
+  HeaderGroup,
 } from '@tanstack/react-table';
 
 export interface Product {
@@ -40,13 +41,14 @@ export interface Product {
 const TableHeaders = memo(function TableHeaders({
   headers,
 }: {
-  headers: HeaderGroup<Product>[] | undefined;
+  headers: HeaderGroup<Product>[];
 }) {
   return (
     <>
-      {headers?.map((headerGroup) => (
-        <TableRow key={headerGroup.id}>
-          {headerGroup.headers.map((header) => (
+      {headers.map((headerGroup) =>
+        headerGroup.headers
+          .slice(1)
+          .map((header) => (
             <TableHead key={header.id}>
               {header.isPlaceholder
                 ? null
@@ -55,17 +57,31 @@ const TableHeaders = memo(function TableHeaders({
                     header.getContext(),
                   )}
             </TableHead>
-          ))}
-        </TableRow>
-      ))}
+          )),
+      )}
     </>
   );
 });
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
-  const { tableInstance, updateTableInstance } = useTableStore();
+  const { updateTableInstance, isLoading, setLoading } = useTableStore();
   const { accountant } = useAccountantStore();
+
+  useEffect(() => {
+    setLoading(true);
+    const getProducts = async () => {
+      const results: Product[] = await invoke('get_products', {
+        entity: accountant?.currently_representing?.name,
+      });
+
+      setData(results);
+      updateTableInstance(table);
+      setLoading(false);
+    };
+
+    getProducts();
+  }, [accountant?.currently_representing]);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
@@ -104,6 +120,7 @@ export default function InventoryTable() {
         enableHiding: false,
       },
       {
+        id: 'code',
         accessorKey: 'code',
         header: ({ column }) => (
           <Button
@@ -134,6 +151,7 @@ export default function InventoryTable() {
         ),
       },
       {
+        id: 'description',
         accessorKey: 'description',
         header: 'Description',
         cell: ({ row }) => (
@@ -163,11 +181,11 @@ export default function InventoryTable() {
         sortingFn: 'basic',
       },
       {
-        id: 'measure_unit',
+        id: 'measure unit',
         accessorKey: 'measure_unit',
         header: () => <div className="text-center">Unit</div>,
         cell: ({ row }) => (
-          <div className="text-center">{row.getValue('measure_unit')}</div>
+          <div className="text-center">{row.getValue('measure unit')}</div>
         ),
         sortingFn: 'text',
       },
@@ -181,6 +199,7 @@ export default function InventoryTable() {
         sortingFn: 'text',
       },
       {
+        id: 'price',
         accessorKey: 'price',
         header: ({ column }) => (
           <Button
@@ -209,6 +228,7 @@ export default function InventoryTable() {
         enableGlobalFilter: false,
       },
       {
+        id: 'storage unit',
         accessorKey: 'storage_unit',
         header: 'Storage',
         enableGlobalFilter: false,
@@ -237,21 +257,8 @@ export default function InventoryTable() {
     overscan: 2,
   });
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const results: Product[] = await invoke('get_products', {
-        entity: accountant?.currently_representing?.name,
-      });
-
-      setData(results);
-      updateTableInstance(table);
-    };
-
-    getProducts();
-  }, [accountant?.currently_representing]);
-
   return (
-    <>
+    <LoadingOverlay isLoading={isLoading}>
       <ScrollArea
         type="scroll"
         className="flex-1 border rounded-md"
@@ -260,7 +267,22 @@ export default function InventoryTable() {
         <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
           <Table className="border-separate border-spacing-0">
             <TableHeader>
-              <TableHeaders headers={tableInstance?.getHeaderGroups()} />
+              <TableRow>
+                {table
+                  .getLeafHeaders()
+                  .slice(0, 1)
+                  .map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  ))}
+                <TableHeaders headers={table.getHeaderGroups()} />
+              </TableRow>
             </TableHeader>
             <TableBody>
               {rows?.length ? (
@@ -290,39 +312,16 @@ export default function InventoryTable() {
                     );
                   })
                 ) : (
-                  <TableRow key="no-data-row" className="hover:bg-transparent">
-                    <TableCell
-                      colSpan={columns.length}
-                      key="no-data-cell"
-                      height={parentRef.current?.clientHeight}
-                      className="min-h-0 border-t text-xl text-center"
-                    >
-                      <span>Select an entity to start</span>
-                      <br />
-                      <span>
-                        Open entity selector
-                        <Badge variant="secondary" className="mx-2">
-                          Cntrl
-                        </Badge>
-                        +
-                        <Badge variant="secondary" className="mx-2">
-                          P
-                        </Badge>
-                      </span>
-                    </TableCell>
-                  </TableRow>
+                  <NoEntitySelectedRow
+                    colspan={columns.length}
+                    height={parentRef.current?.clientHeight}
+                  />
                 )
               ) : (
-                <TableRow key="no-data-row" className="hover:bg-transparent">
-                  <TableCell
-                    colSpan={columns.length}
-                    key="no-data-cell"
-                    height={parentRef.current?.clientHeight}
-                    className="min-h-0 border-t text-xl text-center"
-                  >
-                    <span>No results.</span>
-                  </TableCell>
-                </TableRow>
+                <NoDataRow
+                  colspan={columns.length}
+                  height={parentRef.current?.clientHeight}
+                />
               )}
             </TableBody>
           </Table>
@@ -335,6 +334,59 @@ export default function InventoryTable() {
       ) : (
         <span className="text-center">showing 0 results</span>
       )}
-    </>
+    </LoadingOverlay>
   );
 }
+
+const NoDataRow = ({
+  colspan,
+  height,
+}: {
+  colspan: number;
+  height: number | undefined;
+}) => {
+  return (
+    <TableRow key="no-data-row" className="hover:bg-transparent">
+      <TableCell
+        colSpan={colspan}
+        key="no-data-cell"
+        height={height}
+        className="min-h-24 border-t text-xl text-center"
+      >
+        <span>No results.</span>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const NoEntitySelectedRow = ({
+  colspan,
+  height,
+}: {
+  colspan: number;
+  height: number | undefined;
+}) => {
+  return (
+    <TableRow key="no-data-row" className="hover:bg-transparent">
+      <TableCell
+        colSpan={colspan}
+        key="no-data-cell"
+        height={height}
+        className="min-h-24 border-t text-xl text-center"
+      >
+        <span>Select an entity to start</span>
+        <br />
+        <span>
+          Open entity selector
+          <Badge variant="secondary" className="mx-2">
+            Cntrl
+          </Badge>
+          +
+          <Badge variant="secondary" className="mx-2">
+            P
+          </Badge>
+        </span>
+      </TableCell>
+    </TableRow>
+  );
+};

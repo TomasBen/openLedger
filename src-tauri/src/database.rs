@@ -180,56 +180,31 @@ pub fn create_product(product: Product) -> Result<usize, String> {
 }
 
 #[tauri::command]
-pub fn get_products(entity: Option<String>) -> Result<Vec<Product>, String> {
+pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
     let conn = DB.lock().unwrap();
 
     let mut stmt = conn
         .prepare("SELECT * FROM products WHERE entity_name = ?")
         .map_err(|e| e.to_string())?;
 
-    if entity.is_some() {
-        let products: Result<Vec<Product>, rusqlite::Error> = stmt
-            .query_map([entity], |row| {
-                Ok(Product {
-                    code: row.get(0)?,
-                    name: row.get(1)?,
-                    description: row.get(2)?,
-                    amount: row.get(3)?,
-                    measure_unit: row.get(4)?,
-                    price: row.get(5)?,
-                    currency: row.get(6)?,
-                    storage_unit: row.get(7)?,
-                    entity_name: row.get(8)?,
-                })
+    let products: Result<Vec<Product>, rusqlite::Error> = stmt
+        .query_map([entity], |row| {
+            Ok(Product {
+                code: row.get(0)?,
+                name: row.get(1)?,
+                description: row.get(2)?,
+                amount: row.get(3)?,
+                measure_unit: row.get(4)?,
+                price: row.get(5)?,
+                currency: row.get(6)?,
+                storage_unit: row.get(7)?,
+                entity_name: row.get(8)?,
             })
-            .map_err(|e| e.to_string())?
-            .collect();
+        })
+        .map_err(|e| e.to_string())?
+        .collect();
 
-        products.map_err(|e| e.to_string())
-    } else {
-        let mut stmt = conn
-            .prepare("SELECT * FROM products")
-            .map_err(|e| e.to_string())?;
-
-        let products: Result<Vec<Product>, rusqlite::Error> = stmt
-            .query_map([], |row| {
-                Ok(Product {
-                    code: row.get(0)?,
-                    name: row.get(1)?,
-                    description: row.get(2)?,
-                    amount: row.get(3)?,
-                    measure_unit: row.get(4)?,
-                    price: row.get(5)?,
-                    currency: row.get(6)?,
-                    storage_unit: row.get(7)?,
-                    entity_name: row.get(8)?,
-                })
-            })
-            .map_err(|e| e.to_string())?
-            .collect();
-
-        products.map_err(|e| e.to_string())
-    }
+    products.map_err(|e| e.to_string())
 }
 
 #[tauri::command]

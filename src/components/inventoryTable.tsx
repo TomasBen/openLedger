@@ -15,7 +15,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  LoadingOverlay,
 } from '@/components/ui/table';
 import {
   ColumnDef,
@@ -65,7 +64,7 @@ const TableHeaders = memo(function TableHeaders({
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
-  const { updateTableInstance, isLoading, setLoading } = useTableStore();
+  const { updateTableInstance, setLoading } = useTableStore();
   const { accountant } = useAccountantStore();
 
   useEffect(() => {
@@ -258,7 +257,7 @@ export default function InventoryTable() {
   });
 
   return (
-    <LoadingOverlay isLoading={isLoading}>
+    <>
       <ScrollArea
         type="scroll"
         className="flex-1 border rounded-md"
@@ -334,7 +333,7 @@ export default function InventoryTable() {
       ) : (
         <span className="text-center">showing 0 results</span>
       )}
-    </LoadingOverlay>
+    </>
   );
 }
 

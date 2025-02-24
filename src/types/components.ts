@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react'
+import { LucideIcon } from 'lucide-react';
 
 export type PanelState = 'open' | 'closed';
 
@@ -6,7 +6,7 @@ export interface SidebarGroup {
   icon: LucideIcon;
   name: string;
   path: string;
-  subitems?: SidebarGroup[]
+  subitems?: SidebarGroup[];
 }
 
 export type Location = {
@@ -16,3 +16,18 @@ export type Location = {
   state: any;
   key: string;
 };
+
+export interface ActionButton {
+  name: string;
+  icon?: LucideIcon;
+  variant?:
+    | 'default'
+    | 'link'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | null
+    | undefined;
+  action: () => void;
+}

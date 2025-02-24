@@ -15,6 +15,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TableActionMenu,
 } from '@/components/ui/table';
 import {
   ColumnDef,
@@ -25,6 +26,8 @@ import {
   getSortedRowModel,
   HeaderGroup,
 } from '@tanstack/react-table';
+
+import { ActionButton } from '@/types/components';
 
 export interface Product {
   code: string;
@@ -256,6 +259,15 @@ export default function InventoryTable() {
     overscan: 2,
   });
 
+  const actionButtons: ActionButton[] = [
+    {
+      name: 'delete rows',
+      variant: 'destructive',
+      action: () => console.log('delete rows'),
+    },
+    { name: 'export rows', action: () => console.log('export rows') },
+  ];
+
   return (
     <>
       <ScrollArea
@@ -327,12 +339,12 @@ export default function InventoryTable() {
         </div>
       </ScrollArea>
       {accountant?.currently_representing ? (
-        <span className="text-center">
-          showing {table.getRowCount()} results
-        </span>
+        <span className="px-2">showing {table.getRowCount()} results</span>
       ) : (
-        <span className="text-center">showing 0 results</span>
+        <span className="px-2">showing 0 results</span>
       )}
+      {/* pass actions for rows */}
+      <TableActionMenu selectedRows={0} actionButtons={actionButtons} />
     </>
   );
 }

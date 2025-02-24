@@ -43,7 +43,7 @@ function Layout() {
           <main
             id="main-content"
             role="main"
-            className="flex w-full h-[calc(100vh-30px-16px)] bg-white rounded-sm drop-shadow-lg"
+            className="flex justify-center w-full h-[calc(100vh-30px-16px)] bg-white rounded-sm drop-shadow-lg"
             style={{
               contain: 'layout',
             }}

@@ -1,101 +1,126 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { useVirtualizer, Virtualizer } from '@tanstack/react-virtual';
-import { Table as TableType } from '@tanstack/react-table';
-import { Product } from '../inventoryTable';
+import { createPortal } from 'react-dom';
+import { Button } from './button';
+import { ActionButton } from '@/types/components';
 
-interface TableContext {
-  virtualizer: Virtualizer<HTMLDivElement, Element> | undefined;
-  setVirtualizer: React.Dispatch<
-    React.SetStateAction<Virtualizer<HTMLDivElement, Element> | undefined>
-  >;
-  tableInstance: TableType<Product> | undefined;
-}
+// interface TableContext {
+//   virtualizer: Virtualizer<HTMLDivElement, Element> | undefined;
+//   setVirtualizer: React.Dispatch<
+//     React.SetStateAction<Virtualizer<HTMLDivElement, Element> | undefined>
+//   >;
+//   tableInstance: TableType<Product> | undefined;
+// }
 
-const TableContext = React.createContext<TableContext | null>(null);
+// const TableContext = React.createContext<TableContext | null>(null);
 
-function useTable() {
-  const context = React.useContext(TableContext);
-  if (!context) {
-    throw new Error('TableContext must be used within a TableProvider');
+// function useTable() {
+//   const context = React.useContext(TableContext);
+//   if (!context) {
+//     throw new Error('TableContext must be used within a TableProvider');
+//   }
+
+//   return context;
+// }
+
+// const TableProvider: React.FC<React.ComponentProps<'div'> & TableContext> = (
+//   { children },
+//   props,
+// ) => {
+//   const [virtualizer, setVirtualizer] = React.useState<
+//     Virtualizer<HTMLDivElement, Element> | undefined
+//   >(undefined);
+
+//   const contextValue = React.useMemo<TableContext>(
+//     () => ({
+//       virtualizer,
+//       setVirtualizer,
+//       tableInstance: undefined,
+//     }),
+//     [],
+//   );
+
+//   return (
+//     <TableContext.Provider value={contextValue} {...props}>
+//       {children}
+//     </TableContext.Provider>
+//   );
+// };
+// TableProvider.displayName = 'TableProvider';
+
+// const TableVirtualizer = React.forwardRef<
+//   HTMLDivElement,
+//   React.ComponentProps<'div'> & {
+//     overscan?: number;
+//     parentRef: React.RefObject<HTMLDivElement>;
+//     rowCount: number;
+//   }
+// >(
+//   (
+//     { className, children, parentRef, overscan = 5, rowCount, ...props },
+//     ref,
+//   ) => {
+//     const { setVirtualizer } = useTable();
+
+//     const virtualizer = useVirtualizer({
+//       count: rowCount,
+//       getScrollElement: () => parentRef.current,
+//       estimateSize: () => 15,
+//       overscan: overscan,
+//     });
+//     setVirtualizer(virtualizer);
+
+//     return (
+//       <div
+//         style={{ height: `${virtualizer.getTotalSize()}px` }}
+//         ref={ref}
+//         {...props}
+//       >
+//         {children}
+//       </div>
+//     );
+//   },
+// );
+// TableVirtualizer.displayName = 'TableVirtualizer';
+
+/**
+ * Action Menu that displays when rows are selected
+ *
+ * @param selectedRows The variable on which will depend if the portal is active or not
+ * @param actionButtons Array of buttons to be displayed on the portal
+ * @param [container] Aptional portal container. Defaults to either main or document body if the former isnt available
+ */
+const TableActionMenu: React.FC<
+  React.HTMLProps<'div'> & {
+    selectedRows: number;
+    actionButtons: ActionButton[];
+    container?: Element | DocumentFragment;
   }
-
-  return context;
-}
-
-const TableProvider: React.FC<React.ComponentProps<'div'> & TableContext> = (
-  { children },
-  props,
-) => {
-  const [virtualizer, setVirtualizer] = React.useState<
-    Virtualizer<HTMLDivElement, Element> | undefined
-  >(undefined);
-
-  const contextValue = React.useMemo<TableContext>(
-    () => ({
-      virtualizer,
-      setVirtualizer,
-      tableInstance: undefined,
-    }),
-    [],
-  );
-
+> = ({ selectedRows, actionButtons, container }, ref) => {
   return (
-    <TableContext.Provider value={contextValue} {...props}>
-      {children}
-    </TableContext.Provider>
+    <>
+      {selectedRows > 0 &&
+        createPortal(
+          <div className="flex fixed gap-4 z-10 bg-white p-3 m-5 place-self-end border border-sidebar-border rounded-md drop-shadow-lg">
+            <div className="p-1 border border-dashed border-sidebar-border rounded-sm">
+              {selectedRows} rows selected
+            </div>
+            {actionButtons.map((button) => (
+              <Button
+                variant={button.variant ?? 'outline'}
+                onClick={button.action}
+              >
+                {button.icon ? <button.icon /> : null}
+                {button.name}
+              </Button>
+            ))}
+          </div>,
+          container || document.getElementById('main-content') || document.body,
+        )}
+    </>
   );
 };
-TableProvider.displayName = 'TableProvider';
-
-const TableVirtualizer = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<'div'> & {
-    overscan?: number;
-    parentRef: React.RefObject<HTMLDivElement>;
-    rowCount: number;
-  }
->(
-  (
-    { className, children, parentRef, overscan = 5, rowCount, ...props },
-    ref,
-  ) => {
-    const { setVirtualizer } = useTable();
-
-    const virtualizer = useVirtualizer({
-      count: rowCount,
-      getScrollElement: () => parentRef.current,
-      estimateSize: () => 15,
-      overscan: overscan,
-    });
-    setVirtualizer(virtualizer);
-
-    return (
-      <div
-        style={{ height: `${virtualizer.getTotalSize()}px` }}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
-TableVirtualizer.displayName = 'TableVirtualizer';
-
-const LoadingOverlay = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLProps<'div'> & {
-    isLoading: boolean;
-  }
->(({ isLoading, children }) => {
-  if (isLoading) {
-    return <div className="loader flex-1 border rounded-md " />;
-  } else {
-    return <>{children}</>;
-  }
-});
-LoadingOverlay.displayName = 'LoadingOverlay';
+TableActionMenu.displayName = 'TableActionMenu';
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -204,7 +229,6 @@ const TableCaption = React.forwardRef<
 TableCaption.displayName = 'TableCaption';
 
 export {
-  LoadingOverlay,
   Table,
   TableHeader,
   TableBody,
@@ -213,4 +237,5 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  TableActionMenu,
 };

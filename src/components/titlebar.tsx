@@ -1,9 +1,10 @@
 import { MouseEvent } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { useLocation } from '@tanstack/react-router';
 import { Window } from '@/lib/window';
-import { WindowActions } from './windowActions';
+import { useLocation } from '@tanstack/react-router';
 import { SidebarTrigger } from './ui/sidebar';
+import { Separator } from './ui/separator';
+import { Button } from './ui/button';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,8 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { House } from 'lucide-react';
-import { Separator } from './ui/separator';
+import { House, Minus, Square, X } from 'lucide-react';
 
 export function Titlebar() {
   const window = getCurrentWindow();
@@ -21,7 +21,7 @@ export function Titlebar() {
   const handleMousedown = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
 
-    if (['button'].some((selector) => target.closest(selector))) {
+    if (['button', 'li', 'svg'].some((selector) => target.closest(selector))) {
       return;
     }
 
@@ -49,6 +49,7 @@ export function Titlebar() {
 function TitlebarBreadcrumb() {
   const { pathname } = useLocation();
   let location = pathname.split('/');
+  console.log(location);
 
   return (
     <Breadcrumb className="flex ml-2">
@@ -56,22 +57,65 @@ function TitlebarBreadcrumb() {
         <BreadcrumbItem>
           <House size={18} />
         </BreadcrumbItem>
-        {location.map((path, index) => {
-          if (index <= location.length - 2) {
-            return (
-              <>
-                <BreadcrumbItem key={index}>
-                  <BreadcrumbLink>{path}</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator key={index} />
-              </>
-            );
-          }
-        })}
-        <BreadcrumbItem>
-          <BreadcrumbPage>{location.pop()}</BreadcrumbPage>
-        </BreadcrumbItem>
+        {location.length > 2 &&
+          location.map((item, index) => {
+            if (index != location.length - 1 && item.length != 0) {
+              return (
+                <>
+                  <BreadcrumbSeparator key={`separator-${index}`} />
+                  <BreadcrumbItem key={index}>
+                    <BreadcrumbLink>{item}</BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              );
+            } else if (item.length != 0) {
+              return (
+                <>
+                  <BreadcrumbSeparator key={`separator-${index}`} />
+                  <BreadcrumbItem key={index}>
+                    <BreadcrumbPage>{item}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </>
+              );
+            }
+          })}
       </BreadcrumbList>
     </Breadcrumb>
+  );
+}
+
+export function WindowActions() {
+  const window = getCurrentWindow();
+
+  return (
+    <div className="flex items-center gap-2 ml-auto">
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={(e) => {
+          e.preventDefault(), window.minimize();
+        }}
+      >
+        <Minus />
+      </Button>
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={(e) => {
+          e.preventDefault(), Window.toggleMaximize();
+        }}
+      >
+        <Square />
+      </Button>
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={(e) => {
+          e.preventDefault(), window.close();
+        }}
+      >
+        <X />
+      </Button>
+    </div>
   );
 }

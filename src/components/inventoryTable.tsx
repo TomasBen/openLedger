@@ -28,6 +28,7 @@ import {
 } from '@tanstack/react-table';
 
 import { ActionButton } from '@/types/components';
+import { toast } from 'sonner';
 
 export interface Product {
   code: string;
@@ -73,13 +74,19 @@ export default function InventoryTable() {
   useEffect(() => {
     setLoading(true);
     const getProducts = async () => {
-      const results: Product[] = await invoke('get_products', {
-        entity: accountant?.currently_representing?.name,
-      });
-
-      setData(results);
-      updateTableInstance(table);
-      setLoading(false);
+      try {
+        const results: Product[] = await invoke('get_products', {
+          entity: accountant?.currently_representing?.name,
+        });
+        setData(results);
+        updateTableInstance(table);
+      } catch (error) {
+        toast('Error', {
+          description: `${error}`,
+        });
+      } finally {
+        setLoading(false);
+      }
     };
 
     getProducts();
@@ -242,7 +249,7 @@ export default function InventoryTable() {
 
   const table = useReactTable({
     columns,
-    data,
+    data: data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

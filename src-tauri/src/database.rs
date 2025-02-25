@@ -5,9 +5,14 @@ use std::sync::Mutex;
 
 mod embedded {
     use refinery::embed_migrations;
-    embed_migrations!(
-        "/var/home/tomas/Documents/Github/openLedger/src-tauri/migrations/0001_initial_tables.sql"
-    );
+    embed_migrations!("/var/home/tomas/Documents/Github/openLedger/src-tauri/migrations");
+}
+
+struct DatabaseError {
+    is_critical: bool,
+    cause: String,
+    sqlite_error: String,
+    possible_fix: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -207,32 +212,32 @@ pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
     products.map_err(|e| e.to_string())
 }
 
-#[tauri::command]
-pub fn search_products(search_term: String, entity: String) -> Result<Vec<Product>, String> {
-    let conn = DB.lock().unwrap();
+// #[tauri::command]
+// pub fn search_products(search_term: String, entity: String) -> Result<Vec<Product>, String> {
+//     let conn = DB.lock().unwrap();
 
-    let mut stmt = conn
-        .prepare(
-            "SELECT * FROM products WHERE (code LIKE '%' || ?1 || '%' OR name LIKE '%' || ?1 || '%' OR currency LIKE '%' || ?1 || '%') AND entity_name = ?2",
-        )
-        .map_err(|e| e.to_string())?;
+//     let mut stmt = conn
+//         .prepare(
+//             "SELECT * FROM products WHERE (code LIKE '%' || ?1 || '%' OR name LIKE '%' || ?1 || '%' OR currency LIKE '%' || ?1 || '%') AND entity_name = ?2",
+//         )
+//         .map_err(|e| e.to_string())?;
 
-    let results: Result<Vec<Product>, rusqlite::Error> = stmt
-        .query_map([search_term, entity], |row| {
-            Ok(Product {
-                code: row.get(0)?,
-                name: row.get(1)?,
-                description: row.get(2)?,
-                amount: row.get(3)?,
-                measure_unit: row.get(4)?,
-                price: row.get(5)?,
-                currency: row.get(6)?,
-                storage_unit: row.get(7)?,
-                entity_name: row.get(8)?,
-            })
-        })
-        .map_err(|e| e.to_string())?
-        .collect();
+//     let results: Result<Vec<Product>, rusqlite::Error> = stmt
+//         .query_map([search_term, entity], |row| {
+//             Ok(Product {
+//                 code: row.get(0)?,
+//                 name: row.get(1)?,
+//                 description: row.get(2)?,
+//                 amount: row.get(3)?,
+//                 measure_unit: row.get(4)?,
+//                 price: row.get(5)?,
+//                 currency: row.get(6)?,
+//                 storage_unit: row.get(7)?,
+//                 entity_name: row.get(8)?,
+//             })
+//         })
+//         .map_err(|e| e.to_string())?
+//         .collect();
 
-    results.map_err(|e| e.to_string())
-}
+//     results.map_err(|e| e.to_string())
+// }

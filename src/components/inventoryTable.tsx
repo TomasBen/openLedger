@@ -67,11 +67,10 @@ const TableHeaders = memo(function TableHeaders({
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
-  const { updateTableInstance, setLoading } = useTableStore();
+  const { updateTableInstance } = useTableStore();
   const { accountant } = useAccountantStore();
 
   useEffect(() => {
-    setLoading(true);
     const getProducts = async () => {
       try {
         const results: Product[] = await invoke('get_products', {
@@ -83,8 +82,6 @@ export default function InventoryTable() {
         toast('Error', {
           description: `${error}`,
         });
-      } finally {
-        setLoading(false);
       }
     };
 

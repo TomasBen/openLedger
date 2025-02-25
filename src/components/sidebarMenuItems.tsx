@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import {
   SidebarMenuButton,
   SidebarMenuItem,
@@ -28,73 +28,72 @@ import {
 } from 'lucide-react';
 import { SidebarGroup } from '@/types/components';
 
-const SIDEBAR_ITEMS: SidebarGroup[] = [
-  {
-    icon: LayoutDashboard,
-    name: 'Dashboard',
-    path: '/',
-  },
-  {
-    icon: ShoppingCart,
-    name: 'Ventas',
-    path: '/sales',
-    subitems: [
-      {
-        icon: FileOutput,
-        name: 'Comprobantes',
-        path: '/sales/invoices',
-      },
-      { icon: FileDigit, name: 'Presupuestos', path: '/sales/quotes' },
-      { icon: Truck, name: 'Remitos', path: '/sales/transport' },
-      { icon: CreditCard, name: 'Cobranzas', path: '/sales/collection' },
-      { icon: TrendingUp, name: 'Ingresos', path: '/sales/revenue' },
-      {
-        icon: Scale,
-        name: 'Saldo de clientes',
-        path: '/sales/clients',
-      },
-    ],
-  },
-  {
-    icon: ShoppingBag,
-    name: 'Compras',
-    path: '/purchases',
-    subitems: [
-      { icon: FileInput, name: 'Comprobantes', path: '/purchases/invoices' },
-      {
-        icon: FileSearch,
-        name: 'Ordenes de compra',
-        path: '/purchases/orders',
-      },
-      { icon: HandCoins, name: 'Pagos', path: '/purchases/payments' },
-      { icon: TrendingDown, name: 'Egresos', path: '/purchases/egreses' },
-    ],
-  },
-  {
-    icon: Package,
-    name: 'Productos',
-    path: '/products',
-    subitems: [
-      { icon: Blocks, name: 'Inventario', path: '/products/inventory' },
-    ],
-  },
-  {
-    icon: BookUser,
-    name: 'Clientes',
-    path: '/clients',
-  },
-  {
-    icon: ChartSpline,
-    name: 'Reportes y Analíticas',
-    path: '/reports',
-  },
-] as const;
-
 export const SidebarMenuItems = memo(function SidebarMenuItems() {
-  const { pathname } = useLocation();
-  const location = pathname.split('/');
-  console.log(pathname);
-  console.log(location);
+  const SIDEBAR_ITEMS: SidebarGroup[] = [
+    {
+      icon: LayoutDashboard,
+      name: 'Dashboard',
+      path: '/',
+    },
+    {
+      icon: ShoppingCart,
+      name: 'Ventas',
+      path: '/sales',
+      subitems: [
+        {
+          icon: FileOutput,
+          name: 'Comprobantes',
+          path: '/sales/invoices',
+        },
+        { icon: FileDigit, name: 'Presupuestos', path: '/sales/quotes' },
+        { icon: Truck, name: 'Remitos', path: '/sales/transport' },
+        { icon: CreditCard, name: 'Cobranzas', path: '/sales/collection' },
+        { icon: TrendingUp, name: 'Ingresos', path: '/sales/revenue' },
+        {
+          icon: Scale,
+          name: 'Saldo de clientes',
+          path: '/sales/clients',
+        },
+      ],
+    },
+    {
+      icon: ShoppingBag,
+      name: 'Compras',
+      path: '/purchases',
+      subitems: [
+        {
+          icon: FileInput,
+          name: 'Comprobantes',
+          path: '/purchases/invoices',
+        },
+        {
+          icon: FileSearch,
+          name: 'Ordenes de compra',
+          path: '/purchases/orders',
+        },
+        { icon: HandCoins, name: 'Pagos', path: '/purchases/payments' },
+        { icon: TrendingDown, name: 'Egresos', path: '/purchases/egreses' },
+      ],
+    },
+    {
+      icon: Package,
+      name: 'Productos',
+      path: '/products',
+      subitems: [
+        { icon: Blocks, name: 'Inventario', path: '/products/inventory' },
+      ],
+    },
+    {
+      icon: BookUser,
+      name: 'Clientes',
+      path: '/clients',
+    },
+    {
+      icon: ChartSpline,
+      name: 'Reportes y Analíticas',
+      path: '/reports',
+    },
+  ];
 
   return (
     <>

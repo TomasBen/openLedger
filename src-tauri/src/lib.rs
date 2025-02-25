@@ -53,7 +53,6 @@ pub fn run() {
             database::get_entity,
             database::create_product,
             database::get_products,
-            database::search_products,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

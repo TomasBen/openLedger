@@ -49,7 +49,6 @@ export function Titlebar() {
 function TitlebarBreadcrumb() {
   const { pathname } = useLocation();
   let location = pathname.split('/');
-  console.log(location);
 
   return (
     <Breadcrumb className="flex ml-2">

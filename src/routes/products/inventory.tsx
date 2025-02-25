@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { NewProductDialog } from '@/components/newProductDialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
@@ -17,6 +17,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 
+const SEARCHBAR_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
 
 export const Route = createFileRoute('/products/inventory')({
@@ -79,12 +80,30 @@ function Inventory() {
 function SearchBar() {
   const { tableInstance } = useTableStore();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === SEARCHBAR_SHORTCUT &&
+        (event.metaKey || event.ctrlKey)
+      ) {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const search = useDebounce((value: string) => {
     tableInstance?.setGlobalFilter(value);
   }, SEARCH_DEBOUNCE);
 
   return (
     <Input
+      ref={inputRef}
       placeholder="search by code, name..."
       className="flex-1"
       onChange={(e) => search(e.target.value)}

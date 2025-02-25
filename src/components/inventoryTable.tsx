@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { useTableStore } from '@/stores/tablesStore';
+import { toast } from 'sonner';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 import { ArrowUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
@@ -28,7 +28,6 @@ import {
 } from '@tanstack/react-table';
 
 import { ActionButton } from '@/types/components';
-import { toast } from 'sonner';
 
 export interface Product {
   code: string;
@@ -177,7 +176,7 @@ export default function InventoryTable() {
         header: ({ column }) => (
           <Button
             variant="ghost"
-            className="w-full flex justify-center"
+            className="text-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Amount
@@ -249,7 +248,7 @@ export default function InventoryTable() {
 
   const table = useReactTable({
     columns,
-    data: data || [],
+    data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -303,8 +302,8 @@ export default function InventoryTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows?.length ? (
-                accountant?.currently_representing ? (
+              {accountant?.currently_representing ? (
+                rows.length > 0 ? (
                   virtualizer.getVirtualItems().map((virtualRow, index) => {
                     const row = rows[virtualRow.index];
                     return (
@@ -330,13 +329,13 @@ export default function InventoryTable() {
                     );
                   })
                 ) : (
-                  <NoEntitySelectedRow
+                  <NoDataRow
                     colspan={columns.length}
                     height={parentRef.current?.clientHeight}
                   />
                 )
               ) : (
-                <NoDataRow
+                <NoEntitySelectedRow
                   colspan={columns.length}
                   height={parentRef.current?.clientHeight}
                 />
@@ -345,12 +344,7 @@ export default function InventoryTable() {
           </Table>
         </div>
       </ScrollArea>
-      {accountant?.currently_representing ? (
-        <span className="px-2">showing {table.getRowCount()} results</span>
-      ) : (
-        <span className="px-2">showing 0 results</span>
-      )}
-      {/* pass actions for rows */}
+      <span className="px-2">showing {table.getRowCount()} results</span>
       <TableActionMenu selectedRows={0} actionButtons={actionButtons} />
     </>
   );
@@ -393,17 +387,6 @@ const NoEntitySelectedRow = ({
         className="min-h-24 border-t text-xl text-center"
       >
         <span>Select an entity to start</span>
-        <br />
-        <span>
-          Open entity selector
-          <Badge variant="secondary" className="mx-2">
-            Cntrl
-          </Badge>
-          +
-          <Badge variant="secondary" className="mx-2">
-            P
-          </Badge>
-        </span>
       </TableCell>
     </TableRow>
   );

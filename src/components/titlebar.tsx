@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { Fragment, MouseEvent } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { Window } from '@/lib/window';
 import { useLocation } from '@tanstack/react-router';
@@ -59,23 +59,23 @@ function TitlebarBreadcrumb() {
         </BreadcrumbItem>
         {location.length > 2 &&
           location.map((item, index) => {
-            if (index != location.length - 1 && item.length != 0) {
+            if (item.length != 0 && index != location.length - 1) {
               return (
-                <>
-                  <BreadcrumbSeparator key={`separator-${index}`} />
-                  <BreadcrumbItem key={index}>
+                <Fragment key={index}>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
                     <BreadcrumbLink>{item}</BreadcrumbLink>
                   </BreadcrumbItem>
-                </>
+                </Fragment>
               );
             } else if (item.length != 0) {
               return (
-                <>
-                  <BreadcrumbSeparator key={`separator-${index}`} />
-                  <BreadcrumbItem key={index}>
+                <Fragment key={index}>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
                     <BreadcrumbPage>{item}</BreadcrumbPage>
                   </BreadcrumbItem>
-                </>
+                </Fragment>
               );
             }
           })}

@@ -33,10 +33,8 @@ import {
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { useState } from 'react';
 
 export function NewProductDialog() {
-  const [open, setOpen] = useState(false);
   const { accountant } = useAccountantStore();
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -56,7 +54,6 @@ export function NewProductDialog() {
       },
     })
       .then(() => {
-        setOpen(false);
         toast('Success!', {
           description: 'Product created succesfully',
         });
@@ -69,9 +66,9 @@ export function NewProductDialog() {
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)}>Añadir</Button>
+        <Button>Añadir</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -204,9 +201,7 @@ export function NewProductDialog() {
             <DialogFooter>
               <Button type="submit">Guardar</Button>
               <DialogClose asChild>
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                  Cancelar
-                </Button>
+                <Button variant="outline">Cancelar</Button>
               </DialogClose>
             </DialogFooter>
           </form>

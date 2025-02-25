@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { useTableStore } from '@/stores/tablesStore';
+import { useProductTableStore } from '@/stores/tablesStore';
 import { toast } from 'sonner';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -28,6 +28,7 @@ import {
 } from '@tanstack/react-table';
 
 import { ActionButton } from '@/types/components';
+import { FileDown, Trash2 } from 'lucide-react';
 
 export interface Product {
   code: string;
@@ -67,26 +68,9 @@ const TableHeaders = memo(function TableHeaders({
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
-  const { updateTableInstance } = useTableStore();
+  const { rowSelection, setRowSelection, setTableInstance } =
+    useProductTableStore();
   const { accountant } = useAccountantStore();
-
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const results: Product[] = await invoke('get_products', {
-          entity: accountant?.currently_representing?.name,
-        });
-        setData(results);
-        updateTableInstance(table);
-      } catch (error) {
-        toast('Error', {
-          description: `${error}`,
-        });
-      }
-    };
-
-    getProducts();
-  }, [accountant?.currently_representing]);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
@@ -243,9 +227,35 @@ export default function InventoryTable() {
     [],
   );
 
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const results: Product[] = await invoke('get_products', {
+          entity: accountant?.currently_representing?.name,
+        });
+
+        setData(results);
+        setTableInstance(table);
+      } catch (error) {
+        toast.error('Error', {
+          richColors: true,
+          description: `${error}`,
+        });
+      }
+    };
+
+    getProducts();
+  }, [accountant?.currently_representing]);
+
   const table = useReactTable({
     columns,
     data,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
+    getRowId: (row) => row.code,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -264,11 +274,15 @@ export default function InventoryTable() {
 
   const actionButtons: ActionButton[] = [
     {
+      name: 'export rows',
+      icon: FileDown,
+      action: () => console.log('export rows'),
+    },
+    {
       name: 'delete rows',
-      variant: 'destructive',
+      icon: Trash2,
       action: () => console.log('delete rows'),
     },
-    { name: 'export rows', action: () => console.log('export rows') },
   ];
 
   return (
@@ -342,7 +356,7 @@ export default function InventoryTable() {
         </div>
       </ScrollArea>
       <span className="px-2">showing {table.getRowCount()} results</span>
-      <TableActionMenu selectedRows={0} actionButtons={actionButtons} />
+      <TableActionMenu actionButtons={actionButtons} />
     </>
   );
 }

@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTableStore } from '@/stores/tablesStore';
+import { useProductTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -78,7 +78,7 @@ function Inventory() {
 }
 
 function SearchBar() {
-  const { tableInstance } = useTableStore();
+  const { tableInstance } = useProductTableStore();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -112,7 +112,7 @@ function SearchBar() {
 }
 
 // function ColumnSelector() {
-//   const columns = useTableStore((state) =>
+//   const columns = useProductTableStore((state) =>
 //     state.tableInstance?.getAllColumns(),
 //   );
 //   console.log(columns);

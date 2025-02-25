@@ -51,7 +51,7 @@ function Layout() {
             <Outlet />
           </main>
         </div>
-        <Toaster />
+        <Toaster richColors />
       </SidebarProvider>
       {/* <TanStackRouterDevtools position="bottom-right" /> */}
     </>

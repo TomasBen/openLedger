@@ -29,7 +29,7 @@ function AccountSelector() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="size-8 rounded-lg">
                 <AvatarImage
                   src="https://cloud.appwrite.io/v1/storage/buckets/679c32710028a20a97e8/files/679c3294001b2d470bb0/view?project=679c31b50030bed08d23&"
                   alt={accountant?.name}

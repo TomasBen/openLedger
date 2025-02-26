@@ -16,6 +16,8 @@ import { Entity } from '@/stores/accountantStore';
 
 const ENTITYSELECTOR_KEYBOARD_SHORTCUT = 'p';
 
+/* shortcut not working currently */
+
 export function EntitySelector() {
   const [open, setOpen] = useState(false);
   const { accountant, updateAccountant } = useAccountantStore();

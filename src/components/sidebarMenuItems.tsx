@@ -106,7 +106,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
               activeOptions={{ exact: false }}
               activeProps={{
                 className:
-                  'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+                  'bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)] font-medium text-sidebar-accent-foreground',
               }}
             >
               <item.icon />
@@ -126,7 +126,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                       activeOptions={{ exact: false }}
                       activeProps={{
                         className:
-                          'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+                          'bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)] font-medium text-sidebar-accent-foreground',
                       }}
                     >
                       {subitem.name}

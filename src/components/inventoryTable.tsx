@@ -27,19 +27,8 @@ import {
   HeaderGroup,
 } from '@tanstack/react-table';
 
-import { ActionButton } from '@/types/components';
+import { ActionButton, Product } from '@/types/components';
 import { FileDown, Trash2 } from 'lucide-react';
-
-export interface Product {
-  code: string;
-  name?: string;
-  description?: string;
-  amount?: number;
-  measure_unit?: string;
-  price?: number;
-  currency?: string;
-  storage_unit?: string;
-}
 
 const TableHeaders = memo(function TableHeaders({
   headers,
@@ -313,40 +302,33 @@ export default function InventoryTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {accountant?.currently_representing ? (
-                rows.length > 0 ? (
-                  virtualizer.getVirtualItems().map((virtualRow, index) => {
-                    const row = rows[virtualRow.index];
-                    return (
-                      <TableRow
-                        key={row.id}
-                        style={{
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
-                        }}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell
-                            key={cell.id}
-                            className="max-w-[15vw] truncate"
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })
-                ) : (
-                  <NoDataRow
-                    colspan={columns.length}
-                    height={parentRef.current?.clientHeight}
-                  />
-                )
+              {accountant?.currently_representing && rows.length > 0 ? (
+                virtualizer.getVirtualItems().map((virtualRow, index) => {
+                  const row = rows[virtualRow.index];
+                  return (
+                    <TableRow
+                      key={row.id}
+                      style={{
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="max-w-[15vw] truncate"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
               ) : (
-                <NoEntitySelectedRow
+                <FallbackRow
                   colspan={columns.length}
                   height={parentRef.current?.clientHeight}
                 />
@@ -361,7 +343,7 @@ export default function InventoryTable() {
   );
 }
 
-const NoDataRow = ({
+const FallbackRow = ({
   colspan,
   height,
 }: {
@@ -371,33 +353,12 @@ const NoDataRow = ({
   return (
     <TableRow key="no-data-row" className="hover:bg-transparent">
       <TableCell
-        colSpan={colspan}
         key="no-data-cell"
+        colSpan={colspan}
         height={height}
-        className="min-h-24 border-t text-xl text-center"
+        className="min-h-0 border-t text-xl text-center"
       >
         <span>No results.</span>
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const NoEntitySelectedRow = ({
-  colspan,
-  height,
-}: {
-  colspan: number;
-  height: number | undefined;
-}) => {
-  return (
-    <TableRow key="no-data-row" className="hover:bg-transparent">
-      <TableCell
-        colSpan={colspan}
-        key="no-data-cell"
-        height={height}
-        className="min-h-24 border-t text-xl text-center"
-      >
-        <span>Select an entity to start</span>
       </TableCell>
     </TableRow>
   );

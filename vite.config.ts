@@ -17,7 +17,7 @@ export default defineConfig(async () => ({
   ],
   resolve: {
     alias: {
-      '@': './src/',
+      '@': '/src',
     },
   },
 

@@ -15,7 +15,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TableActionMenu,
+  TableActionBar,
 } from '@/components/ui/table';
 import {
   ColumnDef,
@@ -338,7 +338,7 @@ export default function InventoryTable() {
         </div>
       </ScrollArea>
       <span className="px-2">showing {table.getRowCount()} results</span>
-      <TableActionMenu actionButtons={actionButtons} />
+      <TableActionBar actionButtons={actionButtons} />
     </>
   );
 }
@@ -356,7 +356,7 @@ const FallbackRow = ({
         key="no-data-cell"
         colSpan={colspan}
         height={height}
-        className="min-h-0 border-t text-xl text-center"
+        className="min-h-0 text-xl text-center"
       >
         <span>No results.</span>
       </TableCell>

@@ -23,7 +23,10 @@ const TableActionMenu: React.FC<
     <>
       {selectedRows > 0 &&
         createPortal(
-          <div className="flex fixed gap-4 z-10 bg-white p-3 m-5 place-self-end border border-sidebar-border rounded-md drop-shadow-lg">
+          <div
+            data-state={selectedRows > 0 ? 'shown' : 'hidden'}
+            className="flex fixed gap-4 z-10 bg-white p-3 m-5 animate-in fade-in slide-in-from-bottom-4 data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=hidden]:slide-out-to-bottom-4 place-self-end border border-sidebar-border rounded-md drop-shadow-lg"
+          >
             <div className="p-1 border border-dashed border-sidebar-border rounded-sm">
               {selectedRows} rows selected
             </div>
@@ -62,7 +65,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
+  <thead ref={ref} className={className} {...props} />
 ));
 TableHeader.displayName = 'TableHeader';
 

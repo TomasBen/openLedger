@@ -7,9 +7,8 @@ export function WindowActions() {
   const window = getCurrentWindow();
 
   return (
-    <div className="flex items-center gap-2 ml-auto">
+    <div className="ml-auto">
       <Button
-        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), window.minimize();
@@ -18,7 +17,6 @@ export function WindowActions() {
         <Minus />
       </Button>
       <Button
-        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), Window.toggleMaximize();
@@ -27,7 +25,6 @@ export function WindowActions() {
         <Square />
       </Button>
       <Button
-        size="sm"
         variant="ghost"
         onClick={(e) => {
           e.preventDefault(), window.close();

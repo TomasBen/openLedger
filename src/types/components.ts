@@ -31,3 +31,14 @@ export interface ActionButton {
     | undefined;
   action: () => void;
 }
+
+export interface Product {
+  code: string;
+  name?: string;
+  description?: string;
+  amount?: number;
+  measure_unit?: string;
+  price?: number;
+  currency?: string;
+  storage_unit?: string;
+}

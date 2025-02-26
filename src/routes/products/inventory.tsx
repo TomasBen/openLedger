@@ -55,6 +55,7 @@ function Inventory() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          {/* <ColumnSelector /> */}
           {/* <ToggleGroup type="single" variant="outline" defaultValue="list">
             <ToggleGroupItem
               value="grid"
@@ -104,7 +105,7 @@ function SearchBar() {
   return (
     <Input
       ref={inputRef}
-      placeholder="search by code, name..."
+      placeholder="search by code, name, price, amount, measure unit, currency..."
       className="flex-1"
       onChange={(e) => search(e.target.value)}
     />

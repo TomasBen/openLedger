@@ -54,12 +54,12 @@ export function NewProductDialog() {
       },
     })
       .then(() => {
-        toast('Success!', {
+        toast.success('', {
           description: 'Product created succesfully',
         });
       })
       .catch((error) => {
-        toast('Error D:', {
+        toast.error('', {
           description: `${error}`,
         });
       });

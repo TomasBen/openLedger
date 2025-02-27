@@ -14,15 +14,35 @@ import {
   SidebarMenu,
   SidebarProvider,
 } from '@/components/ui/sidebar';
+import { useState } from 'react';
 
 export const Route = createRootRoute({
   component: Layout,
 });
 
 function Layout() {
+  const [open, setOpen] = useState(() =>
+    Boolean(localStorage.getItem('sidebar_isOpen')),
+  );
+
+  const handleChange = (state?: boolean) => {
+    if (state) {
+      setOpen(state);
+      localStorage.setItem('sidebar_isOpen', String(state));
+    } else {
+      localStorage.setItem('sidebar_isOpen', String(!open));
+      setOpen((prev) => !prev);
+    }
+  };
+
   return (
     <>
-      <SidebarProvider defaultOpen={false} className="pt-2 pr-2 pb-2">
+      <SidebarProvider
+        defaultOpen={false}
+        open={open}
+        onOpenChange={handleChange}
+        className="pt-2 pr-2 pb-2"
+      >
         <Sidebar collapsible="icon">
           <SidebarHeader>
             <EntitySelector />

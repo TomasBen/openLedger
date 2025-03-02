@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SalesDocumentsImport } from './routes/sales/documents'
 import { Route as ProductsInventoryImport } from './routes/products/inventory'
 
 // Create/Update Routes
@@ -19,6 +20,12 @@ import { Route as ProductsInventoryImport } from './routes/products/inventory'
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SalesDocumentsRoute = SalesDocumentsImport.update({
+  id: '/sales/documents',
+  path: '/sales/documents',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsInventoryImport
       parentRoute: typeof rootRoute
     }
+    '/sales/documents': {
+      id: '/sales/documents'
+      path: '/sales/documents'
+      fullPath: '/sales/documents'
+      preLoaderRoute: typeof SalesDocumentsImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/products/inventory': typeof ProductsInventoryRoute
+  '/sales/documents': typeof SalesDocumentsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/products/inventory': typeof ProductsInventoryRoute
+  '/sales/documents': typeof SalesDocumentsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/products/inventory': typeof ProductsInventoryRoute
+  '/sales/documents': typeof SalesDocumentsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/products/inventory'
+  fullPaths: '/' | '/products/inventory' | '/sales/documents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/products/inventory'
-  id: '__root__' | '/' | '/products/inventory'
+  to: '/' | '/products/inventory' | '/sales/documents'
+  id: '__root__' | '/' | '/products/inventory' | '/sales/documents'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProductsInventoryRoute: typeof ProductsInventoryRoute
+  SalesDocumentsRoute: typeof SalesDocumentsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProductsInventoryRoute: ProductsInventoryRoute,
+  SalesDocumentsRoute: SalesDocumentsRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/products/inventory"
+        "/products/inventory",
+        "/sales/documents"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/products/inventory": {
       "filePath": "products/inventory.tsx"
+    },
+    "/sales/documents": {
+      "filePath": "sales/documents.tsx"
     }
   }
 }

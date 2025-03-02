@@ -35,6 +35,8 @@ export interface ActionButton {
   action: () => void;
 }
 
+export type InventoryView = 'cards' | 'table';
+
 export interface Product {
   code: string;
   name?: string;

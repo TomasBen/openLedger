@@ -22,14 +22,6 @@ export const Route = createRootRoute({
   component: Layout,
 });
 
-window.addEventListener('error', (err) => {
-  const { message, filename, lineno, colno, error } = err;
-
-  toast.info(`${error}`, {
-    description: `${message}, at ${lineno}:${colno}, ${filename}`,
-  });
-});
-
 function Layout() {
   // needs setter in app settings
   const [collapsibleMode] = useState<SidebarCollapsibleMode>(

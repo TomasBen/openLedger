@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { NewProductDialog } from '@/components/newProductDialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
@@ -14,9 +14,12 @@ import {
 import { useProductTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
-import { Bomb } from 'lucide-react';
+
+import { InventoryView } from '@/types/components';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
+const InventoryCards = lazy(() => import('@/components/inventoryCards'));
 
 const SEARCHBAR_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
@@ -26,6 +29,18 @@ export const Route = createFileRoute('/products/inventory')({
 });
 
 function Inventory() {
+  const [view, setView] = useState<InventoryView>(
+    () => (localStorage.getItem('inventory.View') as InventoryView) ?? 'cards',
+  );
+  console.log(`current value: ${view}`);
+
+  const handleViewChange = (value: InventoryView) => {
+    if (!value) throw new Error('no value passed to handleViewChange');
+    console.log(`changing from: ${view} to: ${value}`);
+    setView(value);
+    localStorage.setItem('inventory.View', value);
+  };
+
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
       <div className="flex flex-none">
@@ -50,33 +65,24 @@ function Inventory() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button
-            variant="destructive"
-            onClick={() => {
-              throw new Error('bro nuked it all');
-            }}
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            value={view}
+            onValueChange={handleViewChange}
           >
-            <Bomb />
-            nuke
-          </Button>
-          {/* <ColumnSelector /> */}
-          {/* <ToggleGroup type="single" variant="outline" defaultValue="list">
-            <ToggleGroupItem
-              value="grid"
-              aria-label="Toggle grid view"
-              disabled
-            >
-              <LayoutGrid />
+            <ToggleGroupItem value="cards" aria-label="Toggle card view">
+              Cards
             </ToggleGroupItem>
-            <ToggleGroupItem value="list" aria-label="Toggle list view">
-              <List />
+            <ToggleGroupItem value="table" aria-label="Toggle table view">
+              Table
             </ToggleGroupItem>
-          </ToggleGroup> */}
+          </ToggleGroup>
         </div>
       </div>
       <Separator className="my-2" />
       <Suspense fallback={<Skeleton className="h-full" />}>
-        <InventoryTable />
+        {view === 'cards' ? <InventoryCards /> : <InventoryTable />}
       </Suspense>
     </div>
   );

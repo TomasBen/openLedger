@@ -12,6 +12,14 @@ declare module '@tanstack/react-router' {
   }
 }
 
+window.addEventListener('error', (err) => {
+  const { message, filename, lineno, colno, error } = err;
+
+  toast.info(`${error}`, {
+    description: `${message}, at ${lineno}:${colno}, ${filename}`,
+  });
+});
+
 // useEffect(() => {
 //   if (sessionStorage.getItem('isFirstBoot')) {
 //     // run startup functions (database, userPreferences and such)

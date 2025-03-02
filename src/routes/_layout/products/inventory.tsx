@@ -24,7 +24,7 @@ const InventoryCards = lazy(() => import('@/components/inventoryCards'));
 const SEARCHBAR_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
 
-export const Route = createFileRoute('/products/inventory')({
+export const Route = createFileRoute('/_layout/products/inventory')({
   component: Inventory,
 });
 

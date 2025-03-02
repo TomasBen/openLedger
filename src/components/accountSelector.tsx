@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useAccountantStore } from '@/stores/accountantStore';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +15,8 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { useAccountantStore } from '@/stores/accountantStore';
 import { ChevronRight, LogOut, Plus, Settings } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 function AccountSelector() {
   const { accountant } = useAccountantStore();
@@ -76,9 +77,11 @@ function AccountSelector() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Settings />
-                Settings
+              <DropdownMenuItem asChild>
+                <Link to="/settings">
+                  <Settings />
+                  Settings
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

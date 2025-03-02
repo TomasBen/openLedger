@@ -11,98 +11,150 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as SalesDocumentsImport } from './routes/sales/documents'
-import { Route as ProductsInventoryImport } from './routes/products/inventory'
+import { Route as LayoutRouteImport } from './routes/_layout/route'
+import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as appSettingsImport } from './routes/(app)/settings'
+import { Route as LayoutSalesDocumentsImport } from './routes/_layout/sales/documents'
+import { Route as LayoutProductsInventoryImport } from './routes/_layout/products/inventory'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const LayoutRouteRoute = LayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutIndexRoute = LayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const appSettingsRoute = appSettingsImport.update({
+  id: '/(app)/settings',
+  path: '/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
-const SalesDocumentsRoute = SalesDocumentsImport.update({
+const LayoutSalesDocumentsRoute = LayoutSalesDocumentsImport.update({
   id: '/sales/documents',
   path: '/sales/documents',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LayoutRouteRoute,
 } as any)
 
-const ProductsInventoryRoute = ProductsInventoryImport.update({
+const LayoutProductsInventoryRoute = LayoutProductsInventoryImport.update({
   id: '/products/inventory',
   path: '/products/inventory',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LayoutRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/(app)/settings': {
+      id: '/(app)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof appSettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout/': {
+      id: '/_layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutRouteImport
     }
-    '/products/inventory': {
-      id: '/products/inventory'
+    '/_layout/products/inventory': {
+      id: '/_layout/products/inventory'
       path: '/products/inventory'
       fullPath: '/products/inventory'
-      preLoaderRoute: typeof ProductsInventoryImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutProductsInventoryImport
+      parentRoute: typeof LayoutRouteImport
     }
-    '/sales/documents': {
-      id: '/sales/documents'
+    '/_layout/sales/documents': {
+      id: '/_layout/sales/documents'
       path: '/sales/documents'
       fullPath: '/sales/documents'
-      preLoaderRoute: typeof SalesDocumentsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutSalesDocumentsImport
+      parentRoute: typeof LayoutRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface LayoutRouteRouteChildren {
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutProductsInventoryRoute: typeof LayoutProductsInventoryRoute
+  LayoutSalesDocumentsRoute: typeof LayoutSalesDocumentsRoute
+}
+
+const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutProductsInventoryRoute: LayoutProductsInventoryRoute,
+  LayoutSalesDocumentsRoute: LayoutSalesDocumentsRoute,
+}
+
+const LayoutRouteRouteWithChildren = LayoutRouteRoute._addFileChildren(
+  LayoutRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/products/inventory': typeof ProductsInventoryRoute
-  '/sales/documents': typeof SalesDocumentsRoute
+  '': typeof LayoutRouteRouteWithChildren
+  '/settings': typeof appSettingsRoute
+  '/': typeof LayoutIndexRoute
+  '/products/inventory': typeof LayoutProductsInventoryRoute
+  '/sales/documents': typeof LayoutSalesDocumentsRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/products/inventory': typeof ProductsInventoryRoute
-  '/sales/documents': typeof SalesDocumentsRoute
+  '/settings': typeof appSettingsRoute
+  '/': typeof LayoutIndexRoute
+  '/products/inventory': typeof LayoutProductsInventoryRoute
+  '/sales/documents': typeof LayoutSalesDocumentsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/products/inventory': typeof ProductsInventoryRoute
-  '/sales/documents': typeof SalesDocumentsRoute
+  '/_layout': typeof LayoutRouteRouteWithChildren
+  '/(app)/settings': typeof appSettingsRoute
+  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/products/inventory': typeof LayoutProductsInventoryRoute
+  '/_layout/sales/documents': typeof LayoutSalesDocumentsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/products/inventory' | '/sales/documents'
+  fullPaths: '' | '/settings' | '/' | '/products/inventory' | '/sales/documents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/products/inventory' | '/sales/documents'
-  id: '__root__' | '/' | '/products/inventory' | '/sales/documents'
+  to: '/settings' | '/' | '/products/inventory' | '/sales/documents'
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/(app)/settings'
+    | '/_layout/'
+    | '/_layout/products/inventory'
+    | '/_layout/sales/documents'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ProductsInventoryRoute: typeof ProductsInventoryRoute
-  SalesDocumentsRoute: typeof SalesDocumentsRoute
+  LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
+  appSettingsRoute: typeof appSettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ProductsInventoryRoute: ProductsInventoryRoute,
-  SalesDocumentsRoute: SalesDocumentsRoute,
+  LayoutRouteRoute: LayoutRouteRouteWithChildren,
+  appSettingsRoute: appSettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -115,19 +167,32 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/products/inventory",
-        "/sales/documents"
+        "/_layout",
+        "/(app)/settings"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_layout": {
+      "filePath": "_layout/route.tsx",
+      "children": [
+        "/_layout/",
+        "/_layout/products/inventory",
+        "/_layout/sales/documents"
+      ]
     },
-    "/products/inventory": {
-      "filePath": "products/inventory.tsx"
+    "/(app)/settings": {
+      "filePath": "(app)/settings.tsx"
     },
-    "/sales/documents": {
-      "filePath": "sales/documents.tsx"
+    "/_layout/": {
+      "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/products/inventory": {
+      "filePath": "_layout/products/inventory.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/sales/documents": {
+      "filePath": "_layout/sales/documents.tsx",
+      "parent": "/_layout"
     }
   }
 }

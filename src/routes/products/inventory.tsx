@@ -14,6 +14,7 @@ import {
 import { useProductTableStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
+import { Bomb } from 'lucide-react';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 
@@ -37,24 +38,27 @@ function Inventory() {
               <Button variant="secondary">Acciones</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
-              <DropdownMenuItem disabled>
+              <DropdownMenuItem>
                 Importar desde CSV
                 <DropdownMenuShortcut className="ml-auto">
                   ⌘M
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem disabled>
+              <DropdownMenuItem>
                 Importar desde XLS o XLSX
                 <DropdownMenuShortcut className="ml-5">⌘B</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem disabled>
-                Opciones
-                <DropdownMenuShortcut className="ml-auto">
-                  ⌘S
-                </DropdownMenuShortcut>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button
+            variant="destructive"
+            onClick={() => {
+              throw new Error('bro nuked it all');
+            }}
+          >
+            <Bomb />
+            nuke
+          </Button>
           {/* <ColumnSelector /> */}
           {/* <ToggleGroup type="single" variant="outline" defaultValue="list">
             <ToggleGroupItem

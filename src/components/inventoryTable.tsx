@@ -57,9 +57,16 @@ const TableHeaders = memo(function TableHeaders({
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
+  const [height, setHeight] = useState(0);
   const { rowSelection, setRowSelection, setTableInstance } =
     useProductTableStore();
   const { accountant } = useAccountantStore();
+
+  useEffect(() => {
+    if (parentRef.current) {
+      setHeight(parentRef.current.clientHeight);
+    }
+  }, []);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
@@ -227,7 +234,6 @@ export default function InventoryTable() {
         setTableInstance(table);
       } catch (error) {
         toast.error('Error', {
-          richColors: true,
           description: `${error}`,
         });
       }
@@ -328,10 +334,7 @@ export default function InventoryTable() {
                   );
                 })
               ) : (
-                <FallbackRow
-                  colspan={columns.length}
-                  height={parentRef.current?.clientHeight}
-                />
+                <FallbackRow colspan={columns.length} height={height} />
               )}
             </TableBody>
           </Table>

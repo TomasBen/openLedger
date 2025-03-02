@@ -6,8 +6,11 @@ export interface SidebarGroup {
   icon: LucideIcon;
   name: string;
   path: string;
+  disabled?: boolean;
   subitems?: SidebarGroup[];
 }
+
+export type SidebarCollapsibleMode = 'offcanvas' | 'icon';
 
 export type Location = {
   pathname: string;

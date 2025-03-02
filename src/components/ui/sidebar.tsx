@@ -114,7 +114,7 @@ function SidebarProvider({
             } as React.CSSProperties
           }
           className={cn(
-            'group/sidebar-wrapper flex min-h-svh w-full',
+            'group/sidebar-wrapper flex min-h-svh w-full p-2',
             className,
           )}
           {...props}

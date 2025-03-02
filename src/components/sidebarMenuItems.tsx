@@ -92,6 +92,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
       icon: ChartSpline,
       name: 'Reportes y Analíticas',
       path: '/reports',
+      disabled: true,
     },
   ];
 
@@ -99,14 +100,17 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
     <>
       {SIDEBAR_ITEMS.map((item: SidebarGroup) => (
         <SidebarMenuItem key={item.name} className="list-none">
-          <SidebarMenuButton asChild tooltip={item.name}>
+          <SidebarMenuButton
+            asChild
+            tooltip={item.name}
+            disabled={item.disabled}
+          >
             <Link
               to={item.path}
               className="flex"
               activeOptions={{ exact: false }}
               activeProps={{
-                className:
-                  'bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)] font-medium text-sidebar-accent-foreground',
+                className: 'bg-white text-black font-medium',
               }}
             >
               <item.icon />
@@ -114,7 +118,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
             </Link>
           </SidebarMenuButton>
           {item.subitems?.map((subitem) =>
-            item.subitems != undefined ? (
+            item.subitems != undefined && !item.disabled ? (
               <SidebarMenuSub key={subitem.path}>
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
@@ -125,8 +129,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                       to={subitem.path}
                       activeOptions={{ exact: false }}
                       activeProps={{
-                        className:
-                          'bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)] font-medium text-sidebar-accent-foreground',
+                        className: 'bg-white text-black font-medium',
                       }}
                     >
                       {subitem.name}

@@ -8,11 +8,40 @@ mod embedded {
     embed_migrations!("/var/home/tomas/Documents/Github/openLedger/src-tauri/migrations");
 }
 
-struct DatabaseError {
-    is_critical: bool,
-    cause: String,
+#[derive(Serialize, Deserialize)]
+pub struct DatabaseError {
     sqlite_error: String,
-    possible_fix: Option<String>,
+    is_critical: bool,
+    help: Option<String>,
+}
+
+impl DatabaseError {
+    fn from_sqlite_error(error: rusqlite::Error) -> Self {
+        let is_critical = match error {
+            rusqlite::Error::SqliteFailure(_, _) => true,
+            rusqlite::Error::QueryReturnedNoRows => false,
+            rusqlite::Error::InvalidColumnName(_) => false,
+            rusqlite::Error::InvalidParameterCount(_, _) => false,
+            _ => false,
+        };
+
+        let help = match error {
+            rusqlite::Error::QueryReturnedNoRows => Some("did not get any results".to_string()),
+            rusqlite::Error::InvalidColumnName(ref name) => {
+                Some(format!("column {} doesn't exist", name))
+            }
+            rusqlite::Error::InvalidParameterCount(given, expected) => Some(format!(
+                "expected {expected} parameters, were given {given} instead"
+            )),
+            _ => None,
+        };
+
+        DatabaseError {
+            sqlite_error: error.to_string(),
+            is_critical,
+            help,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -68,7 +97,7 @@ pub struct Product {
 
 static DB: Lazy<Mutex<Connection>> = Lazy::new(|| {
     let mut conn = Connection::open("/var/home/tomas/.config/OpenLedger/accsw.db")
-        .expect("Filed to establish a conenction to the database");
+        .expect("[Database::migrations]Failed to establish a conenction to the database");
     embedded::migrations::runner().run(&mut conn).unwrap();
     Mutex::new(conn)
 });
@@ -185,12 +214,12 @@ pub fn create_product(product: Product) -> Result<usize, String> {
 }
 
 #[tauri::command]
-pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
+pub fn get_products(entity: String) -> Result<Vec<Product>, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     let mut stmt = conn
         .prepare("SELECT * FROM products WHERE entity_name = ?")
-        .map_err(|e| e.to_string())?;
+        .unwrap();
 
     let products: Result<Vec<Product>, rusqlite::Error> = stmt
         .query_map([entity], |row| {
@@ -206,38 +235,8 @@ pub fn get_products(entity: String) -> Result<Vec<Product>, String> {
                 entity_name: row.get(8)?,
             })
         })
-        .map_err(|e| e.to_string())?
+        .map_err(|e| DatabaseError::from_sqlite_error(e))?
         .collect();
 
-    products.map_err(|e| e.to_string())
+    products.map_err(|e| DatabaseError::from_sqlite_error(e))
 }
-
-// #[tauri::command]
-// pub fn search_products(search_term: String, entity: String) -> Result<Vec<Product>, String> {
-//     let conn = DB.lock().unwrap();
-
-//     let mut stmt = conn
-//         .prepare(
-//             "SELECT * FROM products WHERE (code LIKE '%' || ?1 || '%' OR name LIKE '%' || ?1 || '%' OR currency LIKE '%' || ?1 || '%') AND entity_name = ?2",
-//         )
-//         .map_err(|e| e.to_string())?;
-
-//     let results: Result<Vec<Product>, rusqlite::Error> = stmt
-//         .query_map([search_term, entity], |row| {
-//             Ok(Product {
-//                 code: row.get(0)?,
-//                 name: row.get(1)?,
-//                 description: row.get(2)?,
-//                 amount: row.get(3)?,
-//                 measure_unit: row.get(4)?,
-//                 price: row.get(5)?,
-//                 currency: row.get(6)?,
-//                 storage_unit: row.get(7)?,
-//                 entity_name: row.get(8)?,
-//             })
-//         })
-//         .map_err(|e| e.to_string())?
-//         .collect();
-
-//     results.map_err(|e| e.to_string())
-// }

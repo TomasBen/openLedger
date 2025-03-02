@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import { Titlebar } from '@/components/titlebar.tsx';
 import { EntitySelector } from '@/components/entitySelector.tsx';
@@ -14,23 +15,39 @@ import {
   SidebarMenu,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { useState } from 'react';
+
+import { SidebarCollapsibleMode } from '@/types/components';
 
 export const Route = createRootRoute({
   component: Layout,
 });
 
+window.addEventListener('error', (err) => {
+  const { message, filename, lineno, colno, error } = err;
+
+  toast.info(`${error}`, {
+    description: `${message}, at ${lineno}:${colno}, ${filename}`,
+  });
+});
+
 function Layout() {
-  const [open, setOpen] = useState(() =>
-    Boolean(localStorage.getItem('sidebar_isOpen')),
+  // needs setter in app settings
+  const [collapsibleMode] = useState<SidebarCollapsibleMode>(
+    () =>
+      (localStorage.getItem(
+        'sidebar.collapsibleMode',
+      ) as SidebarCollapsibleMode) ?? 'icon',
+  );
+  const [open, setOpen] = useState(
+    () => Boolean(localStorage.getItem('sidebar.isOpen')) ?? true,
   );
 
   const handleChange = (state?: boolean) => {
     if (state) {
       setOpen(state);
-      localStorage.setItem('sidebar_isOpen', String(state));
+      localStorage.setItem('sidebar.isOpen', String(state));
     } else {
-      localStorage.setItem('sidebar_isOpen', String(!open));
+      localStorage.setItem('sidebar.isOpen', String(!open));
       setOpen((prev) => !prev);
     }
   };
@@ -41,9 +58,8 @@ function Layout() {
         defaultOpen={false}
         open={open}
         onOpenChange={handleChange}
-        className="pt-2 pr-2 pb-2"
       >
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible={collapsibleMode}>
           <SidebarHeader>
             <EntitySelector />
           </SidebarHeader>
@@ -64,9 +80,6 @@ function Layout() {
             id="main-content"
             role="main"
             className="flex justify-center w-full h-[calc(100vh-30px-16px)] bg-white rounded-sm drop-shadow-lg"
-            style={{
-              contain: 'layout',
-            }}
           >
             <Outlet />
           </main>

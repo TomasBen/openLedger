@@ -18,7 +18,7 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { ChevronRight, LogOut, Plus, Settings } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
-function AccountSelector() {
+export const AccountSelector = memo(function AccountSelector() {
   const { accountant } = useAccountantStore();
 
   return (
@@ -96,6 +96,4 @@ function AccountSelector() {
       </SidebarMenuItem>
     </SidebarMenu>
   );
-}
-
-export const MemoAccountSelector = memo(AccountSelector);
+});

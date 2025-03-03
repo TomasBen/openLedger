@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { Toaster } from '@/components/ui/sonner.tsx';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { Titlebar } from '@/components/titlebar.tsx';
 import { EntitySelector } from '@/components/entitySelector.tsx';
-import { MemoAccountSelector } from '@/components/accountSelector.tsx';
+import { AccountSelector } from '@/components/accountSelector.tsx';
 import { SidebarMenuItems } from '@/components/sidebarMenuItems';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
 
 import { SidebarCollapsibleMode } from '@/types/components';
+import { Database, Settings } from 'lucide-react';
 
 export const Route = createFileRoute('/_layout')({
   component: Layout,
@@ -59,9 +62,27 @@ function Layout() {
               <SidebarMenuItems />
             </SidebarMenu>
           </SidebarGroup>
+          <SidebarGroup className="mt-auto">
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Database />
+                    Database
+                  </SidebarMenuButton>
+                  <SidebarMenuButton asChild>
+                    <Link to="/settings">
+                      <Settings />
+                      Settings
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <MemoAccountSelector />
+          <AccountSelector />
         </SidebarFooter>
       </Sidebar>
       <div className="w-full">
@@ -74,7 +95,6 @@ function Layout() {
           <Outlet />
         </main>
       </div>
-      <Toaster richColors />
     </SidebarProvider>
   );
 }

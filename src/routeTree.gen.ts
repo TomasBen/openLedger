@@ -13,9 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
-import { Route as appSettingsImport } from './routes/(app)/settings'
 import { Route as LayoutSalesDocumentsImport } from './routes/_layout/sales/documents'
 import { Route as LayoutProductsInventoryImport } from './routes/_layout/products/inventory'
+import { Route as LayoutappSettingsImport } from './routes/_layout/(app)/settings'
 
 // Create/Update Routes
 
@@ -30,12 +30,6 @@ const LayoutIndexRoute = LayoutIndexImport.update({
   getParentRoute: () => LayoutRouteRoute,
 } as any)
 
-const appSettingsRoute = appSettingsImport.update({
-  id: '/(app)/settings',
-  path: '/settings',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LayoutSalesDocumentsRoute = LayoutSalesDocumentsImport.update({
   id: '/sales/documents',
   path: '/sales/documents',
@@ -45,6 +39,12 @@ const LayoutSalesDocumentsRoute = LayoutSalesDocumentsImport.update({
 const LayoutProductsInventoryRoute = LayoutProductsInventoryImport.update({
   id: '/products/inventory',
   path: '/products/inventory',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const LayoutappSettingsRoute = LayoutappSettingsImport.update({
+  id: '/(app)/settings',
+  path: '/settings',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
 
@@ -59,18 +59,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRoute
     }
-    '/(app)/settings': {
-      id: '/(app)/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof appSettingsImport
-      parentRoute: typeof rootRoute
-    }
     '/_layout/': {
       id: '/_layout/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutRouteImport
+    }
+    '/_layout/(app)/settings': {
+      id: '/_layout/(app)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof LayoutappSettingsImport
       parentRoute: typeof LayoutRouteImport
     }
     '/_layout/products/inventory': {
@@ -94,12 +94,14 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteRouteChildren {
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutappSettingsRoute: typeof LayoutappSettingsRoute
   LayoutProductsInventoryRoute: typeof LayoutProductsInventoryRoute
   LayoutSalesDocumentsRoute: typeof LayoutSalesDocumentsRoute
 }
 
 const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutappSettingsRoute: LayoutappSettingsRoute,
   LayoutProductsInventoryRoute: LayoutProductsInventoryRoute,
   LayoutSalesDocumentsRoute: LayoutSalesDocumentsRoute,
 }
@@ -110,15 +112,15 @@ const LayoutRouteRouteWithChildren = LayoutRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteRouteWithChildren
-  '/settings': typeof appSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/settings': typeof LayoutappSettingsRoute
   '/products/inventory': typeof LayoutProductsInventoryRoute
   '/sales/documents': typeof LayoutSalesDocumentsRoute
 }
 
 export interface FileRoutesByTo {
-  '/settings': typeof appSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/settings': typeof LayoutappSettingsRoute
   '/products/inventory': typeof LayoutProductsInventoryRoute
   '/sales/documents': typeof LayoutSalesDocumentsRoute
 }
@@ -126,22 +128,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteRouteWithChildren
-  '/(app)/settings': typeof appSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/(app)/settings': typeof LayoutappSettingsRoute
   '/_layout/products/inventory': typeof LayoutProductsInventoryRoute
   '/_layout/sales/documents': typeof LayoutSalesDocumentsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/settings' | '/' | '/products/inventory' | '/sales/documents'
+  fullPaths: '' | '/' | '/settings' | '/products/inventory' | '/sales/documents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/settings' | '/' | '/products/inventory' | '/sales/documents'
+  to: '/' | '/settings' | '/products/inventory' | '/sales/documents'
   id:
     | '__root__'
     | '/_layout'
-    | '/(app)/settings'
     | '/_layout/'
+    | '/_layout/(app)/settings'
     | '/_layout/products/inventory'
     | '/_layout/sales/documents'
   fileRoutesById: FileRoutesById
@@ -149,12 +151,10 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
-  appSettingsRoute: typeof appSettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRouteRoute: LayoutRouteRouteWithChildren,
-  appSettingsRoute: appSettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -167,23 +167,24 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_layout",
-        "/(app)/settings"
+        "/_layout"
       ]
     },
     "/_layout": {
       "filePath": "_layout/route.tsx",
       "children": [
         "/_layout/",
+        "/_layout/(app)/settings",
         "/_layout/products/inventory",
         "/_layout/sales/documents"
       ]
     },
-    "/(app)/settings": {
-      "filePath": "(app)/settings.tsx"
-    },
     "/_layout/": {
       "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/(app)/settings": {
+      "filePath": "_layout/(app)/settings.tsx",
       "parent": "/_layout"
     },
     "/_layout/products/inventory": {

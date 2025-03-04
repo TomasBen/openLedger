@@ -24,7 +24,7 @@ pub struct UserPreferences {
     #[serde(rename = "Theme")]
     pub theme: Option<Theme>,
     #[serde(rename = "ScaleFactor")]
-    pub scale_factor: f64,
+    pub scale_factor: f32,
     #[serde(rename = "Fullscreen")]
     pub fullscreen: bool,
 }
@@ -34,7 +34,7 @@ pub enum PreferenceUpdate {
     Full(UserPreferences),
     Language(Language),
     Theme(Theme),
-    ScaleFactor(f64),
+    ScaleFactor(f32),
     Fullscreen(bool),
 }
 

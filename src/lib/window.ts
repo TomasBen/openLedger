@@ -37,12 +37,18 @@ export class Window {
   }
 
   static async toggleMaximize() {
-    if (await window.isMaximized()) {
-      /* document.documentElement.setAttribute('data-maximize', 'false'); */
+    try {
       window.toggleMaximize();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  static async toggleFullscreen() {
+    if (await window.isFullscreen()) {
+      window.setFullscreen(false);
     } else {
-      /* document.documentElement.setAttribute('data-maximize', 'true'); */
-      window.toggleMaximize();
+      window.setFullscreen(true);
     }
   }
 }

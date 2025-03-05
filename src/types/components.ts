@@ -37,6 +37,25 @@ export interface ActionButton {
 
 export type InventoryView = 'cards' | 'table';
 
+export interface Sale {
+  date: Date;
+  doc_id: string;
+  doc_type: number;
+  sale_point: number;
+  auth_code: number;
+  recipient_id_type: number;
+  recipient_id_number: number;
+  recipient_name: string;
+  exchange_rate: number;
+  currency: string;
+  net_levied_import: number;
+  net_exempt_import: number;
+  exempt_op_tax: number;
+  other_taxes: number;
+  vat: number;
+  total_taxes: number;
+}
+
 export interface Product {
   code: string;
   name?: string;

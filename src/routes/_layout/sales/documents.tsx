@@ -15,7 +15,7 @@ import { useProductsStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
-// const SalesTable = lazy(() => import('@/components/salesTable'));
+const SalesTable = lazy(() => import('@/components/salesTable'));
 
 const SEARCHBAR_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
@@ -31,7 +31,6 @@ function Documents() {
         <div className="w-full flex items-center gap-2">
           <SearchBar />
           <Separator orientation="vertical" />
-          <NewProductDialog />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary">Acciones</Button>

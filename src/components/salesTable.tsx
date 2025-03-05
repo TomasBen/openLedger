@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
-import { invoke } from '@tauri-apps/api/core';
+import { useEffect, useMemo, useState, memo, useRef } from 'react';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { useProductTableStore } from '@/stores/tablesStore';
-import { toast } from 'sonner';
+import { useSalesStore } from '@/stores/tablesStore';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from './ui/button';
@@ -25,50 +23,44 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   HeaderGroup,
+  VisibilityState,
 } from '@tanstack/react-table';
 
-import { ActionButton, Product } from '@/types/components';
-import { FileDown, Trash2 } from 'lucide-react';
+import { Sale } from '@/types/components';
 
 const TableHeaders = memo(function TableHeaders({
   headers,
 }: {
-  headers: HeaderGroup<Product>[];
+  headers: HeaderGroup<Sale>[];
 }) {
   return (
     <>
       {headers.map((headerGroup) =>
-        headerGroup.headers
-          .slice(1)
-          .map((header) => (
-            <TableHead key={header.id}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-            </TableHead>
-          )),
+        headerGroup.headers.slice(1).map((header) => (
+          <TableHead key={header.id} className="capitalize">
+            {header.isPlaceholder
+              ? null
+              : flexRender(header.column.columnDef.header, header.getContext())}
+          </TableHead>
+        )),
       )}
     </>
   );
 });
 
 export default function SalesTable() {
-  const [data, setData] = useState<Product[]>([]);
-  const [height, setHeight] = useState(0);
-  const { rowSelection, setRowSelection, setTableInstance } =
-    useProductTableStore();
+  const [data, setData] = useState<Sale[]>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    ['document type']: false,
+    ['sale point']: false,
+    ['recipient id type']: false,
+    ['levied import']: false,
+    ['exempt import']: false,
+  });
+  const { rowSelection, setRowSelection, setTableInstance } = useSalesStore();
   const { accountant } = useAccountantStore();
 
-  useEffect(() => {
-    if (parentRef.current) {
-      setHeight(parentRef.current.clientHeight);
-    }
-  }, []);
-
-  const columns = useMemo<ColumnDef<Product>[]>(
+  const columns = useMemo<ColumnDef<Sale>[]>(
     () => [
       {
         id: 'select',
@@ -85,12 +77,9 @@ export default function SalesTable() {
           />
         ),
         cell: ({ row }) => {
-          const handleCheckedChange = useCallback(
-            (value: boolean) => {
-              row.toggleSelected(!!value);
-            },
-            [row],
-          );
+          const handleCheckedChange = (value: boolean) => {
+            row.toggleSelected(!!value);
+          };
 
           return (
             <Checkbox
@@ -105,119 +94,91 @@ export default function SalesTable() {
         enableHiding: false,
       },
       {
-        id: 'code',
-        accessorKey: 'code',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Code
-            <ArrowUpDown />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize truncate">{row.getValue('code')}</div>
-        ),
-        sortingFn: 'alphanumeric',
+        id: 'date',
+        accessorKey: 'date',
+        header: 'date',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
+      },
+      {
+        id: 'doc id',
+        accessorKey: 'doc_id',
+        header: 'document number',
+        enableGlobalFilter: true,
+        enableSorting: true,
         enableHiding: false,
       },
       {
-        id: 'name',
-        accessorKey: 'name',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Name
-            <ArrowUpDown />
-          </Button>
-        ),
+        id: 'document type',
+        accessorKey: 'doc_type',
+        header: 'document type',
+        enableSorting: true,
+        enableHiding: true,
       },
       {
-        id: 'description',
-        accessorKey: 'description',
-        header: 'Description',
-        cell: ({ row }) => (
-          <div className="text-muted-foreground truncate">
-            {row.getValue('description')}
-          </div>
-        ),
-        sortingFn: 'text',
-        enableSorting: false,
+        id: 'sale point',
+        accessorKey: 'sale_point',
+        header: 'sale point',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
       {
-        id: 'amount',
-        accessorKey: 'amount',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            className="text-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Amount
-            <ArrowUpDown />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="text-center truncate">{row.getValue('amount')}</div>
-        ),
-        sortingFn: 'basic',
+        id: 'recipient id type',
+        accessorKey: 'recipient_id_type',
+        header: 'recipient ID',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
       {
-        id: 'measure unit',
-        accessorKey: 'measure_unit',
-        header: () => <div className="text-center">Unit</div>,
-        cell: ({ row }) => (
-          <div className="text-center">{row.getValue('measure unit')}</div>
-        ),
-        sortingFn: 'text',
+        id: 'recipient id number',
+        accessorKey: 'recipient_id_number',
+        header: 'recipient ID number',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
+      },
+      {
+        id: 'recipient name',
+        accessorKey: 'recipient_name',
+        header: 'recipient name',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
       {
         id: 'currency',
         accessorKey: 'currency',
-        header: () => <div className="text-center">Currency</div>,
-        cell: ({ row }) => (
-          <div className="text-center">{row.getValue('currency')}</div>
-        ),
-        sortingFn: 'text',
+        header: 'currency',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
       {
-        id: 'price',
-        accessorKey: 'price',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            className="flex justify-end"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Price
-            <ArrowUpDown />
-          </Button>
-        ),
-        cell: ({ row }) => {
-          let price: number = row.getValue('price');
-          const currency: string = row.getValue('currency');
-
-          price === null ? (price = 0) : null;
-
-          const formatted = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency,
-          }).format(price);
-
-          return <div className="text-right">{formatted}</div>;
-        },
-        sortingFn: 'basic',
-        enableGlobalFilter: false,
+        id: 'levied import',
+        accessorKey: 'net_levied_import',
+        header: 'levied import',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
       {
-        id: 'storage unit',
-        accessorKey: 'storage_unit',
-        header: 'Storage',
-        enableGlobalFilter: false,
-        enableSorting: false,
+        id: 'exempt import',
+        accessorKey: 'net_exempt_import',
+        header: 'exempt import',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
+      },
+      {
+        id: 'total taxes',
+        accessorKey: 'total_taxes',
+        header: 'total taxes',
+        enableGlobalFilter: true,
+        enableSorting: true,
+        enableHiding: true,
       },
     ],
     [],
@@ -245,12 +206,17 @@ export default function SalesTable() {
   const table = useReactTable({
     columns,
     data,
+    initialState: {
+      columnVisibility,
+    },
     state: {
       rowSelection,
     },
+    enableHiding: true,
+    onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     enableRowSelection: true,
-    getRowId: (row) => row.code,
+    getRowId: (row) => row.doc_id,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -266,19 +232,6 @@ export default function SalesTable() {
     estimateSize: () => 15,
     overscan: 2,
   });
-
-  const actionButtons: ActionButton[] = [
-    {
-      name: 'export rows',
-      icon: FileDown,
-      action: () => console.log('export rows'),
-    },
-    {
-      name: 'delete rows',
-      icon: Trash2,
-      action: () => console.log('delete rows'),
-    },
-  ];
 
   return (
     <>
@@ -334,32 +287,24 @@ export default function SalesTable() {
                   );
                 })
               ) : (
-                <FallbackRow colspan={columns.length} height={height} />
+                <FallbackRow colspan={columns.length} />
               )}
             </TableBody>
           </Table>
         </div>
       </ScrollArea>
       <span className="px-2">showing {table.getRowCount()} results</span>
-      <TableActionBar actionButtons={actionButtons} />
     </>
   );
 }
 
-const FallbackRow = ({
-  colspan,
-  height,
-}: {
-  colspan: number;
-  height: number | undefined;
-}) => {
+const FallbackRow = ({ colspan }: { colspan: number }) => {
   return (
     <TableRow key="no-data-row" className="hover:bg-transparent">
       <TableCell
         key="no-data-cell"
         colSpan={colspan}
-        height={height}
-        className="min-h-0 text-xl text-center"
+        className="h-96 text-xl text-center"
       >
         <span>No results.</span>
       </TableCell>

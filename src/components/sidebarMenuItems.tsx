@@ -43,7 +43,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
         {
           icon: FileOutput,
           name: 'Comprobantes',
-          path: '/sales/invoices',
+          path: '/sales/documents',
         },
         { icon: FileDigit, name: 'Presupuestos', path: '/sales/quotes' },
         { icon: Truck, name: 'Remitos', path: '/sales/transport' },

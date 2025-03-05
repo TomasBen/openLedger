@@ -1,13 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
+import { useEffect, useState, memo, useRef, useMemo } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { useProductsStore } from '@/stores/tablesStore';
 import { toast } from 'sonner';
-import { ScrollArea } from './ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from './ui/button';
-import { ArrowUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { ScrollArea } from './ui/scroll-area';
 import {
   Table,
   TableHeader,
@@ -15,21 +12,21 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TableActionBar,
 } from '@/components/ui/table';
 import {
-  ColumnDef,
   useReactTable,
   getCoreRowModel,
   flexRender,
   getFilteredRowModel,
   getSortedRowModel,
   HeaderGroup,
+  ColumnDef,
 } from '@tanstack/react-table';
 
-import { ActionButton, Product } from '@/types/components';
-import { FileDown, Trash2 } from 'lucide-react';
-import { shallow } from '@tanstack/react-router';
+import { Product } from '@/types/components';
+import { Checkbox } from './ui/checkbox';
+import { Button } from './ui/button';
+import { ArrowUpDown } from 'lucide-react';
 
 const TableHeaders = memo(function TableHeaders({
   headers,
@@ -258,19 +255,6 @@ export default function InventoryTable() {
     overscan: 2,
   });
 
-  const actionButtons: ActionButton[] = [
-    {
-      name: 'export rows',
-      icon: FileDown,
-      action: () => console.log('export rows'),
-    },
-    {
-      name: 'delete rows',
-      icon: Trash2,
-      action: () => console.log('delete rows'),
-    },
-  ];
-
   return (
     <>
       <ScrollArea
@@ -332,7 +316,6 @@ export default function InventoryTable() {
         </div>
       </ScrollArea>
       <span className="px-2">showing {table.getRowCount()} results</span>
-      <TableActionBar actionButtons={actionButtons} />
     </>
   );
 }

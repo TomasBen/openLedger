@@ -1,10 +1,6 @@
-import { useEffect, useMemo, useState, memo, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { useSalesStore } from '@/stores/tablesStore';
 import { ScrollArea } from './ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from './ui/button';
-import { ArrowUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   Table,
@@ -16,14 +12,9 @@ import {
   TableActionBar,
 } from '@/components/ui/table';
 import {
-  ColumnDef,
-  useReactTable,
-  getCoreRowModel,
   flexRender,
-  getFilteredRowModel,
-  getSortedRowModel,
   HeaderGroup,
-  VisibilityState,
+  Table as TableType,
 } from '@tanstack/react-table';
 
 import { Sale } from '@/types/components';
@@ -48,180 +39,14 @@ const TableHeaders = memo(function TableHeaders({
   );
 });
 
-export default function SalesTable() {
-  const [data, setData] = useState<Sale[]>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    ['document type']: false,
-    ['sale point']: false,
-    ['recipient id type']: false,
-    ['levied import']: false,
-    ['exempt import']: false,
-  });
-  const { rowSelection, setRowSelection, setTableInstance } = useSalesStore();
-  const { accountant } = useAccountantStore();
-
-  const columns = useMemo<ColumnDef<Sale>[]>(
-    () => [
-      {
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && 'indeterminate')
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => {
-          const handleCheckedChange = (value: boolean) => {
-            row.toggleSelected(!!value);
-          };
-
-          return (
-            <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={handleCheckedChange}
-              aria-label="Select row"
-            />
-          );
-        },
-        enableSorting: false,
-        enableGlobalFilter: false,
-        enableHiding: false,
-      },
-      {
-        id: 'date',
-        accessorKey: 'date',
-        header: 'date',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'doc id',
-        accessorKey: 'doc_id',
-        header: 'document number',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: false,
-      },
-      {
-        id: 'document type',
-        accessorKey: 'doc_type',
-        header: 'document type',
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'sale point',
-        accessorKey: 'sale_point',
-        header: 'sale point',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'recipient id type',
-        accessorKey: 'recipient_id_type',
-        header: 'recipient ID',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'recipient id number',
-        accessorKey: 'recipient_id_number',
-        header: 'recipient ID number',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'recipient name',
-        accessorKey: 'recipient_name',
-        header: 'recipient name',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'currency',
-        accessorKey: 'currency',
-        header: 'currency',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'levied import',
-        accessorKey: 'net_levied_import',
-        header: 'levied import',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'exempt import',
-        accessorKey: 'net_exempt_import',
-        header: 'exempt import',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-      {
-        id: 'total taxes',
-        accessorKey: 'total_taxes',
-        header: 'total taxes',
-        enableGlobalFilter: true,
-        enableSorting: true,
-        enableHiding: true,
-      },
-    ],
-    [],
-  );
-
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     try {
-  //       const results: Product[] = await invoke('get_products', {
-  //         entity: accountant?.currently_representing?.name,
-  //       });
-
-  //       setData(results);
-  //       setTableInstance(table);
-  //     } catch (error) {
-  //       toast.error('Error', {
-  //         description: `${error}`,
-  //       });
-  //     }
-  //   };
-
-  //   getProducts();
-  // }, [accountant?.currently_representing]);
-
-  const table = useReactTable({
-    columns,
-    data,
-    initialState: {
-      columnVisibility,
-    },
-    state: {
-      rowSelection,
-    },
-    enableHiding: true,
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    enableRowSelection: true,
-    getRowId: (row) => row.doc_id,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: 'includesString',
-  });
+export default function SalesTable({
+  table,
+  columnsLength,
+}: {
+  table: TableType<Sale>;
+  columnsLength: number;
+}) {
+  const accountant = useAccountantStore((state) => state.accountant);
 
   const { rows } = table.getRowModel();
   const parentRef = useRef<HTMLDivElement>(null);
@@ -287,7 +112,7 @@ export default function SalesTable() {
                   );
                 })
               ) : (
-                <FallbackRow colspan={columns.length} />
+                <FallbackRow colspan={columnsLength} />
               )}
             </TableBody>
           </Table>

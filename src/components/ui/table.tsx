@@ -1,33 +1,29 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { useProductsStore } from '@/stores/tablesStore';
 import { ActionButton } from '@/types/components';
 import { Button } from './button';
 import { createPortal } from 'react-dom';
 
 function TableActionBar({
+  rowSelection,
   actionButtons,
   container,
 }: {
+  rowSelection: number;
   actionButtons: ActionButton[];
   container?: Element | DocumentFragment;
 }) {
-  const { rowSelection } = useProductsStore();
-  const selectedRows = Object.entries(rowSelection).filter(
-    ([_, value]) => value === true,
-  ).length;
-
   return (
     <>
-      {selectedRows > 0 &&
+      {rowSelection > 0 &&
         createPortal(
           <div
-            data-state={selectedRows > 0 ? 'shown' : 'hidden'}
+            data-state={rowSelection > 0 ? 'shown' : 'hidden'}
             className="flex fixed gap-4 z-10 bg-white p-3 m-5 animate-in fade-in slide-in-from-bottom-4 data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=hidden]:slide-out-to-bottom-4 place-self-end border border-sidebar-border rounded-md drop-shadow-lg"
           >
             <div className="p-1 border border-dashed border-sidebar-border rounded-sm">
-              {selectedRows} rows selected
+              {rowSelection} rows selected
             </div>
             {actionButtons.map((button) => (
               <Button

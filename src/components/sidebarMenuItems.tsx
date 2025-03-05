@@ -27,6 +27,7 @@ import {
   Scale,
 } from 'lucide-react';
 import { SidebarGroup } from '@/types/components';
+import { cn } from '@/lib/utils';
 
 export const SidebarMenuItems = memo(function SidebarMenuItems() {
   const SIDEBAR_ITEMS: SidebarGroup[] = [
@@ -45,14 +46,35 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
           name: 'Comprobantes',
           path: '/sales/documents',
         },
-        { icon: FileDigit, name: 'Presupuestos', path: '/sales/quotes' },
-        { icon: Truck, name: 'Remitos', path: '/sales/transport' },
-        { icon: CreditCard, name: 'Cobranzas', path: '/sales/collection' },
-        { icon: TrendingUp, name: 'Ingresos', path: '/sales/revenue' },
+        {
+          icon: FileDigit,
+          name: 'Presupuestos',
+          path: '/sales/quotes',
+          disabled: true,
+        },
+        {
+          icon: Truck,
+          name: 'Remitos',
+          path: '/sales/transport',
+          disabled: true,
+        },
+        {
+          icon: CreditCard,
+          name: 'Cobranzas',
+          path: '/sales/collection',
+          disabled: true,
+        },
+        {
+          icon: TrendingUp,
+          name: 'Ingresos',
+          path: '/sales/revenue',
+          disabled: true,
+        },
         {
           icon: Scale,
           name: 'Saldo de clientes',
           path: '/sales/clients',
+          disabled: true,
         },
       ],
     },
@@ -60,6 +82,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
       icon: ShoppingBag,
       name: 'Compras',
       path: '/purchases',
+      disabled: true,
       subitems: [
         {
           icon: FileInput,
@@ -87,6 +110,7 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
       icon: BookUser,
       name: 'Clientes',
       path: '/clients',
+      disabled: true,
     },
     {
       icon: ChartSpline,
@@ -123,7 +147,10 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
                     asChild
-                    className="h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]"
+                    className={cn(
+                      'h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]',
+                      subitem.disabled ? 'cursor-not-allowed' : null,
+                    )}
                   >
                     <Link
                       to={subitem.path}

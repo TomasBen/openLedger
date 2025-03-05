@@ -48,9 +48,8 @@ export interface Sale {
   recipient_name: string;
   exchange_rate: number;
   currency: string;
-  net_levied_import: number;
-  net_exempt_import: number;
-  exempt_op_tax: number;
+  net_levied_amount: number;
+  net_exempt_amount: number;
   other_taxes: number;
   vat: number;
   total_taxes: number;

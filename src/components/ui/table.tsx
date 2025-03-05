@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { useProductTableStore } from '@/stores/tablesStore';
+import { useProductsStore } from '@/stores/tablesStore';
 import { ActionButton } from '@/types/components';
 import { Button } from './button';
 import { createPortal } from 'react-dom';
@@ -13,7 +13,7 @@ function TableActionBar({
   actionButtons: ActionButton[];
   container?: Element | DocumentFragment;
 }) {
-  const { rowSelection } = useProductTableStore();
+  const { rowSelection } = useProductsStore();
   const selectedRows = Object.entries(rowSelection).filter(
     ([_, value]) => value === true,
   ).length;

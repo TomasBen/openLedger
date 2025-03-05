@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useProductTableStore } from '@/stores/tablesStore';
+import { useProductsStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -60,7 +60,7 @@ function Documents() {
 }
 
 function SearchBar() {
-  const { tableInstance } = useProductTableStore();
+  const { tableInstance } = useProductsStore();
 
   const inputRef = useRef<HTMLInputElement>(null);
 

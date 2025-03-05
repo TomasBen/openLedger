@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, memo, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
-import { useProductTableStore } from '@/stores/tablesStore';
+import { useProductsStore } from '@/stores/tablesStore';
 import { toast } from 'sonner';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -29,6 +29,7 @@ import {
 
 import { ActionButton, Product } from '@/types/components';
 import { FileDown, Trash2 } from 'lucide-react';
+import { shallow } from '@tanstack/react-router';
 
 const TableHeaders = memo(function TableHeaders({
   headers,
@@ -57,16 +58,9 @@ const TableHeaders = memo(function TableHeaders({
 
 export default function InventoryTable() {
   const [data, setData] = useState<Product[]>([]);
-  const [height, setHeight] = useState(0);
   const { rowSelection, setRowSelection, setTableInstance } =
-    useProductTableStore();
-  const { accountant } = useAccountantStore();
-
-  useEffect(() => {
-    if (parentRef.current) {
-      setHeight(parentRef.current.clientHeight);
-    }
-  }, []);
+    useProductsStore();
+  const accountant = useAccountantStore((state) => state.accountant);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
@@ -85,12 +79,9 @@ export default function InventoryTable() {
           />
         ),
         cell: ({ row }) => {
-          const handleCheckedChange = useCallback(
-            (value: boolean) => {
-              row.toggleSelected(!!value);
-            },
-            [row],
-          );
+          const handleCheckedChange = (value: boolean) => {
+            row.toggleSelected(!!value);
+          };
 
           return (
             <Checkbox
@@ -334,7 +325,7 @@ export default function InventoryTable() {
                   );
                 })
               ) : (
-                <FallbackRow colspan={columns.length} height={height} />
+                <FallbackRow colspan={columns.length} />
               )}
             </TableBody>
           </Table>
@@ -346,20 +337,13 @@ export default function InventoryTable() {
   );
 }
 
-const FallbackRow = ({
-  colspan,
-  height,
-}: {
-  colspan: number;
-  height: number | undefined;
-}) => {
+const FallbackRow = ({ colspan }: { colspan: number }) => {
   return (
     <TableRow key="no-data-row" className="hover:bg-transparent">
       <TableCell
         key="no-data-cell"
         colSpan={colspan}
-        height={height}
-        className="min-h-0 text-xl text-center"
+        className="h-96 text-xl text-center"
       >
         <span>No results.</span>
       </TableCell>

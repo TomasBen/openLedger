@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { RowSelectionState, Table } from '@tanstack/react-table';
-import { Product } from '@/types/components';
+import { Product, Sale } from '@/types/components';
 
 interface TableStore<T> {
   tableInstance: Table<T> | undefined;
@@ -11,13 +11,9 @@ interface TableStore<T> {
       | RowSelectionState
       | ((old: RowSelectionState) => RowSelectionState),
   ) => void;
-  // columnVisibility: VisibilityState;
-  // setColumnVisibility: (
-  //   updater: VisibilityState | ((old: VisibilityState) => VisibilityState),
-  // ) => void;
 }
 
-export const useProductTableStore = create<TableStore<Product>>((set) => ({
+export const useProductsStore = create<TableStore<Product>>((set) => ({
   tableInstance: undefined,
   setTableInstance: (table: Table<Product>) => {
     set(() => ({ tableInstance: table }));
@@ -29,13 +25,18 @@ export const useProductTableStore = create<TableStore<Product>>((set) => ({
         typeof updater === 'function' ? updater(state.rowSelection) : updater,
     }));
   },
-  // columnVisibility: {},
-  // setColumnVisibility: (updater) => {
-  //   set((state) => ({
-  //     columnVisibility:
-  //       typeof updater === 'function'
-  //         ? updater(state.columnVisibility)
-  //         : updater,
-  //   }));
-  // },
+}));
+
+export const useSalesStore = create<TableStore<Sale>>((set) => ({
+  tableInstance: undefined,
+  setTableInstance: (table: Table<Sale>) => {
+    set(() => ({ tableInstance: table }));
+  },
+  rowSelection: {},
+  setRowSelection: (updater) => {
+    set((state) => ({
+      rowSelection:
+        typeof updater === 'function' ? updater(state.rowSelection) : updater,
+    }));
+  },
 }));

@@ -55,7 +55,7 @@ const TableHeaders = memo(function TableHeaders({
   );
 });
 
-export default function InventoryTable() {
+export default function SalesTable() {
   const [data, setData] = useState<Product[]>([]);
   const [height, setHeight] = useState(0);
   const { rowSelection, setRowSelection, setTableInstance } =
@@ -117,7 +117,7 @@ export default function InventoryTable() {
           </Button>
         ),
         cell: ({ row }) => (
-          <span className="capitalize truncate">{row.getValue('code')}</span>
+          <div className="capitalize truncate">{row.getValue('code')}</div>
         ),
         sortingFn: 'alphanumeric',
         enableHiding: false,
@@ -140,9 +140,9 @@ export default function InventoryTable() {
         accessorKey: 'description',
         header: 'Description',
         cell: ({ row }) => (
-          <span className="text-muted-foreground truncate">
+          <div className="text-muted-foreground truncate">
             {row.getValue('description')}
-          </span>
+          </div>
         ),
         sortingFn: 'text',
         enableSorting: false,
@@ -161,7 +161,7 @@ export default function InventoryTable() {
           </Button>
         ),
         cell: ({ row }) => (
-          <span className="text-center truncate">{row.getValue('amount')}</span>
+          <div className="text-center truncate">{row.getValue('amount')}</div>
         ),
         sortingFn: 'basic',
       },
@@ -170,7 +170,7 @@ export default function InventoryTable() {
         accessorKey: 'measure_unit',
         header: () => <div className="text-center">Unit</div>,
         cell: ({ row }) => (
-          <span className="text-center">{row.getValue('measure unit')}</span>
+          <div className="text-center">{row.getValue('measure unit')}</div>
         ),
         sortingFn: 'text',
       },
@@ -179,7 +179,7 @@ export default function InventoryTable() {
         accessorKey: 'currency',
         header: () => <div className="text-center">Currency</div>,
         cell: ({ row }) => (
-          <span className="text-center">{row.getValue('currency')}</span>
+          <div className="text-center">{row.getValue('currency')}</div>
         ),
         sortingFn: 'text',
       },
@@ -207,7 +207,7 @@ export default function InventoryTable() {
             currency: currency,
           }).format(price);
 
-          return <span className="text-right">{formatted}</span>;
+          return <div className="text-right">{formatted}</div>;
         },
         sortingFn: 'basic',
         enableGlobalFilter: false,
@@ -223,24 +223,24 @@ export default function InventoryTable() {
     [],
   );
 
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const results: Product[] = await invoke('get_products', {
-          entity: accountant?.currently_representing?.name,
-        });
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     try {
+  //       const results: Product[] = await invoke('get_products', {
+  //         entity: accountant?.currently_representing?.name,
+  //       });
 
-        setData(results);
-        setTableInstance(table);
-      } catch (error) {
-        toast.error('Error', {
-          description: `${error}`,
-        });
-      }
-    };
+  //       setData(results);
+  //       setTableInstance(table);
+  //     } catch (error) {
+  //       toast.error('Error', {
+  //         description: `${error}`,
+  //       });
+  //     }
+  //   };
 
-    getProducts();
-  }, [accountant?.currently_representing]);
+  //   getProducts();
+  // }, [accountant?.currently_representing]);
 
   const table = useReactTable({
     columns,

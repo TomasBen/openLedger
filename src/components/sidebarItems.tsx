@@ -110,7 +110,6 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
       icon: BookUser,
       name: 'Clientes',
       path: '/clients',
-      disabled: true,
     },
     {
       icon: ChartSpline,

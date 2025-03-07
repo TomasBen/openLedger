@@ -3,7 +3,7 @@ import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { Titlebar } from '@/components/titlebar.tsx';
 import { EntitySelector } from '@/components/entitySelector.tsx';
 import { AccountSelector } from '@/components/accountSelector.tsx';
-import { SidebarMenuItems } from '@/components/sidebarMenuItems';
+import { SidebarMenuItems } from '@/components/sidebarItems';
 import {
   Sidebar,
   SidebarContent,

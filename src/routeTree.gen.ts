@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LayoutClientsRouteImport } from './routes/_layout/clients/route'
 import { Route as LayoutSalesDocumentsImport } from './routes/_layout/sales/documents'
 import { Route as LayoutProductsInventoryImport } from './routes/_layout/products/inventory'
 import { Route as LayoutappSettingsImport } from './routes/_layout/(app)/settings'
@@ -27,6 +28,12 @@ const LayoutRouteRoute = LayoutRouteImport.update({
 const LayoutIndexRoute = LayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const LayoutClientsRouteRoute = LayoutClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
 
@@ -58,6 +65,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRoute
+    }
+    '/_layout/clients': {
+      id: '/_layout/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof LayoutClientsRouteImport
+      parentRoute: typeof LayoutRouteImport
     }
     '/_layout/': {
       id: '/_layout/'
@@ -93,6 +107,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteRouteChildren {
+  LayoutClientsRouteRoute: typeof LayoutClientsRouteRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutappSettingsRoute: typeof LayoutappSettingsRoute
   LayoutProductsInventoryRoute: typeof LayoutProductsInventoryRoute
@@ -100,6 +115,7 @@ interface LayoutRouteRouteChildren {
 }
 
 const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
+  LayoutClientsRouteRoute: LayoutClientsRouteRoute,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutappSettingsRoute: LayoutappSettingsRoute,
   LayoutProductsInventoryRoute: LayoutProductsInventoryRoute,
@@ -112,6 +128,7 @@ const LayoutRouteRouteWithChildren = LayoutRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteRouteWithChildren
+  '/clients': typeof LayoutClientsRouteRoute
   '/': typeof LayoutIndexRoute
   '/settings': typeof LayoutappSettingsRoute
   '/products/inventory': typeof LayoutProductsInventoryRoute
@@ -119,6 +136,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/clients': typeof LayoutClientsRouteRoute
   '/': typeof LayoutIndexRoute
   '/settings': typeof LayoutappSettingsRoute
   '/products/inventory': typeof LayoutProductsInventoryRoute
@@ -128,6 +146,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteRouteWithChildren
+  '/_layout/clients': typeof LayoutClientsRouteRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/(app)/settings': typeof LayoutappSettingsRoute
   '/_layout/products/inventory': typeof LayoutProductsInventoryRoute
@@ -136,12 +155,24 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/settings' | '/products/inventory' | '/sales/documents'
+  fullPaths:
+    | ''
+    | '/clients'
+    | '/'
+    | '/settings'
+    | '/products/inventory'
+    | '/sales/documents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/products/inventory' | '/sales/documents'
+  to:
+    | '/clients'
+    | '/'
+    | '/settings'
+    | '/products/inventory'
+    | '/sales/documents'
   id:
     | '__root__'
     | '/_layout'
+    | '/_layout/clients'
     | '/_layout/'
     | '/_layout/(app)/settings'
     | '/_layout/products/inventory'
@@ -173,11 +204,16 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout/route.tsx",
       "children": [
+        "/_layout/clients",
         "/_layout/",
         "/_layout/(app)/settings",
         "/_layout/products/inventory",
         "/_layout/sales/documents"
       ]
+    },
+    "/_layout/clients": {
+      "filePath": "_layout/clients/route.tsx",
+      "parent": "/_layout"
     },
     "/_layout/": {
       "filePath": "_layout/index.tsx",

@@ -83,6 +83,17 @@ pub struct Entity {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct Client {
+    id: u64,
+    name: String,
+    email: String,
+    address: String,
+    tax_category: String,
+    condition: String,
+    entity_name: String,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Product {
     code: String,
     name: Option<String>,
@@ -202,6 +213,32 @@ pub fn get_entity(entity_id: String, accountant: String) -> Result<Entity, Strin
         },
     )
     .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn get_clients(entity: String) -> Result<Vec<Client>, DatabaseError> {
+    let conn = DB.lock().unwrap();
+
+    let mut stmt = conn
+        .prepare("SELECT * FROM clients WHERE associated_entity = ?")
+        .unwrap();
+
+    let products: Result<Vec<Client>, rusqlite::Error> = stmt
+        .query_map([entity], |row| {
+            Ok(Client {
+                id: row.get(0)?,
+                name: row.get(1)?,
+                email: row.get(2)?,
+                address: row.get(3)?,
+                tax_category: row.get(4)?,
+                condition: row.get(5)?,
+                entity_name: row.get(6)?,
+            })
+        })
+        .map_err(|e| DatabaseError::from_sqlite_error(e))?
+        .collect();
+
+    products.map_err(|e| DatabaseError::from_sqlite_error(e))
 }
 
 #[tauri::command]

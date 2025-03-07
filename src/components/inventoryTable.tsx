@@ -226,7 +226,6 @@ export default function InventoryTable() {
           entity: accountant?.currently_representing?.name,
         });
 
-        console.log(results);
         setData(results);
         setTableInstance(table);
       } catch (error) {

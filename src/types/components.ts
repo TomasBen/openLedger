@@ -37,6 +37,16 @@ export interface ActionButton {
 
 export type InventoryView = 'cards' | 'table';
 
+export interface Client {
+  id: string | number;
+  name: string;
+  email: string | undefined;
+  address: string | undefined;
+  tax_category: string | undefined;
+  condition: string | undefined;
+  created_at: Date;
+}
+
 export interface Sale {
   date: Date;
   doc_id: string;

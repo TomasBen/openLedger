@@ -46,7 +46,6 @@ export function NewProductDialog() {
   });
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
-    console.log(values);
     await invoke('create_product', {
       product: {
         ...values,

@@ -6,8 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -17,6 +20,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { InventoryView } from '@/types/components';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { EllipsisVertical } from 'lucide-react';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 const InventoryCards = lazy(() => import('@/components/inventoryCards'));
@@ -32,11 +36,9 @@ function Inventory() {
   const [view, setView] = useState<InventoryView>(
     () => (localStorage.getItem('inventory.View') as InventoryView) ?? 'cards',
   );
-  console.log(`current value: ${view}`);
 
   const handleViewChange = (value: InventoryView) => {
     if (!value) throw new Error('no value passed to handleViewChange');
-    console.log(`changing from: ${view} to: ${value}`);
     setView(value);
     localStorage.setItem('inventory.View', value);
   };
@@ -50,7 +52,9 @@ function Inventory() {
           <NewProductDialog />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary">Acciones</Button>
+              <Button variant="secondary">
+                <EllipsisVertical />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
               <DropdownMenuItem>
@@ -60,24 +64,31 @@ function Inventory() {
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                Importar desde XLS o XLSX
+                Importar desde XLS
                 <DropdownMenuShortcut className="ml-5">⌘B</DropdownMenuShortcut>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Change view</DropdownMenuLabel>
+              <ToggleGroup
+                type="single"
+                orientation="vertical"
+                value={view}
+                onValueChange={handleViewChange}
+                className="w-full"
+              >
+                <ToggleGroupItem value="cards" aria-label="Toggle card view">
+                  Box view
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="table"
+                  aria-label="Toggle table view"
+                  className="ml-2"
+                >
+                  Table view
+                </ToggleGroupItem>
+              </ToggleGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          <ToggleGroup
-            type="single"
-            variant="outline"
-            value={view}
-            onValueChange={handleViewChange}
-          >
-            <ToggleGroupItem value="cards" aria-label="Toggle card view">
-              Cards
-            </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="Toggle table view">
-              Table
-            </ToggleGroupItem>
-          </ToggleGroup>
         </div>
       </div>
       <Separator className="my-2" />

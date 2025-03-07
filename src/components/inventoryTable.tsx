@@ -127,11 +127,14 @@ export default function InventoryTable() {
         id: 'description',
         accessorKey: 'description',
         header: 'Description',
-        cell: ({ row }) => (
-          <span className="text-muted-foreground truncate">
-            {row.getValue('description')}
-          </span>
-        ),
+        cell: ({ row }) => {
+          let description: string = row.getValue('description') ?? '-';
+          return (
+            <span className="text-muted-foreground truncate">
+              {description}
+            </span>
+          );
+        },
         sortingFn: 'text',
         enableSorting: false,
       },
@@ -148,9 +151,10 @@ export default function InventoryTable() {
             <ArrowUpDown />
           </Button>
         ),
-        cell: ({ row }) => (
-          <span className="text-center truncate">{row.getValue('amount')}</span>
-        ),
+        cell: ({ row }) => {
+          let value: number = row.getValue('amount') ?? 0;
+          return <span className="text-center truncate">{value}</span>;
+        },
         sortingFn: 'basic',
       },
       {
@@ -204,6 +208,10 @@ export default function InventoryTable() {
         id: 'storage unit',
         accessorKey: 'storage_unit',
         header: 'Storage',
+        cell: ({ row }) => {
+          let storage: string = row.getValue('storage unit') ?? '-';
+          return storage;
+        },
         enableGlobalFilter: false,
         enableSorting: false,
       },
@@ -218,6 +226,7 @@ export default function InventoryTable() {
           entity: accountant?.currently_representing?.name,
         });
 
+        console.log(results);
         setData(results);
         setTableInstance(table);
       } catch (error) {

@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/card';
 import { MapPin } from 'lucide-react';
 import { Product } from '@/types/components';
-import { ScrollArea } from './ui/scroll-area';
 
 export default function InventoryCard() {
   const [data, setData] = useState<Product[]>([]);
@@ -38,7 +37,7 @@ export default function InventoryCard() {
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-4 overflow-y-scroll">
+      <div className="grid grid-cols-4 gap-5 overflow-y-scroll">
         {data.map((item) => (
           <Card key={item.code} className="w-full">
             <CardHeader>

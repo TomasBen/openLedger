@@ -3,12 +3,25 @@ import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { createFileRoute } from '@tanstack/react-router';
-import { Badge, Users, Building2, User } from 'lucide-react';
-import { CardContent, CardFooter } from '@/components/ui/card';
+import {
+  Users,
+  Building2,
+  User,
+  EllipsisVertical,
+  Trash,
+  Pen,
+} from 'lucide-react';
 
 import { Client } from '@/types/components';
 import { Avatar } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const Route = createFileRoute('/_layout/clients')({
   component: ClientsPage,
@@ -39,8 +52,8 @@ function ClientsPage() {
   }, [accountant?.currently_representing?.name]);
 
   return (
-    <ScrollArea type="scroll" className="w-full p-2">
-      <div className="grid grid-cols-4 gap-6 overflow-y-scroll">
+    <ScrollArea type="scroll" className="w-full">
+      <div className="grid grid-cols-4 gap-5 p-5">
         {clients.map((client) => (
           <ClientCard client={client} />
         ))}
@@ -51,10 +64,10 @@ function ClientsPage() {
 
 function ClientCard({ client }: { client: Client }) {
   return (
-    <div className="shadow-md rounded-lg">
-      <div className="flex items-center justify-between bg-primary p-4 text-white">
-        <div className="flex items-center gap-2">
-          <Avatar className="rounded-full bg-black p-2">
+    <div className="flex flex-col border border-border rounded-md shadow-md">
+      <div className="flex justify-between p-3 bg-primary rounded-t-md">
+        <div className="flex items-center gap-4 truncate">
+          <Avatar className="bg-[var(--color-inverse-primary)]/25 text-white p-2 rounded-full">
             {client.category === 'corporate' ? (
               <Building2 />
             ) : client.category === 'unipersonal' ? (
@@ -63,15 +76,36 @@ function ClientCard({ client }: { client: Client }) {
               <Users />
             )}
           </Avatar>
-          <span className="font-medium">{client.name}</span>
+          <h2 className="text-xl font-medium leading-tight text-[var(--color-on-primary)] truncate">
+            {client.name}
+          </h2>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              className="rounded-full text-[var(--color-on-primary)] hover:bg-[var(--color-inverse-primary)]/25 hover:text-white transition-colors"
+            >
+              <EllipsisVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Pen /> Edit client
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash />
+              Delete client
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      <CardContent className="p-6">
+      <div className="px-6 py-4">
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-navy-900">ID: {client.id}</h3>
+          <h3 className="text-xl font-bold text-primary">ID: {client.id}</h3>
           <p className="text-sm text-muted-foreground">
-            {client.industry ?? 'industry not specified'}
+            {client.industry ?? ''}
           </p>
         </div>
 
@@ -80,33 +114,33 @@ function ClientCard({ client }: { client: Client }) {
             <span className="min-w-24 text-sm font-medium text-gray-500">
               Email:
             </span>
-            <span className="text-sm">{client.email}</span>
+            <span className="text-sm">{client.email ?? 'not provided'}</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="min-w-24 text-sm font-medium text-gray-500">
               Phone:
             </span>
-            <span className="text-sm">03624-256728</span>
+            <span className="text-sm">{client.phone ?? 'not provided'}</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="min-w-24 text-sm font-medium text-gray-500">
               Address:
             </span>
-            <span className="text-sm">{client.address}</span>
+            <span className="text-sm">{client.address ?? 'not provided'}</span>
           </div>
         </div>
-      </CardContent>
+      </div>
 
-      <CardFooter className="flex border-t border-gray-100 bg-gray-300 px-6 py-3">
-        <p className="text-xs text-gray-500">
-          Client since{' '}
+      <div className="flex items-center p-2 bg-[var(--color-surface)] border-t border-border rounded-b-md">
+        <span className="text-muted-foreground font-extralight text-sm">
+          since:{' '}
           {new Intl.DateTimeFormat('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
-          }).format(Date.now())}
-        </p>
-      </CardFooter>
+          }).format(client.created_at)}
+        </span>
+      </div>
     </div>
   );
 }

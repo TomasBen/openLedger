@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -18,9 +17,12 @@ import { useProductsStore } from '@/stores/tablesStore';
 import useDebounce from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { InventoryView } from '@/types/components';
+import { InventoryView, Product } from '@/types/components';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { EllipsisVertical } from 'lucide-react';
+import { invoke } from '@tauri-apps/api/core';
+import { useAccountantStore } from '@/stores/accountantStore';
+import { toast } from 'sonner';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 const InventoryCards = lazy(() => import('@/components/inventoryCards'));
@@ -33,21 +35,41 @@ export const Route = createFileRoute('/_layout/products/inventory')({
 });
 
 function Inventory() {
+  const [data, setData] = useState<Product[]>([]);
   const [view, setView] = useState<InventoryView>(
-    () => (localStorage.getItem('inventory.View') as InventoryView) ?? 'cards',
+    () => (localStorage.getItem('inventory.view') as InventoryView) ?? 'table',
   );
+  const accountant = useAccountantStore((state) => state.accountant);
 
   const handleViewChange = (value: InventoryView) => {
     if (!value) throw new Error('no value passed to handleViewChange');
     setView(value);
-    localStorage.setItem('inventory.View', value);
+    localStorage.setItem('inventory.view', value);
   };
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const results: Product[] = await invoke('get_products', {
+          entity: accountant?.currently_representing?.name,
+        });
+
+        setData(results);
+      } catch (error) {
+        toast.error('Error', {
+          description: `${error}`,
+        });
+      }
+    };
+
+    getProducts();
+  }, [accountant?.currently_representing]);
 
   return (
     <div className="w-full h-auto p-4 flex flex-col gap-2">
       <div className="flex flex-none">
         <div className="w-full flex items-center gap-2">
-          <SearchBar />
+          <SearchBar currView={view} />
           <Separator orientation="vertical" />
           <NewProductDialog />
           <DropdownMenu>
@@ -77,7 +99,7 @@ function Inventory() {
                 className="w-full"
               >
                 <ToggleGroupItem value="cards" aria-label="Toggle card view">
-                  Box view
+                  Card view
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="table"
@@ -93,15 +115,18 @@ function Inventory() {
       </div>
       <Separator className="my-2" />
       <Suspense fallback={<Skeleton className="h-full" />}>
-        {view === 'cards' ? <InventoryCards /> : <InventoryTable />}
+        {view === 'cards' ? (
+          <InventoryCards data={data} />
+        ) : (
+          <InventoryTable data={data} />
+        )}
       </Suspense>
     </div>
   );
 }
 
-function SearchBar() {
+function SearchBar({ currView }: { currView: InventoryView }) {
   const table = useProductsStore((state) => state.tableInstance);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -128,6 +153,7 @@ function SearchBar() {
       ref={inputRef}
       placeholder="search by code, name, price, amount, measure unit, currency..."
       className="flex-1"
+      disabled={currView === 'cards'}
       onChange={(e) => search(e.target.value)}
     />
   );

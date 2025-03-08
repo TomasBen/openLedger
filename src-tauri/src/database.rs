@@ -86,10 +86,11 @@ pub struct Entity {
 pub struct Client {
     id: u64,
     name: String,
-    email: String,
-    address: String,
-    tax_category: String,
-    condition: String,
+    email: Option<String>,
+    address: Option<String>,
+    industry: Option<String>,
+    category: String,
+    condition: Option<String>,
     entity_name: String,
 }
 
@@ -230,9 +231,10 @@ pub fn get_clients(entity: String) -> Result<Vec<Client>, DatabaseError> {
                 name: row.get(1)?,
                 email: row.get(2)?,
                 address: row.get(3)?,
-                tax_category: row.get(4)?,
-                condition: row.get(5)?,
-                entity_name: row.get(6)?,
+                industry: row.get(4)?,
+                category: row.get(5)?,
+                condition: row.get(6)?,
+                entity_name: row.get(7)?,
             })
         })
         .map_err(|e| DatabaseError::from_sqlite_error(e))?

@@ -42,7 +42,8 @@ export interface Client {
   name: string;
   email: string | undefined;
   address: string | undefined;
-  tax_category: string | undefined;
+  industry: string | null;
+  category: 'corporate' | 'small business' | 'unipersonal';
   condition: string | undefined;
   created_at: Date;
 }

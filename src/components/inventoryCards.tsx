@@ -1,41 +1,7 @@
-import { useEffect, useState } from 'react';
-import { invoke } from '@tauri-apps/api/core';
-import { useAccountantStore } from '@/stores/accountantStore';
-import { toast } from 'sonner';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Clock, DollarSign, MapPin, Package, Tag } from 'lucide-react';
+import { MapPin, Package, Tag } from 'lucide-react';
 import { Product } from '@/types/components';
-import { ScrollArea } from './ui/scroll-area';
 
-export default function InventoryCard() {
-  const [data, setData] = useState<Product[]>([]);
-  const { accountant } = useAccountantStore();
-
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const results: Product[] = await invoke('get_products', {
-          entity: accountant?.currently_representing?.name,
-        });
-
-        setData(results);
-      } catch (error) {
-        toast.error('Error', {
-          description: `${error}`,
-        });
-      }
-    };
-
-    getProducts();
-  }, [accountant?.currently_representing]);
-
+export default function InventoryCard({ data }: { data: Product[] }) {
   return (
     <>
       <div className="grid grid-cols-4 gap-5 overflow-y-scroll">
@@ -43,7 +9,7 @@ export default function InventoryCard() {
           const formatted = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: item.currency,
-          }).format(item.price);
+          }).format(item.price ?? 0);
 
           return (
             <div
@@ -51,7 +17,7 @@ export default function InventoryCard() {
                 'flex flex-col rounded-xl border border-border shadow-sm'
               }
             >
-              <div className="p-5 border-b border-border bg-secondary/30">
+              <div className="p-5 border-b border-border bg-secondary/50">
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-1">
                     <h3 className="font-medium text-lg leading-tight line-clamp-1 group-hover:text-primary transition-colors duration-200">
@@ -74,7 +40,7 @@ export default function InventoryCard() {
                     <div className="flex items-center text-sm font-medium">
                       <Package className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
                       <span>
-                        {item.amount ?? 0} {item.measure_unit}
+                        {item.amount} {item.measure_unit}
                       </span>
                     </div>
                   </div>
@@ -101,13 +67,6 @@ export default function InventoryCard() {
                       </span>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="flex h-full p-4 border-t border-border text-xs text-muted-foreground bg-secondary/30">
-                <div className="flex items-center">
-                  <Clock className="mr-1.5 h-3 w-3" />
-                  <span>Last updated {item.description ?? 'never'}</span>
                 </div>
               </div>
             </div>

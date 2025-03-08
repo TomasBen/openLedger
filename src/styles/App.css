@@ -80,6 +80,7 @@ main {
 
 html,
 body {
+  font-family: 'Geist Mono', monospace;
   background-color: var(--color-surface-dim);
   overflow: hidden;
 }

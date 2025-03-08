@@ -1,4 +1,4 @@
-import { useEffect, useState, memo, useRef, useMemo } from 'react';
+import { useEffect, memo, useRef, useMemo } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { useProductsStore } from '@/stores/tablesStore';
@@ -53,11 +53,14 @@ const TableHeaders = memo(function TableHeaders({
   );
 });
 
-export default function InventoryTable() {
-  const [data, setData] = useState<Product[]>([]);
+export default function InventoryTable({ data }: { data: Product[] }) {
   const { rowSelection, setRowSelection, setTableInstance } =
     useProductsStore();
   const accountant = useAccountantStore((state) => state.accountant);
+
+  useEffect(() => {
+    setTableInstance(table);
+  }, [data]);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
@@ -218,25 +221,6 @@ export default function InventoryTable() {
     ],
     [],
   );
-
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const results: Product[] = await invoke('get_products', {
-          entity: accountant?.currently_representing?.name,
-        });
-
-        setData(results);
-        setTableInstance(table);
-      } catch (error) {
-        toast.error('Error', {
-          description: `${error}`,
-        });
-      }
-    };
-
-    getProducts();
-  }, [accountant?.currently_representing]);
 
   const table = useReactTable({
     columns,

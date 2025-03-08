@@ -36,10 +36,7 @@ export function Titlebar() {
       onMouseDown={(e) => handleMousedown(e)}
     >
       <SidebarTrigger />
-      <Separator
-        orientation="vertical"
-        className="bg-[var(--color-outline)] mx-2"
-      />
+      <Separator orientation="vertical" className="bg-gray-400 mx-2" />
       <TitlebarBreadcrumb />
       <WindowActions />
     </header>

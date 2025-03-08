@@ -1,8 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
+import useDebounce from '@/hooks/useDebounce';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { createFileRoute } from '@tanstack/react-router';
+import { Avatar } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Users,
   Building2,
@@ -10,18 +20,14 @@ import {
   EllipsisVertical,
   Trash,
   Pen,
+  Plus,
+  Filter,
 } from 'lucide-react';
 
 import { Client } from '@/types/components';
-import { Avatar } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
+const SEARCH_SHORTCUT = 'k';
+const SEARCH_DEBOUNCE = 200;
 
 export const Route = createFileRoute('/_layout/clients')({
   component: ClientsPage,
@@ -52,13 +58,74 @@ function ClientsPage() {
   }, [accountant?.currently_representing?.name]);
 
   return (
-    <ScrollArea type="scroll" className="w-full">
-      <div className="grid grid-cols-4 gap-5 p-5">
+    <div className="flex flex-col gap-5 w-full p-3">
+      <div className="flex items-center gap-4 p-2">
+        <SearchBar />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="secondary">
+              <Filter />
+              Filter by category
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Building2 />
+              corporate
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Users /> small business
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <User /> unipersonal
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="grid grid-cols-4 gap-5 overflow-y-scroll px-2">
+        <div className="flex flex-col justify-center items-center gap-4 bg-secondary/15 border border-dashed border-primary/50 rounded-md shadow-md transition-colors hover:bg-secondary/30 hover:border-primary">
+          <span className="rounded-full bg-secondary p-4">
+            <Plus size={25} />
+          </span>
+          <span className="text-2xl font-medium">Add new client</span>
+          <span className="font-medium text-muted-foreground">
+            create a new client entry
+          </span>
+        </div>
         {clients.map((client) => (
           <ClientCard client={client} />
         ))}
       </div>
-    </ScrollArea>
+    </div>
+  );
+}
+
+function SearchBar() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === SEARCH_SHORTCUT && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const search = useDebounce((value: string) => {
+    console.log(value);
+  }, SEARCH_DEBOUNCE);
+
+  return (
+    <Input
+      ref={inputRef}
+      placeholder="search by name or ID"
+      className="flex-1"
+      onChange={(e) => search(e.target.value)}
+    />
   );
 }
 
@@ -67,7 +134,7 @@ function ClientCard({ client }: { client: Client }) {
     <div className="flex flex-col border border-border rounded-md shadow-md">
       <div className="flex justify-between p-3 bg-primary rounded-t-md">
         <div className="flex items-center gap-4 truncate">
-          <Avatar className="bg-[var(--color-inverse-primary)]/25 text-white p-2 rounded-full">
+          <Avatar className="bg-primary-inverse/30 text-white p-2 rounded-full">
             {client.category === 'corporate' ? (
               <Building2 />
             ) : client.category === 'unipersonal' ? (
@@ -76,7 +143,7 @@ function ClientCard({ client }: { client: Client }) {
               <Users />
             )}
           </Avatar>
-          <h2 className="text-xl font-medium leading-tight text-[var(--color-on-primary)] truncate">
+          <h2 className="text-xl font-medium leading-tight text-primary-foreground truncate">
             {client.name}
           </h2>
         </div>
@@ -84,7 +151,7 @@ function ClientCard({ client }: { client: Client }) {
           <DropdownMenuTrigger>
             <Button
               variant="ghost"
-              className="rounded-full text-[var(--color-on-primary)] hover:bg-[var(--color-inverse-primary)]/25 hover:text-white transition-colors"
+              className="rounded-full text-primary-foreground hover:bg-primary-inverse/30 hover:text-white transition-colors"
             >
               <EllipsisVertical />
             </Button>

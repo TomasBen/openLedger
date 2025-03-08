@@ -148,7 +148,6 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                     asChild
                     className={cn(
                       'h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]',
-                      subitem.disabled ? 'cursor-not-allowed' : null,
                     )}
                   >
                     <Link

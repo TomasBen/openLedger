@@ -38,7 +38,16 @@ export function Titlebar() {
       <SidebarTrigger />
       <Separator orientation="vertical" className="bg-gray-400 mx-2" />
       <TitlebarBreadcrumb />
-      <WindowActions />
+      <Button
+        size="icon"
+        variant="ghost"
+        className="size-6 rounded-full ml-auto transition-colors duration-100 hover:bg-destructive hover:text-destructive-foreground"
+        onClick={(e) => {
+          e.preventDefault(), window.close();
+        }}
+      >
+        <X />
+      </Button>
     </header>
   );
 }

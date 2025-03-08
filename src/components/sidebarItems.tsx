@@ -27,7 +27,6 @@ import {
   Scale,
 } from 'lucide-react';
 import { SidebarGroup } from '@/types/components';
-import { cn } from '@/lib/utils';
 
 export const SidebarMenuItems = memo(function SidebarMenuItems() {
   const SIDEBAR_ITEMS: SidebarGroup[] = [
@@ -146,9 +145,9 @@ export const SidebarMenuItems = memo(function SidebarMenuItems() {
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
                     asChild
-                    className={cn(
-                      'h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]',
-                    )}
+                    className={
+                      'h-fit has-[.active]:bg-[var(--color-primary-container)] has-[.active]:text-[var(--color-on-primary-container)]'
+                    }
                   >
                     <Link
                       to={subitem.path}

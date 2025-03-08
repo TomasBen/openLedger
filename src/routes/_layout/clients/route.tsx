@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
 import useDebounce from '@/hooks/useDebounce';
@@ -35,6 +35,7 @@ export const Route = createFileRoute('/_layout/clients')({
 
 function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
+  const [filteredCliets, setFilteredClients] = useState<Client[] | null>(null);
   const accountant = useAccountantStore((state) => state.accountant);
 
   useEffect(() => {
@@ -57,26 +58,30 @@ function ClientsPage() {
     getClients();
   }, [accountant?.currently_representing?.name]);
 
+  const handleFilter = (filter: string) => {
+    setFilteredClients(clients.filter((client) => client.category === filter));
+  };
+
   return (
     <div className="flex flex-col gap-5 w-full p-3">
       <div className="flex items-center gap-4 p-2">
-        <SearchBar />
+        <SearchBar initialData={clients} onSearch={setFilteredClients} />
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="secondary">
               <Filter />
               Filter by category
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleFilter('corporate')}>
               <Building2 />
               corporate
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleFilter('small business')}>
               <Users /> small business
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleFilter('unipersonal')}>
               <User /> unipersonal
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -92,15 +97,25 @@ function ClientsPage() {
             create a new client entry
           </span>
         </div>
-        {clients.map((client) => (
-          <ClientCard client={client} />
-        ))}
+        {filteredCliets
+          ? filteredCliets.map((client) => (
+              <ClientCard client={client} key={client.id} />
+            ))
+          : clients.map((client) => (
+              <ClientCard client={client} key={client.id} />
+            ))}
       </div>
     </div>
   );
 }
 
-function SearchBar() {
+function SearchBar({
+  initialData,
+  onSearch,
+}: {
+  initialData: Client[];
+  onSearch: Dispatch<SetStateAction<Client[] | null>>;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -116,7 +131,15 @@ function SearchBar() {
   }, []);
 
   const search = useDebounce((value: string) => {
-    console.log(value);
+    if (!value) onSearch(null);
+
+    onSearch(
+      initialData.filter(
+        (client) =>
+          client.name.toLowerCase().includes(value.toLowerCase()) ||
+          String(client.id).toLowerCase().includes(value.toLowerCase()),
+      ),
+    );
   }, SEARCH_DEBOUNCE);
 
   return (
@@ -148,7 +171,7 @@ function ClientCard({ client }: { client: Client }) {
           </h2>
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               className="rounded-full text-primary-foreground hover:bg-primary-inverse/30 hover:text-white transition-colors"

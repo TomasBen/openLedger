@@ -1,7 +1,6 @@
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
 import {
+  useContext,
+  createContext,
   ComponentProps,
   Dispatch,
   SetStateAction,
@@ -10,17 +9,70 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { Button } from './button';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/lib/utils';
+import { VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
+import { Button, buttonVariants } from './button';
+
+interface DialogContext {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const DialogContext = createContext<DialogContext>({
+  open: false,
+  setOpen: () => {},
+});
 
 function Dialog({
-  open,
-  onOpenChange,
+  value: externalGetter,
+  onValueChange: externalSetter,
   children,
   ...props
 }: ComponentProps<'div'> & {
-  open: boolean;
-  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  value?: boolean;
+  onValueChange?: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [internalGetter, internalSetter] = useState(false);
+
+  const open = externalGetter !== undefined ? externalGetter : internalGetter;
+  const setOpen = externalSetter || internalSetter;
+
+  return (
+    <DialogContext.Provider value={{ open, setOpen }}>
+      <div {...props}>{children}</div>
+    </DialogContext.Provider>
+  );
+}
+
+function DialogTrigger({
+  variant,
+  size,
+  children,
+  className,
+  ...props
+}: ComponentProps<'button'> & VariantProps<typeof buttonVariants>) {
+  const { setOpen } = useContext(DialogContext);
+
+  return (
+    <Button
+      variant={variant ?? 'default'}
+      size={size ?? 'default'}
+      {...props}
+      onClick={() => setOpen(true)}
+    >
+      {children}
+    </Button>
+  );
+}
+
+function DialogContent({
+  children,
+  className,
+  ...props
+}: ComponentProps<'div'>) {
+  const { open, setOpen } = useContext(DialogContext);
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(open);
   const [isVisible, setIsVisible] = useState(false);
@@ -39,7 +91,7 @@ function Dialog({
     }
   }, [open]);
 
-  useClickOutside(modalContentRef, () => onOpenChange((prev) => !prev));
+  useClickOutside(modalContentRef, () => setOpen(false));
   if (!isLoading) return null;
 
   return createPortal(
@@ -52,7 +104,7 @@ function Dialog({
       <div
         ref={modalContentRef}
         className={cn(
-          'relative max-w-[95%] max-h-[95%] flex gap-4 bg-white p-6 rounded-lg transition-all duration-300',
+          'relative max-w-[95%] max-h-[95%] min-w-[20vw] flex flex-col gap-4 bg-card p-2 rounded-lg transition-all duration-300',
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
         )}
         {...props}
@@ -60,8 +112,8 @@ function Dialog({
         {children}
         <Button
           variant="ghost"
-          className="absolute top-4 right-4 size-6 rounded-full"
-          onClick={() => onOpenChange(false)}
+          className="absolute top-4 right-4 size-6 rounded-sm"
+          onClick={() => setOpen(false)}
         >
           <X />
         </Button>
@@ -72,7 +124,9 @@ function Dialog({
 }
 
 function DialogHeader({ className, ...props }: ComponentProps<'div'>) {
-  return <div className={cn('flex flex-col w-full', className)} {...props} />;
+  return (
+    <div className={cn('flex flex-col w-full p-4', className)} {...props} />
+  );
 }
 
 function DialogTitle({ className, ...props }: ComponentProps<'h2'>) {
@@ -94,27 +148,31 @@ function DialogDescription({ className, ...props }: ComponentProps<'p'>) {
   );
 }
 
-function DialogContent({ className, ...props }: ComponentProps<'div'>) {
+function DialogBody({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn(
-        'flex flex-col flex-1 gap-2 w-full overflow-y-scroll',
-        className,
-      )}
+      className={cn('flex flex-col gap-2 w-full p-4', className)}
       {...props}
     />
   );
 }
 
 function DialogFooter({ className, ...props }: ComponentProps<'div'>) {
-  return <div className={cn('flex w-full', className)} {...props} />;
+  return (
+    <div
+      className={cn('flex justify-end gap-4 w-full p-4', className)}
+      {...props}
+    />
+  );
 }
 
 export {
   Dialog,
+  DialogTrigger,
+  DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogContent,
+  DialogBody,
   DialogFooter,
 };

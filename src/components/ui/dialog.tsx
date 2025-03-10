@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { cn } from '@/lib/utils';
 import { VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
@@ -38,6 +39,17 @@ function Dialog({
 
   const open = externalGetter !== undefined ? externalGetter : internalGetter;
   const setOpen = externalSetter || internalSetter;
+
+  useEffect(() => {
+    const handleKeydown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
+  }, [setOpen]);
 
   return (
     <DialogContext.Provider value={{ open, setOpen }}>

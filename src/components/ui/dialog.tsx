@@ -79,7 +79,7 @@ function DialogContent({
   ...props
 }: ComponentProps<'div'>) {
   const { open, setOpen } = useContext(DialogContext);
-  const modalContentRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(open);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -97,18 +97,18 @@ function DialogContent({
     }
   }, [open]);
 
-  useClickOutside(modalContentRef, () => setOpen(false));
+  useClickOutside(overlayRef, () => setOpen(false));
   if (!isLoading) return null;
 
   return createPortal(
     <div
+      ref={overlayRef}
       className={cn(
         'flex items-center justify-center fixed inset-0 h-screen w-screen bg-black/80 transition-opacity duration-300 z-50',
         isVisible ? 'opacity-100' : 'opacity-0',
       )}
     >
       <div
-        ref={modalContentRef}
         className={cn(
           'relative max-w-[95%] max-h-[95%] min-w-[20vw] flex flex-col gap-4 bg-card p-2 rounded-lg transition-all duration-300',
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',

@@ -1,4 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  lazy,
+  SetStateAction,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
@@ -26,6 +34,7 @@ import {
 } from 'lucide-react';
 
 import { Client } from '@/types/components';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const SEARCH_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
@@ -34,7 +43,10 @@ export const Route = createFileRoute('/_layout/clients')({
   component: ClientsPage,
 });
 
+const NewClientDialog = lazy(() => import('@/components/newClientDialog.tsx'));
+
 function ClientsPage() {
+  const [dialogState, setDialogState] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [filteredCliets, setFilteredClients] = useState<Client[] | null>(null);
   const accountant = useAccountantStore((state) => state.accountant);
@@ -67,6 +79,9 @@ function ClientsPage() {
     <div className="flex flex-col gap-5 w-full p-3">
       <div className="flex items-center gap-4 p-2">
         <SearchBar initialData={clients} onSearch={setFilteredClients} />
+        <Suspense fallback={<Skeleton className="flex flex-1" />}>
+          <NewClientDialog open={dialogState} onOpenChange={setDialogState} />
+        </Suspense>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary">
@@ -89,7 +104,10 @@ function ClientsPage() {
         </DropdownMenu>
       </div>
       <div className="grid grid-cols-4 gap-5 overflow-y-scroll px-2">
-        <div className="flex flex-col justify-center items-center gap-4 bg-secondary/15 border border-dashed border-primary/50 rounded-md shadow-md transition-colors hover:bg-secondary/30 hover:border-primary">
+        <div
+          className="flex flex-col justify-center items-center gap-4 bg-secondary/15 border border-dashed border-primary/50 rounded-md shadow-md aspect-[4/3] transition-colors hover:bg-secondary/30 hover:border-primary"
+          onClick={() => setDialogState(true)}
+        >
           <span className="rounded-full bg-secondary p-4">
             <Plus size={25} />
           </span>

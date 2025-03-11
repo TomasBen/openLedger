@@ -51,6 +51,7 @@ pub fn run() {
             database::get_account,
             database::get_accountant_session,
             database::get_entity,
+            database::create_client,
             database::get_clients,
             database::create_product,
             database::get_products,

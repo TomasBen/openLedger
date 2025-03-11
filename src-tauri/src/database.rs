@@ -82,16 +82,18 @@ pub struct Entity {
     tax_category: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Client {
     id: u64,
     name: String,
     email: Option<String>,
+    phone: Option<u32>,
     address: Option<String>,
     industry: Option<String>,
     category: String,
     condition: Option<String>,
     entity_name: String,
+    created_at: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -217,6 +219,24 @@ pub fn get_entity(entity_id: String, accountant: String) -> Result<Entity, Strin
 }
 
 #[tauri::command]
+pub fn create_client(client: Client) -> Result<usize, DatabaseError> {
+    let conn = DB.lock().unwrap();
+
+    println!("received client: {:?}", client);
+    conn.execute("INSERT INTO clients (id, name, email, phone, address, industry, category, condition, entity_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)", params![
+        &client.id,
+        &client.name,
+        &client.email,
+        &client.phone,
+        &client.address,
+        &client.industry,
+        &client.category,
+        &client.condition,
+        &client.entity_name
+    ]).map_err(|e| { DatabaseError::from_sqlite_error(e)})
+}
+
+#[tauri::command]
 pub fn get_clients(entity: String) -> Result<Vec<Client>, DatabaseError> {
     let conn = DB.lock().unwrap();
 
@@ -230,11 +250,13 @@ pub fn get_clients(entity: String) -> Result<Vec<Client>, DatabaseError> {
                 id: row.get(0)?,
                 name: row.get(1)?,
                 email: row.get(2)?,
-                address: row.get(3)?,
-                industry: row.get(4)?,
-                category: row.get(5)?,
-                condition: row.get(6)?,
-                entity_name: row.get(7)?,
+                phone: row.get(3)?,
+                address: row.get(4)?,
+                industry: row.get(5)?,
+                category: row.get(6)?,
+                condition: row.get(7)?,
+                entity_name: row.get(8)?,
+                created_at: row.get(9)?,
             })
         })
         .map_err(|e| DatabaseError::from_sqlite_error(e))?

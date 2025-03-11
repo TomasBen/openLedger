@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+/* integer values have to accept strings since controlled inputs in the forms fields require a default value, and setting an empty string as the default value for a number input is the "correct" or prefered way of doing it. See:
+shadcn-ui/ui#410  https://github.com/shadcn-ui/ui/issues/410 &
+facebook/react#7779 https://github.com/facebook/react/issues/7779 */
+
 export const factura = z
   .object({
     client: z.string(),
@@ -40,4 +44,17 @@ export const productSchema = z.object({
   price: z.optional(z.number()),
   currency: z.string(), // <- default to 'main currency' per entity profile
   storage_unit: z.optional(z.string()),
+});
+
+export const clientSchema = z.object({
+  id: z.string().min(5),
+  name: z.string(),
+  email: z.optional(z.string()),
+  phone: z.optional(z.string()),
+  address: z.optional(z.string()),
+  industry: z.optional(z.string()),
+  category: z.enum(['corporate', 'small business', 'unipersonal']),
+  condition: z.optional(z.string()),
+  entity_name: z.string(),
+  created_at: z.string(),
 });

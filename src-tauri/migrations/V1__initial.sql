@@ -35,15 +35,6 @@ CREATE TABLE IF NOT EXISTS tax_categories (
     agency TEXT
 );
 
--- INSERT INTO
---     tax_categories (name, division, description, agency)
--- VALUES
---     (
---         'monotributo',
---         'A',
---         'regimen simplificado para pequeñas y medianas empresas',
---         'AFIP'
---     );
 CREATE TABLE IF NOT EXISTS entities (
     id TEXT PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
@@ -71,24 +62,6 @@ CREATE TABLE IF NOT EXISTS products (
     FOREIGN KEY (entity_name) REFERENCES entities (name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- insert into
---     accounts (
---         account_id,
---         name,
---         email,
---         account_type,
---         country,
---         industry
---     )
--- values
---     (
---         'f1cab4d3-8829-4cfd-b1b5-ffdddf034477',
---         'Tomás',
---         'tomasben@mail.com',
---         'independent accountant',
---         'Uruguay',
---         'finnances and bookeeping'
---     );
 CREATE VIEW IF NOT EXISTS accountantSession AS
 SELECT
     entities.id,
@@ -100,15 +73,16 @@ FROM
     accounts
     LEFT JOIN entities ON entities.associated_account = accounts.name;
 
-/*CREATE TABLE IF NOT EXISTS
-clients (
-id INTEGER PRIMARY KEY,
-name TEXT NOT NULL,
-email TEXT,
-address TEXT,
-tax_category TEXT,
-associated_entity TEXT NOT NULL,
-created_at TEXT DEFAULT (datetime('now', 'localtime')),
-FOREIGN KEY (tax_category) REFERENCES tax_categories (name),
-FOREIGN KEY (associated_entity) REFERENCES entities (name) ON DELETE CASCADE
-); */
+CREATE TABLE IF NOT EXISTS clients (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT,
+    phone INTEGER,
+    address TEXT,
+    industry TEXT,
+    category TEXT NOT NULL,
+    condition TEXT,
+    associated_entity TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime ('now', 'localtime')),
+    FOREIGN KEY (associated_entity) REFERENCES entities (name) ON DELETE CASCADE
+);

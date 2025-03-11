@@ -46,7 +46,6 @@ export const Route = createFileRoute('/_layout/clients')({
 const NewClientDialog = lazy(() => import('@/components/newClientDialog.tsx'));
 
 function ClientsPage() {
-  const [dialogState, setDialogState] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [filteredCliets, setFilteredClients] = useState<Client[] | null>(null);
   const accountant = useAccountantStore((state) => state.accountant);
@@ -80,7 +79,7 @@ function ClientsPage() {
       <div className="flex items-center gap-4 p-2">
         <SearchBar initialData={clients} onSearch={setFilteredClients} />
         <Suspense fallback={<Skeleton className="flex flex-1" />}>
-          <NewClientDialog open={dialogState} onOpenChange={setDialogState} />
+          <NewClientDialog />
         </Suspense>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -106,7 +105,17 @@ function ClientsPage() {
       <div className="grid grid-cols-4 gap-5 overflow-y-scroll px-2">
         <div
           className="flex flex-col justify-center items-center gap-4 bg-secondary/15 border border-dashed border-primary/50 rounded-md shadow-md aspect-[4/3] transition-colors hover:bg-secondary/30 hover:border-primary"
-          onClick={() => setDialogState(true)}
+          onClick={() => {
+            const event = new globalThis.KeyboardEvent('keydown', {
+              key: 'n',
+              ctrlKey: true,
+              altKey: false,
+              shiftKey: false,
+              bubbles: true,
+              cancelable: true,
+            });
+            document.dispatchEvent(event);
+          }}
         >
           <span className="rounded-full bg-secondary p-4">
             <Plus size={25} />

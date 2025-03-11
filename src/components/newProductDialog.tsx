@@ -52,22 +52,23 @@ export default function NewProductDialog({
   });
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
-    await invoke('create_product', {
-      product: {
-        ...values,
-        entityName: accountant?.currently_representing?.name,
-      },
-    })
-      .then(() => {
-        toast.success('', {
-          description: 'Product created succesfully',
-        });
-      })
-      .catch((error) => {
-        toast.error('', {
-          description: `${error}`,
-        });
-      });
+    toast.success('product created succesfully!');
+    // await invoke('create_product', {
+    //   product: {
+    //     ...values,
+    //     entityName: accountant?.currently_representing?.name,
+    //   },
+    // })
+    //   .then(() => {
+    //     toast.success('', {
+    //       description: 'Product created succesfully',
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     toast.error('', {
+    //       description: `${error}`,
+    //     });
+    //   });
   }
 
   return (

@@ -40,12 +40,13 @@ export type InventoryView = 'cards' | 'table';
 export interface Client {
   id: string | number;
   name: string;
-  email: string | null;
-  phone: number | string | null;
-  address: string | null;
-  industry: string | null;
+  email: string | undefined;
+  phone: number | undefined;
+  address: string | undefined;
+  industry: string | undefined;
   category: 'corporate' | 'small business' | 'unipersonal';
-  condition: string | null;
+  condition: string | undefined;
+  entity_name: string;
   created_at: Date;
 }
 

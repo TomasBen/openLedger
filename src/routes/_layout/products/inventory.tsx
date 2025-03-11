@@ -24,6 +24,7 @@ import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { toast } from 'sonner';
 
+const NewProductDialog = lazy(() => import('@/components/newProductDialog'));
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 const InventoryCards = lazy(() => import('@/components/inventoryCards'));
 
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/_layout/products/inventory')({
 });
 
 function Inventory() {
+  const [modalState, setModalState] = useState(false);
   const [data, setData] = useState<Product[]>([]);
   const [view, setView] = useState<InventoryView>(
     () => (localStorage.getItem('inventory.view') as InventoryView) ?? 'table',
@@ -71,7 +73,9 @@ function Inventory() {
         <div className="w-full flex items-center gap-2">
           <SearchBar currView={view} />
           <Separator orientation="vertical" />
-          {/* <NewProductDialog /> */}
+          <Suspense fallback={<Skeleton className="flex flex-1" />}>
+            <NewProductDialog open={modalState} onOpenChange={setModalState} />
+          </Suspense>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary">

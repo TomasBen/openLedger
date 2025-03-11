@@ -10,11 +10,11 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { cn } from '@/lib/utils';
 import { VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 import { Button, buttonVariants } from './button';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
 interface DialogContext {
   open: boolean;
@@ -29,27 +29,21 @@ const DialogContext = createContext<DialogContext>({
 function Dialog({
   value: externalGetter,
   onValueChange: externalSetter,
+  closeOnEscape = true,
   children,
   ...props
 }: ComponentProps<'div'> & {
   value?: boolean;
   onValueChange?: Dispatch<SetStateAction<boolean>>;
+  closeOnEscape?: boolean;
 }) {
   const [internalGetter, internalSetter] = useState(false);
 
   const open = externalGetter !== undefined ? externalGetter : internalGetter;
   const setOpen = externalSetter || internalSetter;
 
-  useEffect(() => {
-    const handleKeydown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
-  }, [setOpen]);
+  if (closeOnEscape)
+    useKeyboardShortcut('Escape', false, () => setOpen(false), [setOpen]);
 
   return (
     <DialogContext.Provider value={{ open, setOpen }}>
@@ -163,7 +157,7 @@ function DialogDescription({ className, ...props }: ComponentProps<'p'>) {
 function DialogBody({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn('flex flex-col gap-2 w-full p-4', className)}
+      className={cn('flex flex-col gap-2 w-full px-4', className)}
       {...props}
     />
   );

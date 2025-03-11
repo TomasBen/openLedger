@@ -13,10 +13,9 @@ import {
 import { ChevronsUpDown, Command, Plus } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Entity } from '@/stores/accountantStore';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
-const ENTITYSELECTOR_KEYBOARD_SHORTCUT = 'p';
-
-/* shortcut not working currently */
+const ENTITY_SELECTOR_SHORTCUT = 'p';
 
 export function EntitySelector() {
   const [open, setOpen] = useState(false);
@@ -31,20 +30,9 @@ export function EntitySelector() {
     updateAccountant({ currently_representing: result });
   };
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === ENTITYSELECTOR_KEYBOARD_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        setOpen((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useKeyboardShortcut(ENTITY_SELECTOR_SHORTCUT, true, () =>
+    setOpen((prev) => !prev),
+  );
 
   return (
     <SidebarMenu>

@@ -1,5 +1,4 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { NewProductDialog } from '@/components/newProductDialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
@@ -14,20 +13,21 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useProductsStore } from '@/stores/tablesStore';
-import useDebounce from '@/hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { InventoryView, Product } from '@/types/components';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { EllipsisVertical } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { toast } from 'sonner';
 
 const InventoryTable = lazy(() => import('@/components/inventoryTable'));
 const InventoryCards = lazy(() => import('@/components/inventoryCards'));
 
-const SEARCHBAR_SHORTCUT = 'k';
+const SEARCH_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
 
 export const Route = createFileRoute('/_layout/products/inventory')({
@@ -71,7 +71,7 @@ function Inventory() {
         <div className="w-full flex items-center gap-2">
           <SearchBar currView={view} />
           <Separator orientation="vertical" />
-          <NewProductDialog />
+          {/* <NewProductDialog /> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary">
@@ -129,20 +129,7 @@ function SearchBar({ currView }: { currView: InventoryView }) {
   const table = useProductsStore((state) => state.tableInstance);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === SEARCHBAR_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useKeyboardShortcut(SEARCH_SHORTCUT, true, () => inputRef.current?.focus());
 
   const search = useDebounce((value: string) => {
     table?.setGlobalFilter(value);

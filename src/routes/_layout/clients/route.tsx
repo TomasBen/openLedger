@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { toast } from 'sonner';
-import useDebounce from '@/hooks/useDebounce';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { createFileRoute } from '@tanstack/react-router';
 import { Avatar } from '@/components/ui/avatar';
@@ -118,17 +119,7 @@ function SearchBar({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === SEARCH_SHORTCUT && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useKeyboardShortcut(SEARCH_SHORTCUT, true, () => inputRef.current?.focus());
 
   const search = useDebounce((value: string) => {
     if (!value) onSearch(null);

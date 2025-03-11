@@ -1,18 +1,21 @@
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Dispatch, SetStateAction } from 'react';
+import { invoke } from '@tauri-apps/api/core';
+import { toast } from 'sonner';
+import { useAccountantStore } from '@/stores/accountantStore';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productSchema } from '@/schemas/ARCA';
-import { z } from 'zod';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
   DialogContent,
   DialogFooter,
-  DialogClose,
-  DialogDescription,
+  DialogTrigger,
+  DialogBody,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -30,11 +33,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { invoke } from '@tauri-apps/api/core';
-import { toast } from 'sonner';
-import { useAccountantStore } from '@/stores/accountantStore';
 
-export function NewProductDialog() {
+export default function NewProductDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+}) {
   const { accountant } = useAccountantStore();
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -65,151 +71,148 @@ export function NewProductDialog() {
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Añadir</Button>
-      </DialogTrigger>
+    <Dialog value={open} onValueChange={onOpenChange}>
+      <DialogTrigger>New Product</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Product</DialogTitle>
-          <DialogDescription>Fill the necessary fields</DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <FormField
-              name="code"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Code</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormDescription>Identifier for the product</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="amount"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="measure_unit"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Measure Unit</FormLabel>
-                  <FormControl>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="unit" {...field} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="box">boxes</SelectItem>
-                        <SelectItem value="pcs">pieces (pcs)</SelectItem>
-                        <SelectItem value="dozen">dozen</SelectItem>
-                        <SelectItem value="cm">centimeters (cm)</SelectItem>
-                        <SelectItem value="gr">grams (gr)</SelectItem>
-                        <SelectItem value="mg">miligrams (mg)</SelectItem>
-                        <SelectItem value="ml">mililiters (ml)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="price"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="currency"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Currency</FormLabel>
-                  <FormControl>
-                    <Input placeholder=" " {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="storage_unit"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Storage Unit</FormLabel>
-                  <FormControl>
-                    <Input placeholder=" " {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button type="submit">Guardar</Button>
-              <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </Form>
+        <DialogBody>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <FormField
+                name="code"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel>Code</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Identifier for the product
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="amount"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Amount</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="measure_unit"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Measure Unit</FormLabel>
+                    <FormControl>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="unit" {...field} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="box">boxes</SelectItem>
+                          <SelectItem value="pcs">pieces (pcs)</SelectItem>
+                          <SelectItem value="dozen">dozen</SelectItem>
+                          <SelectItem value="cm">centimeters (cm)</SelectItem>
+                          <SelectItem value="gr">grams (gr)</SelectItem>
+                          <SelectItem value="mg">miligrams (mg)</SelectItem>
+                          <SelectItem value="ml">mililiters (ml)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="price"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="currency"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Currency</FormLabel>
+                    <FormControl>
+                      <Input placeholder=" " {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="storage_unit"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Storage Unit</FormLabel>
+                    <FormControl>
+                      <Input placeholder="not defined" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </DialogBody>
+        <DialogFooter>
+          <Button type="submit">Guardar</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      {/* <div className="flex flex-col">
-        <NumberInput label="Price" required />
-        <TextInput label="Currency" />
-      </div> */}
     </Dialog>
   );
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useProductsStore } from '@/stores/tablesStore';
-import useDebounce from '@/hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 import { createFileRoute } from '@tanstack/react-router';
 import { EllipsisVertical } from 'lucide-react';
 import {
@@ -30,10 +30,11 @@ import {
 } from '@tanstack/react-table';
 import { Sale } from '@/types/components';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
 const SalesTable = lazy(() => import('@/components/salesTable'));
 
-const SEARCHBAR_SHORTCUT = 'k';
+const SEARCH_SHORTCUT = 'k';
 const SEARCH_DEBOUNCE = 200;
 
 export const Route = createFileRoute('/_layout/sales/documents')({
@@ -282,20 +283,7 @@ function SearchBar() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === SEARCHBAR_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useKeyboardShortcut(SEARCH_SHORTCUT, true, () => inputRef.current?.focus());
 
   const search = useDebounce((value: string) => {
     tableInstance?.setGlobalFilter(value);

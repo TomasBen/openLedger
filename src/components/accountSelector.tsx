@@ -47,8 +47,8 @@ export const AccountSelector = memo(function AccountSelector() {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="min-w-[10vw] rounded-lg"
-            side="right"
+            className="w-56 rounded-lg"
+            side="top"
             align="end"
             sideOffset={4}
           >

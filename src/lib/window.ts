@@ -1,36 +1,35 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { UserPreferences, Theme } from '../types/user-preferences';
+import { usePreferencesStore } from '@/stores/userPreferencesStore';
 
 export const window = getCurrentWindow();
 
 export class Window {
-  static async getCurrentTheme(preferences: UserPreferences) {
+  static async getCurrentTheme() {
+    const preferences = usePreferencesStore.getState().preferences;
+
     if (preferences.Theme === (await window.theme())) {
       return preferences.Theme;
     } else {
-      console.error(
+      return new Error(
         '[Window.ts] preferences.Theme and webview.theme dont match',
       );
     }
   }
 
-  static async setDarkMode(
-    updatePreferences: (updates: Partial<UserPreferences>) => void,
-  ) {
+  static async setDarkMode() {
     try {
       await window.setTheme('dark');
-      updatePreferences({ Theme: Theme.Dark });
+      usePreferencesStore.getState().updatePreferences({ Theme: Theme.Dark });
     } catch (error) {
       return error;
     }
   }
 
-  static async setLightMode(
-    updatePreferences: (updates: Partial<UserPreferences>) => void,
-  ) {
+  static async setLightMode() {
     try {
       await window.setTheme('light');
-      updatePreferences({ Theme: Theme.Light });
+      usePreferencesStore.getState().updatePreferences({ Theme: Theme.Light });
     } catch (error) {
       return error;
     }
@@ -44,11 +43,11 @@ export class Window {
     }
   }
 
-  static async toggleFullscreen() {
-    if (await window.isFullscreen()) {
-      window.setFullscreen(false);
-    } else {
-      window.setFullscreen(true);
-    }
-  }
+  // static async toggleFullscreen() {
+  //   if (await window.isFullscreen()) {
+  //     window.setFullscreen(false);
+  //   } else {
+  //     window.setFullscreen(true);
+  //   }
+  // }
 }

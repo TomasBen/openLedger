@@ -1,6 +1,5 @@
 import { getCurrentWebview } from '@tauri-apps/api/webview';
 import { usePreferencesStore } from '@/stores/userPreferencesStore';
-import { useDebounce } from '@/hooks/useDebounce';
 
 export class Webview {
   static async zoomIn() {

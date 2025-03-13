@@ -1,5 +1,5 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { UserPreferences, Theme } from '../types/user-preferences';
+import { Theme } from '../types/user-preferences';
 import { usePreferencesStore } from '@/stores/userPreferencesStore';
 
 export const window = getCurrentWindow();

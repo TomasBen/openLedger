@@ -10,10 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronsUpDown, Command, Plus } from 'lucide-react';
+import { ChevronsUpDown, Command, Plus, User } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Entity } from '@/stores/accountantStore';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { Avatar } from './ui/avatar';
 
 const ENTITY_SELECTOR_SHORTCUT = 'p';
 
@@ -41,26 +42,26 @@ export function EntitySelector() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="flex justify-between data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
+              className="flex data-[state=open]:bg-white data-[state=open]:text-sidebar-accent-foreground"
               onClick={() => setOpen((prev: boolean) => !prev)}
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Command />
               </div>
-              {accountant?.currently_representing != undefined ? (
+              {accountant?.currently_representing ? (
                 <div className="ml-2 truncate">
-                  <span className="truncate">
+                  <span className="font-medium truncate">
                     {accountant?.currently_representing?.name}
                   </span>
                   <br />
-                  <span className="truncate">
+                  <span className="text-sm text-muted-foreground truncate">
                     {accountant?.currently_representing?.id}
                   </span>
                 </div>
               ) : (
                 <span className="ml-2">No entity selected</span>
               )}
-              <ChevronsUpDown />
+              <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -77,8 +78,8 @@ export function EntitySelector() {
                   onClick={() => handleChange(entity.id)}
                   className="flex gap-2 truncate"
                 >
-                  <span className="truncate">{entity.name}</span>
-                  <span className="text-muted-foreground truncate">
+                  <span className="truncate font-medium">{entity.name}</span>
+                  <span className="text-muted-foreground text-sm truncate">
                     {entity.id}
                   </span>
                 </DropdownMenuItem>

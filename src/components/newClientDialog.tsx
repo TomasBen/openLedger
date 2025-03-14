@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { clientSchema } from '@/schemas/ARCA';
+import { clientSchema } from '@/schemas/core';
 import {
   Dialog,
   DialogBody,

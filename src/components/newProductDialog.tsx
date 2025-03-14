@@ -5,7 +5,7 @@ import { useAccountantStore } from '@/stores/accountantStore';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { productSchema } from '@/schemas/ARCA';
+import { productSchema } from '@/schemas/core';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {

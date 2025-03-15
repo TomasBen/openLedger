@@ -15,8 +15,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-const SIDEBAR_WIDTH = '15rem';
-const SIDEBAR_WIDTH_ICON = '3rem';
+const SIDEBAR_WIDTH = '12.5vw';
+const SIDEBAR_WIDTH_ICON = '2.5vw';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 type SidebarContext = {

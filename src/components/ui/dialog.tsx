@@ -7,14 +7,16 @@ import {
   useEffect,
   useRef,
   useState,
+  MouseEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/lib/utils';
 import { VariantProps } from 'class-variance-authority';
-import { X } from 'lucide-react';
 import { Button, buttonVariants } from './button';
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { X } from 'lucide-react';
+import { Slot } from '@radix-ui/react-slot';
 
 interface DialogContext {
   open: boolean;
@@ -55,18 +57,29 @@ function Dialog({
 function DialogTrigger({
   variant,
   size,
+  asChild,
   children,
   className,
   ...props
-}: ComponentProps<'button'> & VariantProps<typeof buttonVariants>) {
+}: ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
   const { setOpen } = useContext(DialogContext);
+
+  const commonProps = {
+    ...props,
+    onClick: (e: MouseEvent<HTMLButtonElement>) => {
+      props.onClick?.(e);
+      setOpen(true);
+    },
+  };
+
+  if (asChild) return <Slot {...commonProps}>{children}</Slot>;
 
   return (
     <Button
       variant={variant ?? 'default'}
       size={size ?? 'default'}
-      {...props}
-      onClick={() => setOpen(true)}
+      {...commonProps}
     >
       {children}
     </Button>
@@ -139,7 +152,7 @@ function DialogTitle({ className, ...props }: ComponentProps<'h2'>) {
   return (
     <h2
       role="heading"
-      className={cn('text-2xl font-bold leading-tight', className)}
+      className={cn('text-lg font-bold leading-tight', className)}
       {...props}
     />
   );
@@ -148,7 +161,7 @@ function DialogTitle({ className, ...props }: ComponentProps<'h2'>) {
 function DialogDescription({ className, ...props }: ComponentProps<'p'>) {
   return (
     <p
-      className={cn('text-lg text-muted-foreground font-medium', className)}
+      className={cn('text-muted-foreground font-medium', className)}
       {...props}
     />
   );

@@ -7,7 +7,6 @@ import {
   useEffect,
   useRef,
   useState,
-  MouseEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
@@ -57,7 +56,7 @@ function Dialog({
 function DialogTrigger({
   variant,
   size,
-  asChild,
+  asChild = false,
   children,
   className,
   ...props
@@ -65,21 +64,21 @@ function DialogTrigger({
   VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
   const { setOpen } = useContext(DialogContext);
 
-  const commonProps = {
-    ...props,
-    onClick: (e: MouseEvent<HTMLButtonElement>) => {
-      props.onClick?.(e);
-      setOpen(true);
-    },
-  };
-
-  if (asChild) return <Slot {...commonProps}>{children}</Slot>;
+  if (asChild) {
+    return (
+      <Slot className={className} onClick={() => setOpen(true)} {...props}>
+        {children}
+      </Slot>
+    );
+  }
 
   return (
     <Button
       variant={variant ?? 'default'}
       size={size ?? 'default'}
-      {...commonProps}
+      className={className}
+      onClick={() => setOpen(true)}
+      {...props}
     >
       {children}
     </Button>

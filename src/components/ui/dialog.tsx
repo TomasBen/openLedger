@@ -9,13 +9,13 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { cn } from '@/lib/utils';
+import { Slot } from '@radix-ui/react-slot';
 import { VariantProps } from 'class-variance-authority';
 import { Button, buttonVariants } from './button';
 import { X } from 'lucide-react';
-import { Slot } from '@radix-ui/react-slot';
 
 interface DialogContext {
   open: boolean;
@@ -122,7 +122,7 @@ function DialogContent({
     >
       <div
         className={cn(
-          'relative max-w-[95%] max-h-[95%] min-w-[20vw] flex flex-col gap-4 bg-card p-2 rounded-lg transition-all duration-300',
+          'relative max-w-[95%] max-h-[95%] min-w-[20vw] flex flex-col gap-2 py-4 bg-card rounded-lg transition-all duration-300',
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
         )}
         {...props}
@@ -143,7 +143,7 @@ function DialogContent({
 
 function DialogHeader({ className, ...props }: ComponentProps<'div'>) {
   return (
-    <div className={cn('flex flex-col w-full p-4', className)} {...props} />
+    <div className={cn('flex flex-col w-full px-4', className)} {...props} />
   );
 }
 
@@ -178,7 +178,7 @@ function DialogBody({ className, ...props }: ComponentProps<'div'>) {
 function DialogFooter({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn('flex justify-end gap-4 w-full p-4', className)}
+      className={cn('flex justify-end gap-4 w-full px-4', className)}
       {...props}
     />
   );

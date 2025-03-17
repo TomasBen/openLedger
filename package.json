@@ -41,7 +41,6 @@
     "@tauri-apps/plugin-window-state": "~2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.13",
     "lucide-react": "^0.476.0",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
@@ -73,5 +72,6 @@
   },
   "prettier": {
     "singleQuote": true
-  }
+  },
+  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
 }

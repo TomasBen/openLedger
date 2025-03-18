@@ -80,7 +80,7 @@ export default function ImportFileDialog() {
                 <Label htmlFor="file-input" className="text-base">
                   Select CSV file
                 </Label>
-                <FileInput accept=".csv" />
+                <FileInput accept=".csv" dragAndDrop />
                 <Label htmlFor="separator" className="text-base mt-4">
                   Separator
                 </Label>
@@ -98,7 +98,7 @@ export default function ImportFileDialog() {
                   <div className="flex items-center gap-2 mt-4">
                     <Checkbox id="quoted-fields" />
                     <Label htmlFor="quoted-fields" className="text-base">
-                      file contains quoted fields
+                      File contains quoted fields
                     </Label>
                   </div>
                 </Select>
@@ -107,7 +107,10 @@ export default function ImportFileDialog() {
                 <Label htmlFor="file-input" className="text-base">
                   Select any Excel file
                 </Label>
-                <FileInput accept=".xls, .xlsx, .xlsm, .xlsb, .xla, .xlam, .ods" />
+                <FileInput
+                  accept=".xls, .xlsx, .xlsm, .xlsb, .xla, .xlam, .ods"
+                  dragAndDrop
+                />
                 <Label className="text-sm text-muted-foreground">
                   .xls, .xlsx, .xlsm, .xlsb, .xla, .xlam, .ods
                 </Label>
@@ -136,7 +139,7 @@ export default function ImportFileDialog() {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button variant="default" disabled>
+          <Button variant="default">
             <Import />
             Import
           </Button>

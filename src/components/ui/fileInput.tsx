@@ -52,7 +52,7 @@ export const FileInput = ({
       <div
         id="fileDropArea"
         className={cn(
-          'flex flex-col justify-center items-center gap-2 p-8 border border-dashed rounded-lg',
+          'flex flex-col justify-center items-center gap-2 p-8 truncate border border-dashed rounded-lg',
           file
             ? 'bg-secondary border-primary'
             : 'bg-surface-lowest border-slate-400',
@@ -75,7 +75,10 @@ export const FileInput = ({
         />
         {file ? (
           <>
-            <Label className="text-base text-primary font-medium truncate">
+            <Label
+              title={file.name}
+              className="text-base text-primary font-medium"
+            >
               {file.name}
             </Label>
             <span>{(file.size / 1024).toFixed(1)} KB</span>

@@ -13,18 +13,19 @@ interface ErrorManagerConfig {
   captureReactErrors: boolean;
 }
 
-enum ErrorType {
-  RUNTIME = 'RuntimeError',
-  DATABASE = 'DatabaseError',
-  WEBVIEW = 'WebviewError',
-  // APP = 'AppError',
-  // WINDOW = 'WindowError',
-  // NETWORK = 'NetworkError',
-  // PROMISE = 'PromiseError',
-  // RENDER = 'RenderError',
-  // ROUTER = 'RouterError',
-  UNKNOWN = 'UnknownError',
-}
+const ERROR_TYPES = {
+  RUNTIME: 'RuntimeError',
+  DATABASE: 'DatabaseError',
+  WEBVIEW: 'WebviewError',
+  // APP: 'AppError',
+  // WINDOW: 'WindowError',
+  // NETWORK: 'NetworkError',
+  // PROMISE: 'PromiseError',
+  // RENDER: 'RenderError',
+  // ROUTER: 'RouterError',
+  UNKNOWN: 'UnknownError',
+} as const;
+type ErrorType = keyof typeof ERROR_TYPES;
 
 enum SeverityLevel {
   CRITICAL = 'critical',
@@ -40,15 +41,7 @@ interface NormalizedError {
   solution?: string | undefined;
   originalError: any;
   timestamp: string;
-  enviromentInfo: EnviromentInfo;
   additionalInfo?: Record<string, string | number | boolean>;
-}
-
-interface EnviromentInfo {
-  // Location: string; // has to be gotten from router context
-  AppVersion: string | null;
-  Platform: string | undefined;
-  OnlineStatus: boolean;
 }
 
 /**
@@ -83,7 +76,7 @@ class ErrorManager {
       const { message, filename, lineno, colno, error } = err;
 
       this.handleError(error || message, {
-        type: ErrorType.RUNTIME,
+        type: 'RUNTIME',
         location: `${filename}:${lineno}:${colno}`,
       });
     });
@@ -147,7 +140,6 @@ class ErrorManager {
         'en-US',
         this.config.dateTimeFormat,
       ).format(new Date()),
-      enviromentInfo: await this._getEnviromentInfo(),
       additionalInfo: { ...additionalInfo },
     };
 
@@ -161,12 +153,12 @@ class ErrorManager {
     if ('type' in additionalInfo) return additionalInfo.type as ErrorType;
 
     // check if the error.name is already "DatabaseError" or any other ErrorType
-    if (Object.values(ErrorType).includes(error.name as ErrorType))
+    if (Object.values(ERROR_TYPES).includes(error.name))
       return error.name as ErrorType;
 
     if (error instanceof Error) {
       if (error.message.includes('zoom')) {
-        return ErrorType.WEBVIEW;
+        return 'WEBVIEW';
       }
 
       if (
@@ -174,7 +166,7 @@ class ErrorManager {
         error.message.includes('database') ||
         error.message.includes('parameter')
       ) {
-        return ErrorType.DATABASE;
+        return 'DATABASE';
       }
 
       if (
@@ -182,24 +174,11 @@ class ErrorManager {
         (error.message.includes('undefined is not a function') ||
           error.message.includes('cannot read property'))
       ) {
-        return ErrorType.RUNTIME;
+        return 'RUNTIME';
       }
     }
 
-    return ErrorType.UNKNOWN;
-  }
-
-  /**
-   * gets enviroment information for context
-   *
-   * @returns Object containing browser details: AppVersion, Platform and OnlineStatus
-   */
-  private async _getEnviromentInfo(): Promise<EnviromentInfo> {
-    return {
-      AppVersion: await getVersion(),
-      Platform: navigator.platform, // consider using own rust implementation or use OS tauri plugin
-      OnlineStatus: navigator.onLine,
-    };
+    return 'UNKNOWN';
   }
 
   private async _sendToRemote(base: NormalizedError): Promise<void> {

@@ -10,36 +10,30 @@ mod embedded {
 
 #[derive(Serialize, Deserialize)]
 pub struct DatabaseError {
+    name: String,
+    message: String,
     sqlite_error: String,
-    is_critical: bool,
-    help: Option<String>,
 }
 
 impl DatabaseError {
     fn from_sqlite_error(error: rusqlite::Error) -> Self {
-        let is_critical = match error {
-            rusqlite::Error::SqliteFailure(_, _) => true,
-            rusqlite::Error::QueryReturnedNoRows => false,
-            rusqlite::Error::InvalidColumnName(_) => false,
-            rusqlite::Error::InvalidParameterCount(_, _) => false,
-            _ => false,
-        };
+        let name = error.to_string();
 
-        let help = match error {
-            rusqlite::Error::QueryReturnedNoRows => Some("did not get any results".to_string()),
+        let message = match error {
+            rusqlite::Error::QueryReturnedNoRows => String::from("did not get any results"),
             rusqlite::Error::InvalidColumnName(ref name) => {
-                Some(format!("column {} doesn't exist", name))
+                String::from(format!("column {} doesn't exist", name))
             }
-            rusqlite::Error::InvalidParameterCount(given, expected) => Some(format!(
+            rusqlite::Error::InvalidParameterCount(given, expected) => String::from(format!(
                 "expected {expected} parameters, were given {given} instead"
             )),
-            _ => None,
+            _ => String::from("failed to retrieve a message"),
         };
 
         DatabaseError {
+            name,
+            message,
             sqlite_error: error.to_string(),
-            is_critical,
-            help,
         }
     }
 }
@@ -109,15 +103,36 @@ pub struct Product {
     entity_name: String,
 }
 
+// #[derive(Debug, Deserialize)]
+// struct ARCAFactura {
+//     fecha_de_emision: String,
+//     tipo_de_comprobante: u8,
+//     punto_de_venta: u8,
+//     nro_desde: u16,
+//     nro_hasta: u16,
+//     cod_auth: u64,
+//     tipo_doc_receptor: u8,
+//     nro_doc_receptor: u64,
+//     nombre_receptor: String,
+//     cambio: f64,
+//     moneda: String,
+//     imp_neto_gravado: f64,
+//     imp_neto_exento: f64,
+//     imp_op_exentas: f64,
+//     otros_tributos: f64,
+//     iva: f64,
+//     imp_total: f64,
+// }
+
 static DB: Lazy<Mutex<Connection>> = Lazy::new(|| {
     let mut conn = Connection::open("/var/home/tomas/.config/OpenLedger/accsw.db")
-        .expect("[Database::migrations]Failed to establish a conenction to the database");
+        .expect("[Database::migrations] Failed to open a connection to the database");
     embedded::migrations::runner().run(&mut conn).unwrap();
     Mutex::new(conn)
 });
 
 #[tauri::command]
-pub fn create_account(account: Account) -> Result<usize, String> {
+pub fn create_account(account: Account) -> Result<usize, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     conn.execute(
@@ -130,11 +145,11 @@ pub fn create_account(account: Account) -> Result<usize, String> {
             &account.country,
             &account.industry,
         ],
-    ).map_err(|e| e.to_string())
+    ).map_err(|e| DatabaseError::from_sqlite_error(e))
 }
 
 #[tauri::command]
-pub fn get_account(name: &str) -> Result<AccountQuery, String> {
+pub fn get_account(name: &str) -> Result<AccountQuery, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     conn.query_row("SELECT * FROM accounts WHERE name = ?", [name], |row| {
@@ -148,7 +163,7 @@ pub fn get_account(name: &str) -> Result<AccountQuery, String> {
             created_at: row.get(6)?,
         })
     })
-    .map_err(|e| e.to_string())
+    .map_err(|e| DatabaseError::from_sqlite_error(e))
 }
 
 #[tauri::command]
@@ -301,3 +316,47 @@ pub fn get_products(entity: String) -> Result<Vec<Product>, DatabaseError> {
 
     products.map_err(|e| DatabaseError::from_sqlite_error(e))
 }
+
+/* CSV */
+
+// #[tauri::command]
+// fn import_csv(path: &Path, has_headers: bool, separator: char) -> anyhow::Result<Vec<FacturaARCA>> {
+//     let file = File::open(path).expect("failed to open file");
+//     let reader = BufReader::new(file);
+
+//     let mut facturas: Vec<FacturaARCA> = Vec::new();
+
+//     let mut lines = reader.lines();
+//     if has_headers {
+//         let _header = lines.next();
+//     }
+
+//     for line in lines {
+//         let line = line?;
+//         let fields: Vec<&str> = line.split(separator).collect();
+
+//         let factura = Factura {
+//             fecha_de_emision: fields[0].trim().to_string(),
+//             tipo_de_comprobante: fields[1].trim().replace(",", ".").parse()?,
+//             punto_de_venta: fields[2].trim().replace(",", ".").parse()?,
+//             nro_desde: fields[3].trim().replace(",", ".").parse()?,
+//             nro_hasta: fields[4].trim().replace(",", ".").parse()?,
+//             cod_auth: fields[5].trim().replace(",", ".").parse()?,
+//             tipo_doc_receptor: fields[6].trim().replace(",", ".").parse()?,
+//             nro_doc_receptor: fields[7].trim().replace(",", ".").parse()?,
+//             nombre_receptor: fields[8].trim().to_string(),
+//             cambio: fields[9].trim().replace(",", ".").parse()?,
+//             moneda: fields[10].trim().to_string(),
+//             imp_neto_gravado: fields[11].trim().replace(",", ".").parse()?,
+//             imp_neto_exento: fields[12].trim().replace(",", ".").parse()?,
+//             imp_op_exentas: fields[13].trim().replace(",", ".").parse()?,
+//             otros_tributos: fields[14].trim().replace(",", ".").parse()?,
+//             iva: fields[15].trim().replace(",", ".").parse()?,
+//             imp_total: fields[16].trim().replace(",", ".").parse()?,
+//         };
+
+//         facturas.push(factura);
+//     }
+
+//     Ok(facturas)
+// }

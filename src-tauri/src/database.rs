@@ -40,32 +40,25 @@ impl DatabaseError {
 
 #[derive(Serialize, Deserialize)]
 pub struct Account {
-    account_id: String,
+    id: String,
     name: String,
     email: String,
-    account_type: String,
+    category: String,
     country: Option<String>,
     industry: Option<String>,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct AccountQuery {
-    account_id: String,
-    name: String,
-    email: String,
-    account_type: String,
-    country: Option<String>,
-    industry: Option<String>,
-    created_at: String,
+    created_at: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct AccountantSession {
-    id: String,
-    name: String,
-    accountant_name: String,
-    email: String,
-    account_type: String,
+    entity_id: String,
+    entity_name: String,
+    entity_email: String,
+    entity_preferred_currency: String,
+    entity_tax_category: String,
+    account_name: String,
+    account_email: String,
+    account_category: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -86,7 +79,7 @@ pub struct Client {
     industry: Option<String>,
     category: String,
     condition: Option<String>,
-    entity_name: String,
+    entity: String,
     created_at: Option<String>,
 }
 
@@ -136,12 +129,12 @@ pub fn create_account(account: Account) -> Result<usize, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     conn.execute(
-        "INSERT INTO accounts (account_id, name, email, account_type, country, industry) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+        "INSERT INTO accounts (id, name, email, category, country, industry) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
         params![
-            &account.account_id,
+            &account.id,
             &account.name,
             &account.email,
-            &account.account_type,
+            &account.category,
             &account.country,
             &account.industry,
         ],
@@ -149,15 +142,15 @@ pub fn create_account(account: Account) -> Result<usize, DatabaseError> {
 }
 
 #[tauri::command]
-pub fn get_account(name: &str) -> Result<AccountQuery, DatabaseError> {
+pub fn get_account(name: &str) -> Result<Account, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     conn.query_row("SELECT * FROM accounts WHERE name = ?", [name], |row| {
-        Ok(AccountQuery {
-            account_id: row.get(0)?,
+        Ok(Account {
+            id: row.get(0)?,
             name: row.get(1)?,
             email: row.get(2)?,
-            account_type: row.get(3)?,
+            category: row.get(3)?,
             country: row.get(4)?,
             industry: row.get(5)?,
             created_at: row.get(6)?,
@@ -167,51 +160,29 @@ pub fn get_account(name: &str) -> Result<AccountQuery, DatabaseError> {
 }
 
 #[tauri::command]
-pub fn get_accountant_session(
-    accountant_name: Option<String>,
-) -> Result<Vec<AccountantSession>, String> {
+pub fn get_accountant_session(accountant_name: String) -> Result<Vec<AccountantSession>, String> {
     let conn = DB.lock().unwrap();
     let mut stmt = conn
         .prepare("SELECT * FROM accountantSession WHERE accountant_name = ?1")
         .map_err(|e| e.to_string())?;
 
-    if accountant_name.is_some() {
-        let results: Result<Vec<AccountantSession>, rusqlite::Error> = stmt
-            .query_map([accountant_name], |row| {
-                Ok(AccountantSession {
-                    id: row.get(0)?,
-                    name: row.get(1)?,
-                    accountant_name: row.get(2)?,
-                    email: row.get(3)?,
-                    account_type: row.get(4)?,
-                })
+    let results: Result<Vec<AccountantSession>, rusqlite::Error> = stmt
+        .query_map([accountant_name], |row| {
+            Ok(AccountantSession {
+                entity_id: row.get(0)?,
+                entity_name: row.get(1)?,
+                entity_email: row.get(2)?,
+                entity_preferred_currency: row.get(3)?,
+                entity_tax_category: row.get(4)?,
+                account_name: row.get(5)?,
+                account_email: row.get(6)?,
+                account_category: row.get(7)?,
             })
-            .map_err(|e| e.to_string())?
-            .collect();
+        })
+        .map_err(|e| e.to_string())?
+        .collect();
 
-        results.map_err(|e| e.to_string())
-    } else if accountant_name.is_none() {
-        let mut stmt = conn
-            .prepare("SELECT * FROM accountantSession;")
-            .map_err(|e| e.to_string())?;
-
-        let results: Result<Vec<AccountantSession>, rusqlite::Error> = stmt
-            .query_map([], |row| {
-                Ok(AccountantSession {
-                    id: row.get(0)?,
-                    name: row.get(1)?,
-                    accountant_name: row.get(2)?,
-                    email: row.get(3)?,
-                    account_type: row.get(4)?,
-                })
-            })
-            .map_err(|e| e.to_string())?
-            .collect();
-
-        results.map_err(|e| e.to_string())
-    } else {
-        Err("Error: No accountant_name provided".to_string())
-    }
+    results.map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -247,7 +218,7 @@ pub fn create_client(client: Client) -> Result<usize, DatabaseError> {
         &client.industry,
         &client.category,
         &client.condition,
-        &client.entity_name
+        &client.entity
     ]).map_err(|e| { DatabaseError::from_sqlite_error(e)})
 }
 
@@ -270,7 +241,7 @@ pub fn get_clients(entity: String) -> Result<Vec<Client>, DatabaseError> {
                 industry: row.get(5)?,
                 category: row.get(6)?,
                 condition: row.get(7)?,
-                entity_name: row.get(8)?,
+                entity: row.get(8)?,
                 created_at: row.get(9)?,
             })
         })

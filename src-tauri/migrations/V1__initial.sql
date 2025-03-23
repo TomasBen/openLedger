@@ -1,80 +1,74 @@
 CREATE TABLE IF NOT EXISTS accounts (
-    account_id TEXT PRIMARY KEY,
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
     email TEXT NOT NULL,
-    account_type TEXT NOT NULL CHECK (
-        account_type in (
-            'corporate',
-            'independent accountant',
-            'accounting study',
-            'end user'
-        )
-    ),
+    -- corporate, small business, unipersonal --
+    category TEXT NOT NULL,
     country TEXT,
     industry TEXT,
-    created_at TEXT DEFAULT (datetime ('now', 'localtime'))
+    created_at TEXT NOT NULL DEFAULT (datetime ('now', 'localtime'))
 );
 
 CREATE TABLE IF NOT EXISTS taxes (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
     division TEXT UNIQUE,
     jurisdiction TEXT NOT NULL,
     billing_freq TEXT NOT NULL,
-    associated_document TEXT NOT NULL,
-    tax_rate REAL NOT NULL,
-    credit_balance REAL DEFAULT 0.0,
-    debit_balance REAL DEFAULT 0.0,
-    total_balance REAL
+    tax_rate REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tax_categories (
-    name TEXT UNIQUE PRIMARY KEY,
+    name TEXT PRIMARY KEY UNIQUE NOT NULL,
     division TEXT UNIQUE,
     description TEXT NOT NULL,
     agency TEXT
 );
 
 CREATE TABLE IF NOT EXISTS entities (
-    id TEXT PRIMARY KEY,
+    id TEXT PRIMARY KEY NOT NULL,
     name TEXT UNIQUE NOT NULL,
     email TEXT,
+    preferred_currency TEXT,
     commercial_addr TEXT,
     legal_addr TEXT,
+    -- category still not implemented, it is only a hardcoded string for now --
     tax_category TEXT NOT NULL,
-    associated_account TEXT NOT NULL,
-    taxes TEXT DEFAULT 'VAT',
-    created_at TEXT DEFAULT (datetime ('now', 'localtime')),
+    represented_by TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime ('now', 'localtime')),
     FOREIGN KEY (tax_category) REFERENCES tax_categories (name),
-    FOREIGN KEY (associated_account) REFERENCES accounts (name)
+    FOREIGN KEY (represented_by) REFERENCES accounts (name)
 );
 
 CREATE TABLE IF NOT EXISTS products (
-    code TEXT NOT NULL PRIMARY KEY,
+    code TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT,
     description TEXT,
-    amount INTEGER DEFAULT 0.00,
+    amount INTEGER,
     measure_unit TEXT,
-    price REAL,
-    currency TEXT NOT NULL DEFAULT 'USD',
+    price INTEGER,
+    currency TEXT,
     storage_unit TEXT,
-    entity_name TEXT NOT NULL,
-    FOREIGN KEY (entity_name) REFERENCES entities (name) ON DELETE CASCADE ON UPDATE CASCADE
+    entity TEXT NOT NULL,
+    FOREIGN KEY (entity) REFERENCES entities (name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE VIEW IF NOT EXISTS accountantSession AS
 SELECT
     entities.id,
     entities.name,
+    entities.email,
+    entities.preferred_currency,
+    entities.tax_categories,
     accounts.name as accountant_name,
     accounts.email,
-    accounts.account_type
+    accounts.category
 FROM
     accounts
-    LEFT JOIN entities ON entities.associated_account = accounts.name;
+    LEFT JOIN entities ON entities.represented_by = accounts.name;
 
 CREATE TABLE IF NOT EXISTS clients (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY UNIQUE NOT NULL,
     name TEXT NOT NULL,
     email TEXT,
     phone INTEGER,
@@ -82,7 +76,7 @@ CREATE TABLE IF NOT EXISTS clients (
     industry TEXT,
     category TEXT NOT NULL,
     condition TEXT,
-    associated_entity TEXT NOT NULL,
+    entity TEXT NOT NULL,
     created_at TEXT DEFAULT (datetime ('now', 'localtime')),
-    FOREIGN KEY (associated_entity) REFERENCES entities (name) ON DELETE CASCADE
+    FOREIGN KEY (entity) REFERENCES entities (name) ON DELETE CASCADE
 );

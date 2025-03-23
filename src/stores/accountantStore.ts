@@ -5,13 +5,14 @@ export type Entity = {
   id: string;
   name: string;
   email?: string;
+  preferred_currency?: string;
   taxCategory?: string;
 };
 
 export interface AccountantSession {
   name: string;
   email: string;
-  account_type: string;
+  category: string;
   entities: Entity[];
   currently_representing: Entity | undefined;
 }
@@ -19,9 +20,9 @@ export interface AccountantSession {
 export interface AccountSessionQuery {
   id: string;
   name: string;
-  accountant_name: string;
-  email: string;
-  account_type: string;
+  account_name: string;
+  account_email: string;
+  account_category: string;
 }
 
 interface AccountantStoreType {
@@ -48,9 +49,9 @@ const initializeStore = async () => {
 
   if (query) {
     let initialSession: AccountantSession = {
-      name: query[0].accountant_name,
-      email: query[0].email,
-      account_type: query[0].account_type,
+      name: query[0].account_name,
+      email: query[0].account_email,
+      category: query[0].account_category,
       entities: [],
       currently_representing: undefined,
     };

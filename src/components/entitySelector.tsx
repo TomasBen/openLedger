@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useAccountantStore } from '@/stores/accountantStore';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
@@ -10,11 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronsUpDown, Command, Plus, User } from 'lucide-react';
+import { ChevronsUpDown, Command, Plus } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Entity } from '@/stores/accountantStore';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
-import { Avatar } from './ui/avatar';
 
 const ENTITY_SELECTOR_SHORTCUT = 'p';
 
@@ -72,18 +71,26 @@ export function EntitySelector() {
           >
             <DropdownMenuLabel>Entities</DropdownMenuLabel>
             <ScrollArea className="max-h-96 overflow-scroll">
-              {accountant?.entities.map((entity) => (
-                <DropdownMenuItem
-                  key={entity.id}
-                  onClick={() => handleChange(entity.id)}
-                  className="flex gap-2 truncate"
-                >
-                  <span className="truncate font-medium">{entity.name}</span>
-                  <span className="text-muted-foreground text-sm truncate">
-                    {entity.id}
+              {accountant?.entities ? (
+                accountant?.entities.map((entity) => (
+                  <DropdownMenuItem
+                    key={entity.id}
+                    onClick={() => handleChange(entity.id)}
+                    className="flex gap-2 truncate"
+                  >
+                    <span className="truncate font-medium">{entity.name}</span>
+                    <span className="text-muted-foreground text-sm truncate">
+                      {entity.id}
+                    </span>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <DropdownMenuItem key="no entities placeholder">
+                  <span className="truncate text-muted-foreground">
+                    No entities found.
                   </span>
                 </DropdownMenuItem>
-              ))}
+              )}
             </ScrollArea>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">

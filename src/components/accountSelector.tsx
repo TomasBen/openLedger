@@ -19,7 +19,9 @@ import { ChevronRight, LogOut, Plus, Settings } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 export const AccountSelector = memo(function AccountSelector() {
-  const { accountant } = useAccountantStore();
+  const accountant = useAccountantStore((state) => state.accountant);
+
+  // avatar image not implemented, has to either specify a space for uploading their own, selecting a default one, or getting the one from email
 
   return (
     <SidebarMenu>
@@ -39,7 +41,7 @@ export const AccountSelector = memo(function AccountSelector() {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {accountant?.name}
+                  {accountant?.name ?? 'No account selected'}
                 </span>
                 <span className="truncate text-xs">{accountant?.email}</span>
               </div>
@@ -59,11 +61,11 @@ export const AccountSelector = memo(function AccountSelector() {
                     src="https://cloud.appwrite.io/v1/storage/buckets/679c32710028a20a97e8/files/679c3294001b2d470bb0/view?project=679c31b50030bed08d23&"
                     alt={accountant?.name}
                   />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">ACC</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {accountant?.name}
+                    {accountant?.name ?? 'No account selected'}
                   </span>
                   <span className="truncate text-xs">{accountant?.email}</span>
                 </div>

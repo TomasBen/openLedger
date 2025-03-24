@@ -20,7 +20,6 @@
         "dragDropEnabled": false
       }
     ],
-    "macOSPrivateApi": true,
     "security": {
       "csp": null
     }
@@ -38,7 +37,7 @@
   },
   "plugins": {
     "sql": {
-      "preload": ["sqlite:accsw.db"]
+      "preload": ["sqlite:main.db"]
     }
   }
 }

@@ -5,10 +5,10 @@ use std::sync::Mutex;
 
 mod embedded {
     use refinery::embed_migrations;
-    embed_migrations!("/var/home/tomas/Documents/Github/openLedger/src-tauri/migrations");
+    embed_migrations!("./migrations");
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct DatabaseError {
     name: String,
     message: String,
@@ -45,11 +45,10 @@ pub struct Account {
     email: String,
     category: String,
     country: Option<String>,
-    industry: Option<String>,
     created_at: Option<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct AccountantSession {
     entity_id: String,
     entity_name: String,
@@ -107,18 +106,18 @@ pub struct Product {
 //     tipo_doc_receptor: u8,
 //     nro_doc_receptor: u64,
 //     nombre_receptor: String,
-//     cambio: f64,
+//     cambio: u64,
 //     moneda: String,
-//     imp_neto_gravado: f64,
-//     imp_neto_exento: f64,
-//     imp_op_exentas: f64,
-//     otros_tributos: f64,
-//     iva: f64,
-//     imp_total: f64,
+//     imp_neto_gravado: u64,
+//     imp_neto_exento: u64,
+//     imp_op_exentas: u64,
+//     otros_tributos: u64,
+//     iva: u64,
+//     imp_total: u64,
 // }
 
 static DB: Lazy<Mutex<Connection>> = Lazy::new(|| {
-    let mut conn = Connection::open("/var/home/tomas/.config/OpenLedger/accsw.db")
+    let mut conn = Connection::open("/var/home/tomas/.config/OpenLedger/main.db")
         .expect("[Database::migrations] Failed to open a connection to the database");
     embedded::migrations::runner().run(&mut conn).unwrap();
     Mutex::new(conn)
@@ -129,16 +128,16 @@ pub fn create_account(account: Account) -> Result<usize, DatabaseError> {
     let conn = DB.lock().unwrap();
 
     conn.execute(
-        "INSERT INTO accounts (id, name, email, category, country, industry) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+        "INSERT INTO accounts (id, name, email, category, country) VALUES (?1, ?2, ?3, ?4, ?5)",
         params![
             &account.id,
             &account.name,
             &account.email,
             &account.category,
             &account.country,
-            &account.industry,
         ],
-    ).map_err(|e| DatabaseError::from_sqlite_error(e))
+    )
+    .map_err(|e| DatabaseError::from_sqlite_error(e))
 }
 
 #[tauri::command]
@@ -152,8 +151,7 @@ pub fn get_account(name: &str) -> Result<Account, DatabaseError> {
             email: row.get(2)?,
             category: row.get(3)?,
             country: row.get(4)?,
-            industry: row.get(5)?,
-            created_at: row.get(6)?,
+            created_at: row.get(5)?,
         })
     })
     .map_err(|e| DatabaseError::from_sqlite_error(e))
